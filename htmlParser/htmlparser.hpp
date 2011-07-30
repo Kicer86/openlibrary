@@ -1,5 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
+    Html parser
     Copyright (C) 2011  Michał Walenciak <Kicer86@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -46,7 +46,7 @@ class HtmlParser
       CssSPData(): htmlCode(0), results()
       {}
       const HtmlTagList * htmlCode;   //pointer to list of tags
-      SearchList results; //list of search results
+      SearchList results;             //list of search results
       
     private:
       CssSPData(const CssSPData &css);

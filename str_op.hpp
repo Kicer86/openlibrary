@@ -4,12 +4,11 @@
 
 #include <string>
 
-class Strings
+struct Strings
 {
-  public:
     static std::string *stripQuotas(std::string *s)
     {
-      std::string &str=*s;         //str and s is now the same
+      std::string &str=*s;         //str and s are now the same
       if (str.empty()==false &&
           str[0]==str[str.length()-1] &&
           (str[0]=='"' || str[0]=='\'')

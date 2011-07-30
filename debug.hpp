@@ -20,52 +20,59 @@
 #ifndef DEBUG_HPP
 #define DEBUG_HPP
 
-
-#ifdef IN_KDEVELOP_PARSER
-//let kdevelop see class Debug :)
-#define DEBUG
-#endif
-
-
-//only if debugging
-#ifdef DEBUG
-
 #include <iostream>
 #include <string>
-#define debug() Debug(__PRETTY_FUNCTION__)
+
+#define debug(l) Debug(__PRETTY_FUNCTION__, l)
+
+
+namespace DebugLevel
+{
+  enum Level
+    {
+      Debug,
+      Info,
+      Warning,
+      Error
+    };
+}
 
 class Debug
 {
     std::string data;
-  public:
-    Debug(const char* f_name): data(f_name)
+    DebugLevel::Level level;
+
+    bool enableOutput() const
     {
-      data+=" ";
+      //debugging off?
+#ifdef NDEBUG
+      if (level==Debug)        //no output if NDEBUG was defined and output level==DEBUG
+        return false;
+#endif
+      return true;
+    }
+  
+  public:
+    Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(f_name), level(l)
+    {
+      if (enableOutput())
+        data+=": ";
     }
 
     ~Debug()
     {
-      std::clog << data << std::endl;;
+      if (enableOutput())
+        std::clog << data << std::endl;;
     }
-    
+
     template <class T> Debug &operator<<(const T &arg)
     {
-      data+=arg;
+      if (enableOutput())
+        data+=arg;
       return *this;
     }
 };
 
-#else
-//no debugging:
-#define debug() Debug()
-class Debug
-{
-  public:
-    template<class T> Debug &operator<<(const T &arg) 
-    {
-      return *this;
-    };
-};
-#endif
+
 
 #endif // DEBUG_HPP

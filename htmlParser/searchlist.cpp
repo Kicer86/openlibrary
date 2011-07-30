@@ -31,12 +31,12 @@ void SearchList::setResults(const SearchList& list)
 {
   clear(); //remove current elements
 
-  debug() << "after filtration:";
-  
+  debug(DebugLevel::Debug) << "after filtration:";
+
   for (uint i=0; i<list.size(); i++)
   {
     push_back(list[i]);                       //copy all values
-    debug() << *(at(i).base());
+    debug(DebugLevel::Debug) << *(at(i).base());
   }
 }
 
@@ -44,14 +44,14 @@ void SearchList::setResults(const SearchList& list)
 void SearchList::init(const HtmlTagList* tagList, const std::string& id)
 {
   //get search results
-  debug() << "creating SearchList with \"" << id << "\" as primary filter";
+  debug(DebugLevel::Debug) << "creating SearchList with \"" << id << "\" as primary filter";
   setResults(tagList->findAll(id));
 }
 
 
 void SearchList::findDescendant(const std::string& id)
 {
-  debug() << "adding filter 'descentant': \"" << id << '"';
+  debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
   SearchList newResuls;                //new list of valid tags after filtration below
 
   for (iterator main=begin(); main!=end(); main++)
@@ -84,8 +84,8 @@ void SearchList::findDescendant(const std::string& id)
 
 void SearchList::withAttr(const std::string& name)
 {
-  debug() << "adding filter 'attribute': \"" << name << '"';
-  
+  debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << '"';
+
   SearchList newResuls;                //new list of valid tags after filtration below
 
   for (iterator main=begin(); main!=end(); main++)
@@ -105,8 +105,8 @@ void SearchList::withAttr(const std::string& name, const std::string& val)
 {
   std::string value(val);   //make a writable copy
   Strings::stripQuotas(&value);
-  
-  debug() << "adding filter 'attribute': \"" << name << "\" equal to \"" << value << '"';
+
+  debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << "\" equal to \"" << value << '"';
   SearchList newResuls;                //new list of valid tags after filtration below
 
   for (iterator main=begin(); main!=end(); main++)
