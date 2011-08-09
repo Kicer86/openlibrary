@@ -12,9 +12,9 @@ endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 include(../cmake/ForceAddFlags.cmake)
 
-FORCE_ADD_FLAGS(CMAKE_CXX_FLAGS -Weffc++ --std=c++0x)
-
-set (CMAKE_CXX_FLAGS "-Weffc++ ${CMAKE_CXX_FLAGS}")
+# FORCE_ADD_FLAGS(CMAKE_CXX_FLAGS )
+# 
+# set (CMAKE_CXX_FLAGS "-Weffc++ ${CMAKE_CXX_FLAGS}")
 
 set(HTMLPARSER_SRC 
   searchlist.cpp 
@@ -49,6 +49,10 @@ add_library(htmlParser SHARED
 
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES})
+
+set_target_properties(htmlParser PROPERTIES COMPILE_FLAGS "--std=c++0x"
+                                            COMPILE_FLAGS_DEBUG "-Weffc++")
+                                 
 
 #install files
 if (WIN32)  # for windows (dll = runtime)
