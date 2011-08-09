@@ -25,16 +25,19 @@
 
 #define debug(l) Debug(__PRETTY_FUNCTION__, l)
 
+#ifdef DEBUG_QSTRING_SUPPORT
+#include <QString>
+#endif
 
 namespace DebugLevel
 {
   enum Level
-    {
-      Debug,
-      Info,
-      Warning,
-      Error
-    };
+  {
+    Debug,
+    Info,
+    Warning,
+    Error
+  };
 }
 
 class Debug
@@ -46,12 +49,12 @@ class Debug
     {
       //debugging off?
 #ifdef NDEBUG
-      if (level==Debug)        //no output if NDEBUG was defined and output level==DEBUG
+      if (level==DebugLevel::Debug)        //no output if NDEBUG was defined and output level==DEBUG
         return false;
 #endif
       return true;
     }
-  
+
   public:
     Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(f_name), level(l)
     {
@@ -71,6 +74,13 @@ class Debug
         data+=arg;
       return *this;
     }
+
+#ifdef DEBUG_QSTRING_SUPPORT
+    Debug &operator<<(const QString &arg)
+    {
+      return (*this) << arg.toLocal8Bit().data();
+    }
+#endif
 };
 
 
