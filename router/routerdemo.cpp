@@ -55,7 +55,7 @@ RouterDemo::RouterDemo(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f)
   thread.start();
   
   connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
-  timer.start(200);
+  timer.start(200);    //repaint frequency
 }
 
 
