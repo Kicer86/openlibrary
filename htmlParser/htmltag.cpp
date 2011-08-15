@@ -16,8 +16,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <sys/types.h>
-
 #include "../str_op.hpp"
 #include "htmltag.hpp"
 
@@ -62,7 +60,7 @@ std::string HtmlTag::toString() const
 bool HtmlTag::hasAttr ( const std::string& attr ) const
 {
   bool ret=false;
-  for ( uint i=0; i<attributes.size(); i++ )
+  for (unsigned int i=0; i<attributes.size(); i++)
     if ( attributes[i].name==attr )
     {
       ret=true;
@@ -75,7 +73,7 @@ bool HtmlTag::hasAttr ( const std::string& attr ) const
 HtmlTag::Attr HtmlTag::getAttr ( const std::string& attr ) const
 {
   Attr ret;
-  for ( uint i=0; i<attributes.size(); i++ )
+  for (unsigned int i=0; i<attributes.size(); i++)
     if ( attributes[i].name==attr )
     {
       ret=attributes[i];
@@ -88,7 +86,7 @@ HtmlTag::Attr HtmlTag::getAttr ( const std::string& attr ) const
 std::vector<HtmlTag::Attr> HtmlTag::getAttrs ( const std::string& attr ) const
 {
   std::vector<Attr> ret;
-  for ( uint i=0; i<attributes.size(); i++ )
+  for (unsigned int i=0; i<attributes.size(); i++)
     if ( attributes[i].name==attr )
       ret.push_back ( attributes[i] );
 
