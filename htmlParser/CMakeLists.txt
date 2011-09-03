@@ -31,9 +31,9 @@ set(HTMLPARSER_HEADERS
 )
 
 flex_target(htmlFlex html.l ${CMAKE_CURRENT_BINARY_DIR}/html.yy.cc 
-    COMPILE_FLAGS "--header-file=${CMAKE_CURRENT_BINARY_DIR}/html.yy.hh")
+    COMPILE_FLAGS "-CF --header-file=${CMAKE_CURRENT_BINARY_DIR}/html.yy.hh")
 flex_target(cssFlex css.l ${CMAKE_CURRENT_BINARY_DIR}/css.yy.cc 
-    COMPILE_FLAGS "--header-file=${CMAKE_CURRENT_BINARY_DIR}/css.yy.hh")
+    COMPILE_FLAGS "-CF --header-file=${CMAKE_CURRENT_BINARY_DIR}/css.yy.hh")
 bison_target(htmlBison html.y ${CMAKE_CURRENT_BINARY_DIR}/html.tab.cc)
 bison_target(cssBison css.y ${CMAKE_CURRENT_BINARY_DIR}/css.tab.cc)
 add_flex_bison_dependency(htmlFlex htmlBison)
