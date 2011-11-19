@@ -4,9 +4,9 @@
 
 #include <string>
 
-struct Strings
+namespace Strings
 {
-    static std::string *stripQuotas(std::string *s)
+    inline std::string *stripQuotas(std::string *s)
     {
       std::string &str=*s;         //str and s are now the same
       if (str.empty()==false &&
@@ -20,7 +20,7 @@ struct Strings
       return &str;
     }
 
-    static std::string stripBlanks(const std::string &s)
+    inline std::string stripBlanks(const std::string &s)
     {
       std::string str=s;
 
@@ -46,5 +46,5 @@ struct Strings
 
       return str;
     }
-};
+}
 #endif
