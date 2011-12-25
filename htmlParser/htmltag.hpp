@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
 
 class HtmlTag
 {
@@ -30,6 +31,12 @@ class HtmlTag
     virtual ~HtmlTag();
 
     operator std::string() const;
+    friend std::ostream& operator << (std::ostream &out, const HtmlTag &htamlTag) 
+    {
+        out << htamlTag.operator std::string();
+        
+        return out;
+    }
 
     struct Attr
     {
