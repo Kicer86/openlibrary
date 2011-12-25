@@ -31,7 +31,7 @@ void SearchList::setResults(const SearchList& list)
 
   debug(DebugLevel::Debug) << "after filtration:";
 
-  for (unsigned int i=0; i<list.size(); i++)
+  for (size_t i = 0; i < list.size(); i++)
   {
     push_back(list[i]);                       //copy all values
     debug(DebugLevel::Debug) << *(at(i).base());
