@@ -21,7 +21,7 @@
 #define DEBUG_HPP
 
 #include <iostream>
-#include <string>
+#include <sstream>
 
 #define debug(l) Debug(__PRETTY_FUNCTION__, l)
 
@@ -42,7 +42,7 @@ namespace DebugLevel
 
 class Debug
 {
-    std::string data;
+    std::stringstream data;
     DebugLevel::Level level;
 
     bool enableOutput() const
@@ -59,7 +59,7 @@ class Debug
     Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(f_name), level(l)
     {
       if (enableOutput())
-        data+=": ";
+        data << ": ";
     }
 
     ~Debug()
@@ -71,7 +71,8 @@ class Debug
     template <class T> Debug &operator<<(const T &arg)
     {
       if (enableOutput())
-        data+=arg;
+        data << arg;
+      
       return *this;
     }
 
