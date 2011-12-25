@@ -56,19 +56,19 @@ class Debug
     }
 
   public:
-    Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(f_name), level(l)
+    Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(), level(l)
     {
       if (enableOutput())
-        data << ": ";
+        data << f_name << ": ";
     }
 
     ~Debug()
     {
       if (enableOutput())
-        std::clog << data << std::endl;;
+        std::clog << data.str() << std::endl;
     }
 
-    template <class T> Debug &operator<<(const T &arg)
+    template <typename T> Debug &operator<<(const T &arg)
     {
       if (enableOutput())
         data << arg;
