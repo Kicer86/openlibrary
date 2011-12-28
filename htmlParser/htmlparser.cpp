@@ -33,10 +33,17 @@ int css_parse(HtmlParser::CssSPData*, yyscan_t);
 extern int html_debug;
 extern int css_debug;
 
+
 HtmlParser::HtmlParser(const std::string &html): htmlCode(0)
 {
   htmlCode=new HtmlTagList;
   parse(html);
+}
+
+
+HtmlParser::~HtmlParser()
+{
+    delete htmlCode;
 }
 
 
