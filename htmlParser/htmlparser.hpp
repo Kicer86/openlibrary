@@ -38,6 +38,8 @@ class HtmlParser
 
   public:
     HtmlParser(const std::string &html);
+    virtual ~HtmlParser();
+    
     void parse(const std::string &html);
     std::vector<HtmlTag*> findAll(const std::string &query);
         
