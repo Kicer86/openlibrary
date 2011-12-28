@@ -58,14 +58,14 @@ tag:      '<'           { HtmlTag newTag(false); TAGS->push_back(newTag); } //ad
 tag:      '<' '/'       { HtmlTag newTag(true); TAGS->push_back(newTag); } //add new tag to list
           tag_body '>'  {};  //html /tag
 
-tag_body: TEXT          { TAG.setId($1) };  //html tag is <tag>
-tag_body: TEXT attr     { TAG.setId($1) };  //or <tag attr>
+tag_body: TEXT          { TAG.setId($1); };   //html tag is <tag>
+tag_body: TEXT attr     { TAG.setId($1); };   //or <tag attr>
 tag_body: tag_body '/'  {
                           // add closing tag
                           HtmlTag newClosingTag(true);
                           newClosingTag.setId(TAG.getId());
                           TAGS->push_back(newClosingTag); 
-                        };               
+                        }       
 
 //html's tag attributes
 
