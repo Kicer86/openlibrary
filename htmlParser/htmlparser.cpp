@@ -30,9 +30,11 @@
 
 int html_parse(HtmlTagList*, yyscan_t);
 int css_parse(HtmlParser::CssSPData*, yyscan_t);
+
+#ifndef NDEBUG
 extern int html_debug;
 extern int css_debug;
-
+#endif
 
 HtmlParser::HtmlParser(const std::string &html): htmlCode(0)
 {
@@ -52,7 +54,9 @@ void HtmlParser::parse(const std::string& html)
   //read the html code - each tag will be one field in std::vector
   YY_BUFFER_STATE bp;
 
+#ifndef NDEBUG
   html_debug=0;
+#endif
 
   yyscan_t scanner;
   html_lex_init_extra(htmlCode, &scanner);
@@ -73,13 +77,16 @@ void HtmlParser::parse(const std::string& html)
 std::vector< HtmlTag* > HtmlParser::findAll(const std::string& query)
 {
   std::cout << query << std::endl;
-  
+
   //read the html code - each tag will be one field in std::vector
   YY_BUFFER_STATE bp;
   CssSPData cssSPData;
   cssSPData.htmlCode=htmlCode;
+
+#ifndef NDEBUG
   css_debug=0;
-  
+#endif
+
   yyscan_t scanner;
   css_lex_init_extra(&cssSPData, &scanner);
 
@@ -89,10 +96,10 @@ std::vector< HtmlTag* > HtmlParser::findAll(const std::string& query)
 
   css__delete_buffer(bp, scanner);
   css_lex_destroy(scanner);
-  
+
   std::vector<HtmlTag *> ret;   //convert list of iterators to pointers
   for (unsigned int i=0; i<cssSPData.results.size(); i++)
     ret.push_back(const_cast<HtmlTag*>(cssSPData.results.at(i).base())); //take of constness
-  
+
   return ret;
 }
