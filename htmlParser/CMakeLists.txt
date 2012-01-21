@@ -10,12 +10,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DYYDEBUG=1)
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
-include(../cmake/ForceAddFlags.cmake)
-
-# FORCE_ADD_FLAGS(CMAKE_CXX_FLAGS )
-# 
-# set (CMAKE_CXX_FLAGS "-Weffc++ ${CMAKE_CXX_FLAGS}")
-
 set(HTMLPARSER_SRC 
   searchlist.cpp 
   htmltaglist.cpp 
