@@ -19,6 +19,7 @@ qt4_automoc(${LIB_SRC})
 qt4_wrap_cpp(LIB_MOCFILES ${LIB_HEADERS})
 
 add_library(${LIB_NAME} SHARED ${LIB_SRC} ${LIB_MOCFILES} )
+set_target_properties(${LIB_NAME} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS}")
 
 target_link_libraries(${LIB_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 

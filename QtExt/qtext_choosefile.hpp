@@ -8,7 +8,7 @@ class QAbstractButton;
 class QLineEdit;
 class QFileDialog;
 
-class QtExtChooseFile: public QObject
+class __attribute__ ((visibility ("default"))) QtExtChooseFile: public QObject
 {
         Q_OBJECT
 
