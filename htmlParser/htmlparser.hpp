@@ -30,26 +30,26 @@ class HtmlTag;
 
 /**
  * @brief Main HtmlParser class
- * 
+ *
  **/
-class HtmlParser
+class __attribute__ ((visibility ("default"))) HtmlParser
 {
     HtmlTagList *htmlCode;
 
   public:
     HtmlParser(const std::string &html);
     virtual ~HtmlParser();
-    
+
     void parse(const std::string &html);
     std::vector<HtmlTag*> findAll(const std::string &query);
-        
+
     struct CssSPData  //CssSelectorParserData
     {
       CssSPData(): htmlCode(0), results()
       {}
       const HtmlTagList * htmlCode;   //pointer to list of tags
       SearchList results;             //list of search results
-      
+
     private:
       CssSPData(const CssSPData &css);
       void operator=(const CssSPData &css);
