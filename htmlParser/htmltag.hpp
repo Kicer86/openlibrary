@@ -24,17 +24,17 @@
 #include <vector>
 #include <ostream>
 
-class HtmlTag
+class __attribute__ ((visibility ("default"))) HtmlTag
 {
   public:
     HtmlTag(bool type=false);
     virtual ~HtmlTag();
 
     operator std::string() const;
-    friend std::ostream& operator << (std::ostream &out, const HtmlTag &htamlTag) 
+    friend std::ostream& operator << (std::ostream &out, const HtmlTag &htamlTag)
     {
         out << htamlTag.operator std::string();
-        
+
         return out;
     }
 
@@ -42,7 +42,7 @@ class HtmlTag
     {
       Attr(): name(), value()
       {}
-      
+
       std::string name;
       std::string value;
       bool operator==(const std::string &cmp) const;
@@ -62,13 +62,13 @@ class HtmlTag
     Attr getAttr(const std::string &attr) const;
     std::vector<Attr> getAttrs(const std::string &attr) const;
     std::string toString() const;
-    
+
   private:
     int level;         //depth level
     bool closing;      //false: <tag>, true: </tag>
     std::string id;
     std::vector<Attr> attributes;
     std::string plainText;
-}; 
+};
 
 #endif // HTMLTAG_HPP
