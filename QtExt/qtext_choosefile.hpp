@@ -8,19 +8,34 @@ class QAbstractButton;
 class QLineEdit;
 class QFileDialog;
 
+class QtExtChooseFileDialog: public QObject
+{
+    public:
+        virtual int exec() = 0;
+        virtual QString result() const = 0;
+};
+
+
 class __attribute__ ((visibility ("default"))) QtExtChooseFile: public QObject
 {
         Q_OBJECT
 
         QAbstractButton *button;
         QLineEdit *lineEdit;
-        QFileDialog *dialog;
+        QObject *dialog;
+
+        const enum Type
+        {
+            T_QFileDialog,
+            T_QtExtChooseFileDialog
+        } type;
 
     private slots:
         void buttonClicked() const;
 
     public:
         QtExtChooseFile(QAbstractButton *, QLineEdit *, QFileDialog *);     //object takes ownership over dialog (will delete it)
+        QtExtChooseFile(QAbstractButton *, QLineEdit *, QtExtChooseFileDialog *);
 
         virtual ~QtExtChooseFile();
 
