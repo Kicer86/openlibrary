@@ -41,7 +41,7 @@ class __attribute__ ((visibility ("default"))) HtmlParser
     virtual ~HtmlParser();
 
     void parse(const std::string &html);
-    std::vector<HtmlTag*> findAll(const std::string &query);
+    std::vector<HtmlTag*> findAll(const std::string &query);  //use http://www.w3.org/TR/CSS2/selector.html
 
     struct CssSPData  //CssSelectorParserData
     {
