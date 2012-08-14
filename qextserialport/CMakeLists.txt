@@ -6,5 +6,5 @@ include_directories(
 	)
 	
 add_subdirectory( src )
-add_subdirectory( examples/enumerator )
-add_subdirectory( examples/event )
+# add_subdirectory( examples/enumerator )
+# add_subdirectory( examples/event )
