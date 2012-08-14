@@ -1,0 +1,548 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head>
+
+<meta name="KEYWORDS" content="astar, a star, c++, stl, admissibility, optimization, pathfind, path-find, pathfinding, path-finding, 8puzzle, nilsson, artificial intelligence,games programming, computer games,programming,java,justin heyes-jones,jokes,playstation,playstation 2">
+<meta name="DESCRIPTION" content="Justin Heyes-Jones home pages">
+
+<title>Justin Heyes-Jones web pages - A* Algorithm</title><meta http-equiv="content-type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="astar_pliki/1.css" type="text/css" media="screen,projection"></head>
+
+
+
+
+
+
+
+ 
+<body data-twttr-rendered="true">
+
+<div id="container">
+		
+						<div id="header">
+				
+						<h1><i><a href="#">Heyes-Jones.com</a></i></h1>
+						<h3>
+
+<i>When a thing is funny, search it carefully for a hidden truth.</i> <br> <b>George Bernard Shaw</b>
+
+</h3>
+				
+				</div>
+				
+				
+				
+				<br class="clear">
+				
+				<div id="sidebar">
+				
+<img src="astar_pliki/cute2.jpg" align="top" border="0">
+
+<br>
+<a href="http://www.flickr.com/photos/amehare/131267855/">Robot by AmeHare</a>
+
+<br><br>
+
+<br>
+<script async="" src="astar_pliki/cbgapi.loaded_0"></script><script gapi_processed="true" type="text/javascript" src="astar_pliki/plusone.js"></script>
+<div style="height: 24px; width: 106px; display: inline-block; text-indent: 0px; margin: 0px; padding: 0px; background: none repeat scroll 0% 0% transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline;" id="___plusone_0"><iframe allowtransparency="true" hspace="0" marginheight="0" marginwidth="0" style="position:absolute;top:-10000px;width:106px;margin:0px;border-style:none" tabindex="0" vspace="0" id="I1_1344970243285" name="I1_1344970243285" src="astar_pliki/fastbutton.htm" frameborder="0" scrolling="no" width="100%"></iframe></div>
+<br>
+<iframe title="Twitter Tweet Button" style="width: 109px; height: 20px;" class="twitter-share-button twitter-count-horizontal" src="astar_pliki/tweet_button.htm" allowtransparency="true" frameborder="0" scrolling="no"></iframe><script type="text/javascript" src="astar_pliki/widgets.js"></script>
+
+							<p>
+
+</p><h3>Check out my FREE Android Live Wallpaper</h3>
+
+<a href="http://www.heyes-jones.com/android/rainwallpaper.html">RainWallpaper</a>
+
+<br><br>
+						<h3>Sponsored Links</h3>						
+
+<br>
+<a href="http://www.internetsolutionsireland.com/">Web Design Ireland</a>
+      <br><br>
+						
+						<p></p>
+									
+						<p>
+
+
+
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-5565674711596064";
+google_ad_width = 120;
+google_ad_height = 600;
+google_ad_format = "120x600_as";
+google_ad_channel ="";
+google_ad_type = "text_image";
+//--></script>
+<script type="text/javascript" src="astar_pliki/show_ads.js">
+</script><ins style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:120px"><ins id="aswift_0_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:120px"><iframe allowtransparency="true" hspace="0" marginwidth="0" marginheight="0" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){i+='.call';setTimeout(h,0)}else if(h.match){i+='.nav';w.location.replace(h)}s.log&amp;&amp;s.log.push(i)}" vspace="0" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" frameborder="0" height="600" scrolling="no" width="120"></iframe></ins></ins>
+
+
+<br>
+
+<br>
+<script type="text/javascript"><!--
+google_ad_client = "pub-5565674711596064";
+google_ad_width = 120;
+google_ad_height = 240;
+google_ad_format = "120x240_as";
+google_cpa_choice = "CAEQz7akzgMaCClCjS5Fq3XKKPOS_9MB";
+//-->
+</script>
+<script type="text/javascript" src="astar_pliki/show_ads.js">
+</script><ins style="display:inline-table;border:none;height:240px;margin:0;padding:0;position:relative;visibility:visible;width:120px"><ins id="aswift_1_anchor" style="display:block;border:none;height:240px;margin:0;padding:0;position:relative;visibility:visible;width:120px"><iframe allowtransparency="true" hspace="0" marginwidth="0" marginheight="0" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){i+='.call';setTimeout(h,0)}else if(h.match){i+='.nav';w.location.replace(h)}s.log&amp;&amp;s.log.push(i)}" vspace="0" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;" frameborder="0" height="240" scrolling="no" width="120"></iframe></ins></ins>
+<br>
+
+<a href="http://www.lispniks.com/faq/faq.html" target="_top"> lisp faq</a><br>
+<a href="http://www.lispniks.com/cl-gardeners/" target="_top"> cl-gardeners</a><br>
+<a href="http://www.gigamonkeys.com/book/">Common Lisp tutorial</a><br>
+
+						
+						</p>
+						
+						<div id="sidebar_bottom"></div>
+				
+				</div>
+				
+				<div id="content">
+				
+				
+		        [
+			<a href="mailto:justinhj@gmail.com" target="_top">Send Email</a> |
+			<a href="http://code.google.com/p/a-star-algorithm-implementation/">A* source on Google Code</a> |
+			<a href="http://justinsboringpage.blogspot.com/">Coding Blog</a>
+			]
+
+				<br><br>
+
+ <h1>A* algorithm tutorial</h1>
+
+<script type="text/javascript"><!--
+google_ad_client = "pub-5565674711596064";
+google_ad_width = 468;
+google_ad_height = 60;
+google_ad_format = "468x60_as";
+google_ad_channel ="";
+google_ad_type = "text_image";
+//--></script>
+
+      <p>
+
+   </p><h3>Get the source on google code</h3>
+
+<a href="http://code.google.com/p/a-star-algorithm-implementation/">A* on Google Code</a>
+<br>
+<br>
+  <h4>Recent blog posts</h4>
+<a href="http://justinsboringpage.blogspot.com/2009/02/who-uses-a-code.html">Who uses this A* code</a>
+
+<br>
+
+<a href="http://justinsboringpage.blogspot.com/2009/02/algorithm-bug-fixes.html">Bug fixes</a>
+
+<br>
+
+<a href="http://justinsboringpage.blogspot.com/2007/10/avoiding-ten-common-game-ai-mistakes.html" target="_top">Avoiding ten common video game AI mistakes</a>
+
+  <br><br>
+
+  <h4>Introduction</h4>
+  This website is my attempt to help teach the 
+  AI search  algorithm known as A*. The downloads section 
+  also has full source code for an easy to use extendable implementation
+  of the algorithm, and two example problems.<br>
+  <br>
+  Previously I felt that it would be wrong of me to provide source code,
+  because I wanted to focus on teaching the reader how to implement the
+  algorithm rather than just supplying a ready made package. I have now changed
+  my mind, as I get many emails from people struggling to get something
+  working. The example code is written in Standard C++ and uses STL, and does
+  not do anything machine or operating system specific, so hopefully it will be
+  quite useful to a wide audience. In addition the code has been dropped into 
+  many research projects and commercial video games, so you can be assured that 
+  it has been tested in the field extensively.<br>
+  <br>
+  <h4>State space search</h4>
+  A* is a type of search algorithm. Some
+  problems can be solved by representing the world in the initial state, and
+  then for each action we can perform on the world we generate states for what
+  the world would be like if we did so. If you do this until the world is in
+  the state that we specified as a solution, then the route from the start to
+  this goal state is the solution to your problem.<br>
+  <br>
+  In this tutorial I will look at the use
+  of state space search to find the shortest path between two points
+  (pathfinding), and also to solve a simple sliding tile puzzle (the
+  8-puzzle).
+
+  Let's look at some of the terms used in
+  Artificial Intelligence when describing this state space search.<br>
+  <br>
+
+  <i>Some terminology</i><br>
+  <br>
+  A <i>node</i> is a state that the problem's world can be in. In pathfinding
+  a node would be just a 2d coordinate of where we are at the present time. In
+  the 8-puzzle it is the positions of all the tiles.<br>
+  Next all the nodes are arranged in a <i>graph </i>where links between nodes
+  represent valid steps in solving the problem. These links are known as <i>edges</i>.
+  In the 8-puzzle diagram the edges are shown as blue lines. See figure 1
+  below.<br>
+
+  <i>State space search</i>, then, is solving a problem by beginning with the
+  start state, and then for each node we expand all the nodes beneath it in the
+  graph by applying all the possible moves that can be made at each point.<br>
+  <br>
+  <i>Heuristics and Algorithms</i><br><br>
+  At this point we introduce an important concept, the <i>heuristic</i>. This is like
+  an algorithm, but with a key difference. An algorithm is a set of steps which
+  you can follow to solve a problem, which always works for valid input. For
+  example you could probably write an algorithm yourself for multiplying two
+  numbers together on paper. A heuristic is not guaranteed to work but is
+  useful in that it may solve a problem for which there is no algorithm.<br>
+  We need a heuristic to help us cut down on this huge search problem. What we
+  need is to use our heuristic at each node to make an estimate of how far we
+  are from the goal. In pathfinding we know exactly how far we are, because we
+  know how far we can move each step, and we can calculate the exact distance
+  to the goal.<br>
+  But the 8-puzzle is more difficult. There is no known algorithm for calculating
+  from a given position how many moves it will take to get to the goal state.
+  So various heuristics have been devised. The best one that I know of is known
+  as the Nilsson score which leads fairly directly to the goal most of the
+  time, as we shall see.<br>
+  <br>
+  <i>Cost</i><br>
+  <br>
+  When looking at each node in the graph, we now have an idea of a heuristic,
+  which can estimate how close the state is to the goal. Another important
+  consideration is the cost of getting to where we are. In the case of
+  pathfinding we often assign a movement cost to each square. The cost is the
+  same then the cost of each square is one. If we wanted to differentiate
+  between terrain types we may give higher costs to grass and mud than to newly
+  made road. When looking at a node we want to add up the cost of what it took
+  to get here, and this is simply the sum of the cost of this node and all
+  those that are above it in the graph.<br>
+  <h4>8 Puzzle</h4>Let's look at the 8 puzzle in more 
+      detail. This is a simple sliding tile puzzle on a 3*3 grid where one tile 
+      is missing and you can move the other tiles into the gap until you get the 
+      puzzle into the goal position. See figure 1.
+      <p></p>
+
+  <img src="astar_pliki/8puzzle.jpg" border="0" height="320" width="320"><br>
+  <i>Figure 1 : The 8-Puzzle state space for a very simple example</i> <br>
+  <br>
+  There are 362,880 different states that the puzzle can be
+  in, and to find a solution the search has to find a route through them. From
+  most positions of the search the number of edges (that's the blue lines) is
+  two. That means that the number of nodes you have in each level of the search
+  is 2^d where d is the depth. If the number of steps to solve a particular
+  state is 18, then that�s 262,144 nodes just at that level.<br>
+  <br>
+  The 8 puzzle game state is as simple as representing a list of the 9 squares
+  and what's in them. Here are two states for example; the last one is the GOAL
+  state, at which point we've found the solution. The first is a jumbled up
+  example that you may start from.<br>
+  <br>
+Start state SPACE, A, C, H, B, D, G, F, E
+      <p></p>Goal state A, B, C, H, SPACE, D, G, F, E
+      <p></p>
+  The rules that you can apply to the puzzle are also simple. If there is a
+  blank tile above, below, to the left or to the right of a given tile, then
+  you can move that tile into the space. To solve the puzzle you need to find
+  the path from the start state, through the graph down to the goal state.<br>
+  <br>
+  There is example code to to solve the 8-puzzle on the <a href="http://code.google.com/p/a-star-algorithm-implementation/">google code</a> page.<br><br>
+
+  <h4>Pathfinding</h4>
+  In a video game, or some other pathfinding scenario, you
+  want to search a state space and find out how to get from somewhere you are
+  to somewhere you want to be, without bumping into walls or going too far. For
+  reasons we will see later, the A* algorithm will not only find a path, if
+  there is one, but it will find the shortest path. A state in pathfinding is
+  simply a position in the world. In the example of a maze game like Pacman you
+  can represent where everything is using a simple 2d grid. The start state for
+  a ghost say, would be the 2d coordinate of where the ghost is at the start of
+  the search. The goal state would be where pacman is so we can go and eat him.
+  There is also example code to do pathfinding on the <a href="http://code.google.com/p/a-star-algorithm-implementation/"> 
+  google code</a> page.<br>
+  <img src="astar_pliki/pathfind.jpg" border="0" height="320" width="400"><br>
+  <i>Figure 2 : The first three steps of a pathfinding state space</i> 
+      <p></p>
+  <h4>Implementing A*</h4>
+  We are now ready to look at the operation of the A*
+  algorithm. What we need to do is start with the goal state and then generate
+  the graph downwards from there. Let's take the 8-puzzle in figure 1. We ask
+  how many moves can we make from the start state? The answer is 2, there are
+  two directions we can move the blank tile, and so our graph expands.<br>
+  If we were just to continue blindly generating successors to each node, we
+  could potentially fill the computer's memory before we found the goal node.
+  Obviously we need to remember the best nodes and search those first. We also
+  need to remember the nodes that we have expanded already, so that we don't
+  expand the same state repeatedly.<br>
+  Let's start with the OPEN list. This is where we will remember which nodes we
+  haven't yet expanded. When the algorithm begins the start state is placed on
+  the open list, it is the only state we know about and we have not expanded
+  it. So we will expand the nodes from the start and put those on the OPEN list
+  too. Now we are done with the start node and we will put that on the CLOSED list.
+  The CLOSED list is a list of nodes that we have expanded.<br>
+  <br>
+  <i>f = g + h</i><br><br>
+  Using the OPEN and CLOSED list lets us be more selective about what we look
+  at next in the search. We want to look at the best nodes first. We will give
+  each node a score on how good we think it is. This score should be thought of
+  as the cost of getting from the node to the goal plus the cost of getting to
+  where we are. Traditionally this has been represented by the letters f, g and
+  h. 'g' is the sum of all the costs it took to get here, 'h' is our heuristic
+  function, the estimate of what it will take to get to the goal. 'f' is the
+  sum of these two. We will store each of these in our nodes.<br>
+  Using the f, g and h values the A* algorithm will be directed, subject to
+  conditions we will look at further on, towards the goal and will find it in
+  the shortest route possible.<br>
+  <br>
+  So far we have looked at the components of the A*, let's see how they all fit 
+  together to make the algorithm :<br>
+  <br>
+  <i><a href="http://www.heyes-jones.com/pseudocode.html" target="_blank">Pseudocode</a></i><br><br>
+  <br>
+  Hopefully the ideas we looked at in the preceding paragraphs will now click into
+  place as we look at the A* algorithm pseudocode. You may find it helpful to print
+  this out or leave the window open while we discuss it.<br>
+  <br>
+  To help make the operation of the algorithm clear we will look again at the 8-puzzle
+  problem in figure 1 above. Figure 3 below shows the f,g and h scores for each of the tiles.<br>
+
+  <img src="astar_pliki/8puzzle2.jpg" border="0" height="320" width="320"><br>
+  <i>Figure 3 : 8-Puzzle state space showing f,g,h scores</i> <br>
+  <br>
+  First of all look at the g score for each node. This is the cost of what it took to get from 
+  the start to that node. So in the picture the center number is g. As you can see it increases
+  by one at each level. In some problems the cost may vary for different state changes. For
+  example in pathfinding there is sometimes a type of terrain that costs more than other types.<br>
+  Next look at the last number in each triple. This is h, the heuristic score. As I mentioned above
+  I am using a heuristic known as Nilsson's Sequence, which converges quickly to a correct solution
+  in many cases. Here is how you calculate this score for a given 8-puzzle state :<br>
+  <br><br>
+  <i>Nilsson's sequence score</i><br>
+  A tile in the center scores 1 (since it should be empty)<br>
+  For each tile not in the center, if the tile clockwise to it is not the one that should be clockwise
+  to it then score 2. Multiply this sequence by three and 
+  finally add the total distance you need to move each tile back to its correct position. Reading the source
+  code should make this clearer.<br>
+  <br>
+  Looking at the picture you should satisfy yourself that the h scores are correct according to
+  this algorithm.<br>
+  <br>
+  Finally look at the digit on the left, the f score. This is the sum of g and h, and by tracking
+  the lowest f down through the state space you are doing what the A* algorithm would be doing 
+  during its search.<br>
+  <br>
+  Let me now look at the example source code provided with the tutorial, for although the algorithm
+  at this stage may be clear in your mind the implementation is a little complicated. The 
+  language of choice for this kind of algorithm is really Common Lisp or Prolog, and most Universities use these
+  when teaching. This effectively lets students focus on the algorithm rather than the implementation
+  details such as memory and data stuctures. For our purposes however, I will refer to
+  my example source code. This is in C++ and uses standard library and STL data structures.<br>
+  <br>
+  <i>C++ implementation details</i><br>
+  <br>
+  If you intend on compiling and running the example code then you can get it on the <a href="http://code.google.com/p/a-star-algorithm-implementation/">google code</a>
+  page. I have not put any project, workspace or makefiles in the 
+archive, but compilation and linking should
+  be straight forward; the programs run from a command line. As we will 
+see the A* algorithm is in a header file, since it is implemented as a 
+template
+  class, so to compile you need only compile on of the example files 
+8puzzle.cpp or findpath.cpp.<br>
+  <br>
+  There are comments throughout the source, and I hope it is clear and readable. What follows then is 
+  a very brief summary for how it works, and the basic design ideas.<br>
+  <br>
+  The main class is called AStarSearch, and is a template class. I chose to use templates because this enables the user
+  to specialise the AStarSearch class to their user state in an efficient way. Originally I used inheritence
+  from a virtual base class, but that lead to the use of type casts in many places to convert from the base Node
+  to the user's node. Also templates are resolved at compile time rather than runtime and this makes them
+  more efficient and require less memory.<br>
+  <br>
+  You pass in a type which represents the state
+  part of the problem. That type must contain the data you need to represent each state, and also several 
+  member functions which get called during the search. These are described below :<br>
+  <br>
+	float GoalDistanceEstimate( PuzzleState &amp;nodeGoal );<br>
+	Return the estimated cost to goal from this node<br>
+	<br>
+	bool IsGoal( PuzzleState &amp;nodeGoal );<br>
+	Return true if this node is the goal<br>
+	<br>
+	void GetSuccessors( AStarSearch<puzzlestate> *astarsearch );<br>
+	For each successor to this state call the AStarSearch's AddSuccessor call to 
+	add each one to the current search<br>
+	<br>
+	float GetCost( PuzzleState *successor );<br>
+	Return the cost moving from this state to the state of successor<br>
+	<br>
+	bool IsSameState( PuzzleState &amp;rhs );<br>
+	Return true if the provided state is the same as this state<br>
+	<br>
+	The idea is that you should easily be able to implement different problems. All you need do is 
+	create a class to represent a state in your problem, and then fill out the functions above.<br>
+	Once you have done that you create a search class instance like this :<br>
+	<br>
+	AStarSearch<puzzlestate> astarsearch;<br>
+	<br>
+	Then the create the start and goal states and pass them to the algorithm to initialize the search : <br>
+	<br>
+	astarsearch.SetStartAndGoalStates( nodeStart, nodeEnd );
+	<br>
+	Each step (a step is getting the best node and expanding it's successors) you call : <br>
+	<br>
+	SearchState = astarsearch.SearchStep();<br>
+	<br>
+	Which returns a status which let's you know whether the search succeeded, failed, or is still
+	going.<br>
+	<br>
+	Once your search succedes you need to be able to display it to the user, or use it in your program. To
+	facilitate this I have added functions to allow movement through the solution.<br>
+	<br>
+	UserState *GetSolutionStart();<br>
+	UserState *GetSolutionNext()<br>
+	<br>
+	UserState *GetSolutionEnd();<br>
+	UserState *GetSolutionPrev()<br>
+	<br>
+	You use these to move an internal iterator through the solution. The most typical use would be to
+	GetSolutionStart (the start state) and the iterate through each node using GetSolutionNext. For 
+	debugging purposes or some problems you may need to iterate through the solution backwards, and the
+	second two functions allow that.<br>
+	<br>
+	<i>Debugging and Educational functions</i><br>
+	<br>
+	Let's say you decide to display the OPEN and CLOSED lists at each step of the solution. This is
+	a common debug feature whilst getting the algorithm working. Further, for the student it is 
+	often easier to see what is going on this way. Using the following calls you can display the
+	lists during the search process...<br>
+	<br>
+	UserState *GetOpenListStart( float &amp;f, float &amp;g, float &amp;h );<br>
+	UserState *GetOpenListNext( float &amp;f, float &amp;g, float &amp;h );<br>
+	UserState *GetClosedListStart( float &amp;f, float &amp;g, float &amp;h );<br>
+	UserState *GetClosedListNext( float &amp;f, float &amp;g, float &amp;h );<br>
+	<br>
+	As you see these calls take references to float values for f,g and h so if your debugging
+	or learning needs involve looking at these then you can pass floats in to store the results.
+	If you don't care these are optional arguments.<br>
+	<br>
+	Examples of how you use these features are present in both the findpath.cpp and 8puzzle.cpp example
+	files.<br>
+	<br>
+	I hope that at this point you will understand the key concepts you need, and by reading and experimenting with the 
+	example code (stepping through it with a debugger is very instructive) you hopefully will fully grasp
+	the A* Algorithm. To complete this introduction I will briefly cover Admissibility and Optimization issues.
+<br><br>
+  <h4>Admissibility</h4>
+  Any graph search algorithm is said to be <i>admissible</i> if it always returns an optimal soution, that is the
+  one with the lowest cost, if a solution exists at all.<br>
+  However, A* is only admissible if the heuristic you use h' never over-estimates the distance to the goal. In other
+  words if you knew a heuristic h which always gave the exact distance to goal then to be admissible h' must be less than or
+  equal to h. <br>
+  For this reason when choosing a heuristic you should always try to ensure that it does not over-estimate the distance the 
+  goal. In practice this may be impossible. Look at the 8-puzzle for example; in our heuristic above it is possible that
+  we may get an estimated cost to goal that is higher than is really neccessary. But it does help you to be aware of this
+  theory. If you set the heuristic to return zero, you will never over-estimate the distance to goal, but what you will
+  get is a simple search of every node generated at each step (breadth-first search).<br>
+  One final note about admissibility; there is a corollary to this theory called the <i>Graceful Decay of Admissibility</i>
+ which
+  states that if your heuristic rarely over-estimates the real distance 
+to goal by more than a certain value (lets call it E) then
+  the algorithm will rarely find a solution which costs more than E over
+ the cost of the optimal solution.<br>
+  <br>
+
+<br>
+  <h4>Optimization</h4>
+  A good source of optimizations for A* can be found in Steve Rabin's chapters in Game Gems, which is on the
+  <a href="http://www.heyes-jones.com/books.html" target="_top"> books</a> page. The forthcoming book AI Wisdom by the same publisher is going to have
+  several chapters on optimization of A*. These of course focus on pathfinding, which is the ubiquitous use of A* in games.<br>
+  Optimizing pathfinding is a whole subject in itself and I only want to target the A* algorithm for general use, but there
+  are some obvious optimizations you will want to make for most problems. After testing my example code with VTune
+  I found the two main bottlenecks were searching the OPEN and CLOSED lists for a new node, and managing new nodes. A simple
+  but very effective optimization was to write a simpler memory allocator than the C++ std new uses. I have provided 
+  the code for this class and you can enable it in stlastar.h.
+  I may write a tutorial on it in the future if there is
+  sufficient interest.<br>
+  Since you always want to get the node with the lowest 'f' score off the OPEN list each search loop you can use a data
+  structure called a 'priority queue'. This enables to you to organise your data in a way in which the best (or worst 
+  depending on how you set it up) item can always be removed efficiently. Steve Rabin's chapter in the book above shows
+  how to use an STL Vector along with heap operations to get this behaviour. My source code uses this technique<br> 
+  If you are interested in priority queues check this <a href="http://www.heyes-jones.com/datacode.zip" target="_top">source</a> out. I implemented heap based
+priority queue and linked list in C. The code is mature and has been used in public projects such as <a href="http://fc-solve.berlios.de/" target="_top"> FreeCell Solver</a>
+  <br>
+  Another optimization is that instead of searching the lists you should use a hash table. This will
+  prevent you having to do a linear search. A third optimization is that you never need to backtrack in a graph search. If you
+  look at pathfinding for example you will never be nearer to the goal if you step back to where you came from. So when you
+  write your code to generate the successor's of a node, you can check the generated ones and eliminate any states that are
+  the same as the parent. Although this makes no difference to the operation of the algorithm it does make backtracking 
+  quicker.<br>
+  The key to optimization is not to do it until you have your code working and you know that your problem is correctly 
+  represented. Only then can you start to optimize the data structures to work better for your own problem. Using VTune
+  or True Time, or whatever profiler you have available is the next step. In some problems checking to see if something
+  is the goal or not may be costly, whilst in others generating the successor nodes at each step may be a significant 
+  bottleneck. Profiling takes the guesswork out of finding where the bottleneck is, so that you can target the key problems
+  in your application.<br>
+<br>
+
+  <h4>Report bugs and get the latest code from google project</h4>
+<a href="http://code.google.com/p/a-star-algorithm-implementation/" target="_top"> a-star-algorithm-implementation</a><br> 
+
+  <h4>For more information</h4>
+<br>
+	<li>The original tutorial was inspired by Brian Stout's pathfinding tutorial in Game Developer:<br>
+   <a href="http://www.gamasutra.com/features/19990212/sm_01.htm">http://www.gamasutra.com/features/19990212/sm_01.htm</a><br>
+	</li><li>I also recommend Stephen Woodcock's website:<br>
+   <a href="http://www.gameai.com/">http://www.gameai.com</a><br>
+	</li><li>Books<vr>
+   See the <a href="http://www.heyes-jones.com/books.html" target="_top"> books</a> page; the AI section contains two good text books which include
+   good sections on the A* algorithm.<br>
+
+<br>
+<hr>
+
+
+				
+				</vr></li></puzzlestate></puzzlestate></div>
+		
+		</div>
+		
+		<div id="footer">
+		
+				<p>
+						
+								<!-- Please leave this line intact -->
+								Template design by <a href="http://www.sixshootermedia.com/">Six Shooter Media</a>.<br>
+								<!-- you can delete below here -->
+								Featured on <a href="http://www.sixshootermedia.com/Pretty_as_a_Picture">Pretty as a Picture</a>, <a href="http://www.openwebdesign.org/">OWD.org</a> and <a href="http://www.oswd.org/">OSWD.org</a>.<br>
+
+								 Site content Copyright ©2010 Justin Heyes-Jones. All Rights Reserved.
+				
+						</p>
+		
+		</div>
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="astar_pliki/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-6582321-1");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+
+
+
+
+
+
+
+</body></html>
