@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
 
 add_subdirectory(htmlParser htmlParser)
-add_subdirectory(qextserialport qextserialport)
+#add_subdirectory(qextserialport qextserialport)
 add_subdirectory(router router)
 add_subdirectory(QtExt QtExt)
 
