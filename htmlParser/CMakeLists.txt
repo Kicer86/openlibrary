@@ -8,6 +8,7 @@ include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DYYDEBUG=1)
+  message("building htmlParser with debug support")
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
 
 set(HTMLPARSER_SRC
