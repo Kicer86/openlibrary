@@ -9,10 +9,10 @@ include (cmake/ForceAddFlags.cmake)
 
 set(LIBRARY_HEADERS debug.hpp std_macros.hpp str_op.hpp)
 
-install(FILES ${LIBRARY_HEADERS} 
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include 
+install(FILES ${LIBRARY_HEADERS}
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/include
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ )
-        
-install(FILES cmake/ForceAddFlags.cmake 
+
+install(FILES cmake/ForceAddFlags.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules
         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
