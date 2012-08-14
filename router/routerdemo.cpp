@@ -23,6 +23,8 @@
 #include "routerdemo.hpp"
 #include "router.hpp"
 
+#include "A_star/router.hpp"
+
 #define WIDTH 30
 #define HEIGHT 10
 #define SIZE 20
