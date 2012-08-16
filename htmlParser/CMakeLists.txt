@@ -6,7 +6,7 @@ find_package(BISON REQUIRED)
 
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DYYDEBUG=1)
   message("building htmlParser with debug support")
 endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -45,15 +45,15 @@ add_library(htmlParser SHARED
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES})
 
-set_target_properties(htmlParser PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS}"
+set_target_properties(htmlParser PROPERTIES COMPILE_FLAGS "--std=c++11 ${LIB_CXXFLAGS}"
                                             COMPILE_FLAGS_DEBUG "-Weffc++")
 
 
 #install files
 if(WIN32)  # for windows (dll = runtime)
-  install (TARGETS htmlParser RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+  install(TARGETS htmlParser RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
 else(WIN32)
-  install (TARGETS htmlParser LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+  install(TARGETS htmlParser LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
 endif(WIN32)
 
-install (FILES ${HTMLPARSER_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(FILES ${HTMLPARSER_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
