@@ -17,17 +17,20 @@ namespace OpenLibrary
 
             \arg PointT:     type for points (kept in open and closed sets). Must implement:
                              * public access to variables x, and y
-                             *
+                             * public access to variables g_score and f_score
+                             * PointT(T x, T y) - constructor with 'x' and 'y' coordinates
 
             \arg OpenSetT:   type for open points container. Must implement functions:
                              * PointT getBest() - which returns point with lowest f_score
                              * bool exists(PointT) - which checks if point exists in open set
-                             *
+                             * void clear() - clear container
+                             * voin insert(const T &) - function for adding points
 
             \arg ClosedSetT: type for closed points container. Must implement functions:
-                             *
+                             * void clear() - clear container
+                             * voin insert(const T &) - function for adding points
 
-            \arg
+            \arg flags:      options
         */
 
         typedef unsigned int FlagsT;
@@ -39,10 +42,21 @@ namespace OpenLibrary
                 AStar() {}
                 virtual ~AStar() {}
 
-                template<class T>
-                bool route(const T &startPoint, const T &endPoint)
+                template<class CoordinateT>
+                bool route(const CoordinateT &startPoint, const CoordinateT &endPoint)
                 {
-                    const bool status = route(startPoint, endPoint);
+                    //prepare sets
+                    m_openSet.clear();
+                    m_closedSet.clear();
+
+                    PointT firstPoint(startPoint.x, startPoint.y);
+                    PointT lastPoint(endPoint.x, endPoint.y);
+                    firstPoint.g_score = 0;
+                    m_openSet.insert(firstPoint);
+
+                    //find path
+                    const bool status = findPath(lastPoint);
+
                     return status;
                 }
 
@@ -50,7 +64,7 @@ namespace OpenLibrary
                 OpenSetT  m_openSet;
                 ClosedSetT m_closedSet;
 
-                bool route(const PointT &startPoint, const PointT &endPoint)
+                bool findPath(const PointT &&endPoint)
                 {
 
                 }
