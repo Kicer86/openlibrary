@@ -26,6 +26,21 @@
 #include "A_star/router.hpp"
 #include "A_star/std_types.hpp"
 
+#include <set>
+namespace
+{
+    using namespace OpenLibrary::Router;
+    typedef Point<int, double> PointT;
+    AStar<PointT, std::set<PointT>, std::set<PointT>> router;
+    
+    int r()
+    {
+	Coordinates<int> s(0, 0), e(9, 9);
+	router.route(s, e);
+    }
+}
+
+
 #define WIDTH 30
 #define HEIGHT 10
 #define SIZE 20

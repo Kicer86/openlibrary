@@ -15,21 +15,21 @@ namespace OpenLibrary
         /**
             \class AStar
 
-            \arg PointT:     type for points (kept in open and closed sets). Must implement:
-                             * public access to variables x, and y
-                             * public access to variables g_score and f_score
-                             * PointT(T x, T y) - constructor with 'x' and 'y' coordinates (where T is any type you wish ;) )
-			     * move operators
+            \arg PointT:       type for points (kept in open and closed sets). Must implement:
+                               * public access to variables x, and y
+                               * public access to variables g_score and f_score
+			       * public access to variable origin of type PointT*
+                               * PointT(T x, T y) - constructor with 'x' and 'y' coordinates (where T is any type you wish ;) )
 
-            \arg OpenSetT:   type for open points container. Must implement functions:
-                             * PointT getBest() - which returns point with lowest f_score
-                             * bool exists(PointT) - which checks if point exists in open set
-                             * void clear() - clear container
-                             * voin insert(const T &) - function for adding points
+            \arg OpenSetT:     type for open points container. Must implement functions:
+                               * PointT getBest() - which returns point with lowest f_score
+                               * bool exists(PointT) - which checks if point exists in open set
+                               * void clear() - clear container and delete point's!
+                               * void insert(T *) - function for adding points. Set must take care of deletion of it's points
 
-            \arg ClosedSetT: type for closed points container. Must implement functions:
-                             * void clear() - clear container
-                             * voin insert(const T &) - function for adding points
+            \arg ClosedSetT:   type for closed points container. Must implement functions:
+                               * void clear() - clear container and delete point's!
+                               * voin insert(T *) - function for adding points. Set must take care of deletion of it's points
 
             \arg flags:      options
         */
@@ -48,12 +48,12 @@ namespace OpenLibrary
                 {
                     PointT firstPoint(startPoint.x, startPoint.y);
                     PointT lastPoint(endPoint.x, endPoint.y);
-	
+
                     //prepare sets
-		    init(firstPoint);
-		    
+                    init(&firstPoint);
+
                     //find path
-                    const bool status = findPath(lastPoint);
+                    const bool status = findPath(&lastPoint);
 
                     return status;
                 }
@@ -62,16 +62,14 @@ namespace OpenLibrary
                 OpenSetT  m_openSet;
                 ClosedSetT m_closedSet;
 
-		void init(PointT &&startPoint)
-		{
+                void init(PointT *startPoint)
+                {
                     m_openSet.clear();
                     m_closedSet.clear();
-
-                    startPoint.g_score = 0;
                     m_openSet.insert(startPoint);
-		}
+                }
 
-                bool findPath(const PointT &&endPoint)
+                bool findPath(PointT *endPoint)
                 {
 
                 }
