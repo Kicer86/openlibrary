@@ -16,14 +16,14 @@ namespace OpenLibrary
     {
         struct Point
         {
-	    int x, y;                 //coordinates
-	    double f_score, g_score;  //scores
-	    
-	    Point(int _x, int _y): x(_x), y(_y) {}
-	    Point(Point &&) = default;
-	    Point &operator=(Point &&) = default;
-	    
-	    virtual ~Point() {}
+            int x, y;                 //coordinates
+            double f_score, g_score;  //scores
+
+            Point(int _x, int _y): x(_x), y(_y) {}
+            Point(Point && ) = default;
+            Point &operator=(Point && ) = default;
+
+            virtual ~Point() {}
         };
     }
 }
