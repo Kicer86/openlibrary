@@ -24,6 +24,7 @@
 #include "router.hpp"
 
 #include "A_star/router.hpp"
+#include "A_star/std_types.hpp"
 
 #define WIDTH 30
 #define HEIGHT 10

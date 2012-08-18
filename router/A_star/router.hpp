@@ -19,6 +19,7 @@ namespace OpenLibrary
                              * public access to variables x, and y
                              * public access to variables g_score and f_score
                              * PointT(T x, T y) - constructor with 'x' and 'y' coordinates (where T is any type you wish ;) )
+			     * move operators
 
             \arg OpenSetT:   type for open points container. Must implement functions:
                              * PointT getBest() - which returns point with lowest f_score
@@ -45,15 +46,12 @@ namespace OpenLibrary
                 template<class CoordinateT>
                 bool route(const CoordinateT &startPoint, const CoordinateT &endPoint)
                 {
-                    //prepare sets
-                    m_openSet.clear();
-                    m_closedSet.clear();
-
                     PointT firstPoint(startPoint.x, startPoint.y);
                     PointT lastPoint(endPoint.x, endPoint.y);
-                    firstPoint.g_score = 0;
-                    m_openSet.insert(firstPoint);
-
+	
+                    //prepare sets
+		    init(firstPoint);
+		    
                     //find path
                     const bool status = findPath(lastPoint);
 
@@ -63,6 +61,15 @@ namespace OpenLibrary
             private:
                 OpenSetT  m_openSet;
                 ClosedSetT m_closedSet;
+
+		void init(PointT &&startPoint)
+		{
+                    m_openSet.clear();
+                    m_closedSet.clear();
+
+                    startPoint.g_score = 0;
+                    m_openSet.insert(startPoint);
+		}
 
                 bool findPath(const PointT &&endPoint)
                 {
