@@ -14,15 +14,27 @@ namespace OpenLibrary
 {
     namespace Router
     {
-        struct Point
+
+        template<class CoordT>
+        struct Coordinates
         {
-            int x, y;                 //coordinates
-            double f_score, g_score;  //scores
+            CoordT x, y;                 //coordinates
 
-            Point(int _x, int _y): x(_x), y(_y) {}
-            Point(Point && ) = default;
-            Point &operator=(Point && ) = default;
+            Coordinates(CoordT _x, CoordT _y): x(_x), y(_y) {}
+            virtual ~Coordinates() {}
+        };
 
+        template<class CoordT, class ScoreT>
+        struct Point: Coordinates<CoordT>
+        {
+            ScoreT f_score, g_score;     //scores
+            Point *origin;               //origin of point
+
+            Point(const CoordT &_x, const CoordT &_y): Coordinates<CoordT>(_x, _y), f_score(0), g_score(0), origin(nullptr) {}
+            Point(Point && ) = delete;
+            Point(const Point &) = delete;
+            Point &operator=(Point && ) = delete;
+            Point &operator=(Point &) = delete;
             virtual ~Point() {}
         };
     }
