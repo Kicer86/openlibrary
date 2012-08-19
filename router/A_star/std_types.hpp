@@ -10,6 +10,8 @@
 #ifndef OPENLIBRARY_A_START_ROUTER_STD_TYPES_HPP
 #define OPENLIBRARY_A_START_ROUTER_STD_TYPES_HPP
 
+#include <set>
+
 namespace OpenLibrary
 {
     namespace Router
@@ -36,6 +38,20 @@ namespace OpenLibrary
             Point &operator=(Point && ) = delete;
             Point &operator=(Point &) = delete;
             virtual ~Point() {}
+        };
+
+
+        //basic implementation of ClosedSet type for A* router.
+        template<class PointT>
+        class ClosedSet: public std::set<PointT *>
+        {
+            public:
+                ClosedSet(): std::set<PointT *>() {}
+                virtual ~ClosedSet()
+                {
+		    for(auto item: *this)
+                        delete item;
+                }
         };
     }
 }
