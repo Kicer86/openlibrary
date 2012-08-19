@@ -8,6 +8,8 @@
 #ifndef OPENLIBRARY_A_START_ROUTER_HPP
 #define OPENLIBRARY_A_START_ROUTER_HPP
 
+#include <cmath>
+
 namespace OpenLibrary
 {
     namespace Router
@@ -59,20 +61,31 @@ namespace OpenLibrary
                     return status;
                 }
 
-            private:
+            protected:
+                typedef decltype(PointT::f_score) FScoreT;
+
                 OpenSetT  m_openSet;
                 ClosedSetT m_closedSet;
 
-                void init(PointT *startPoint)
+                virtual void init(PointT *startPoint)
                 {
                     m_openSet.clear();
                     m_closedSet.clear();
                     m_openSet.insert(startPoint);
                 }
 
-                bool findPath(PointT *endPoint)
+                virtual bool findPath(PointT *endPoint)
                 {
 
+                }
+
+                virtual FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2)
+                {
+                    const auto pow2 = [](long double x) -> long double { return x * x; };
+
+                    FScoreT dist = sqrt( pow2(p1->x - p2->x) + pow2(p1->y - p2->y) );
+
+                    return dist;
                 }
         };
     }
