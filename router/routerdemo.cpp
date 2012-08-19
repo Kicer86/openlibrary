@@ -31,9 +31,10 @@ namespace
 {
     using namespace OpenLibrary::Router;
     typedef Point<int, double> PointT;
+    typedef OpenSet<PointT> OpenSetT;
     typedef ClosedSet<PointT> ClosedSetT;
-    AStar<PointT, std::set<PointT *>, ClosedSetT> router;
-    
+    AStar<PointT, OpenSetT, ClosedSetT> router;
+
     int r()
     {
 	Coordinates<int> s(0, 0), e(9, 9);
@@ -52,7 +53,7 @@ void RoutingThread::run()
   router->addObstacle(Router::Area(Router::Point(10,0), Router::Point(12,8)));
   router->addObstacle(Router::Area(Router::Point(20,9), Router::Point(22,2)));
   router->route(Router::Point(0,0), Router::Point(25,9));
-  
+
   exit();
 }
 
@@ -72,7 +73,7 @@ char** RoutingThread::getField()
 RouterDemo::RouterDemo(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f)
 {
   thread.start();
-  
+
   connect(&timer, SIGNAL(timeout()), this, SLOT(update()));
   timer.start(200);    //repaint frequency
 }
@@ -81,9 +82,9 @@ RouterDemo::RouterDemo(QWidget* parent, Qt::WindowFlags f): QWidget(parent, f)
 void RouterDemo::paintEvent(QPaintEvent* e)
 {
   char **field=thread.getField();
-  
+
   QPainter painter(this);
-  
+
   for (int y=0; y< HEIGHT; y++)
     for (int x=0; x< WIDTH; x++)
     {
@@ -92,47 +93,47 @@ void RouterDemo::paintEvent(QPaintEvent* e)
         case 0:
           painter.setBrush(QColor(Qt::red));
           break;
-        
+
         case 1:
           painter.setBrush(QColor(Qt::darkRed));
           break;
-          
+
         case 2:
           painter.setBrush(QColor(Qt::blue));
-          break; 
-          
+          break;
+
         case 3:
           painter.setBrush(QColor(Qt::darkBlue));
-          break; 
-        
+          break;
+
         case 4:
           painter.setBrush(QColor(Qt::green));
           break;
-        
+
         case 5:
           painter.setBrush(QColor(Qt::darkGreen));
           break;
-          
+
         case 6:
           painter.setBrush(QColor(Qt::cyan));
-          break; 
-          
+          break;
+
         case 7:
           painter.setBrush(QColor(Qt::darkCyan));
-          break;   
-          
+          break;
+
         case 15:
           painter.setBrush(QColor(Qt::black));
-          break; 
-          
+          break;
+
         default:
           painter.setBrush(QColor(Qt::white));
-          break; 
+          break;
       }
-      
+
       QRect rect(x*SIZE, y*SIZE, SIZE, SIZE);
       painter.drawRect(rect);
     }
-    
+
   e->accept();
 }
