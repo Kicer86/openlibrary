@@ -83,7 +83,7 @@ namespace OpenLibrary
                 {
                     const auto pow2 = [](long double x) -> long double { return x * x; };
 
-                    FScoreT dist = sqrt( pow2(p1->x - p2->x) + pow2(p1->y - p2->y) );
+                    const FScoreT dist = sqrt( pow2(p1->x - p2->x) + pow2(p1->y - p2->y) );
 
                     return dist;
                 }
