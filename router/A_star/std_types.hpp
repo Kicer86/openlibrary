@@ -1,7 +1,7 @@
 
 /*************************************************
  *    standard types for A* routing algorithm    *
- *           Author: Micha³ Walenciak            *
+ *           Author: Michał Walenciak            *
  *           Creation date: 18.08.2012           *
  *************************************************/
 
@@ -55,6 +55,16 @@ namespace OpenLibrary
             Point &operator=(Point &) = delete;
             virtual ~Point() {}
         };
+
+
+	//basic implementation of OpenSet type for A* router.
+	template<class PointT>
+	class OpenSet
+	{
+	    public:
+		OpenSet() {}
+		virtual ~OpenSet() {}
+	};
 
 
         //basic implementation of ClosedSet type for A* router.
