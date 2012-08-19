@@ -11,6 +11,7 @@
 #define OPENLIBRARY_A_START_ROUTER_STD_TYPES_HPP
 
 #include <set>
+#include <list>
 
 namespace OpenLibrary
 {
@@ -57,14 +58,47 @@ namespace OpenLibrary
         };
 
 
-	//basic implementation of OpenSet type for A* router.
-	template<class PointT>
-	class OpenSet
-	{
-	    public:
-		OpenSet() {}
-		virtual ~OpenSet() {}
-	};
+        //basic implementation of OpenSet type for A* router. PointT must meet the same rules as required for 'PointT' in router.hpp
+        template<class PointT>
+        class OpenSet
+        {
+            public:
+                OpenSet() {}
+                virtual ~OpenSet()
+		{
+		    clear();
+		}
+
+                void clear()
+		{
+		    //free memory
+		    for(auto item: m_points)          //m_points and m_value keep the same points, delete them once
+                        delete item;
+
+		    //remove items
+		    m_points.clear();
+		    m_value.clear();
+		}
+
+		void insert(PointT *p)
+		{
+		    m_points.insert(p);
+		    m_value.insert(p);
+		}
+
+            private:
+                class ValueComp
+                {
+		    public:
+			bool operator() (PointT *left, PointT *right)
+                        {
+                            return left->f_score < right->f_score;
+                        }
+                };
+
+                std::set<PointT *> m_points;              //for point fast finding
+                std::set<PointT *, ValueComp> m_value;    //for points sorting
+        };
 
 
         //basic implementation of ClosedSet type for A* router.
@@ -75,9 +109,18 @@ namespace OpenLibrary
                 ClosedSet(): std::set<PointT *>() {}
                 virtual ~ClosedSet()
                 {
+		    clear();
+                }
+
+                void clear()
+		{
+		    //free memory
 		    for(auto item: *this)
                         delete item;
-                }
+
+		    //remove items
+		    std::set<PointT *>::clear();
+		}
         };
 
 
