@@ -18,8 +18,9 @@ namespace OpenLibrary
             \arg PointT:       type for points (kept in open and closed sets). Must implement:
                                * public access to variables x, and y
                                * public access to variables g_score and f_score
-			       * public access to variable origin of type PointT*
+                               * public access to variable origin of type PointT*
                                * PointT(T x, T y) - constructor with 'x' and 'y' coordinates (where T is any type you wish ;) )
+                               * probably some operators to allow keeping points in sets/maps
 
             \arg OpenSetT:     type for open points container. Must implement functions:
                                * PointT getBest() - which returns point with lowest f_score

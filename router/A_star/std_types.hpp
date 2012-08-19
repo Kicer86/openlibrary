@@ -24,6 +24,22 @@ namespace OpenLibrary
 
             Coordinates(CoordT _x, CoordT _y): x(_x), y(_y) {}
             virtual ~Coordinates() {}
+
+            //may be used by set/map:
+            bool operator< (const Coordinates &other) const
+            {
+                bool result = false;
+
+                //there may be some problems with floatingpoint types
+                if (y < other.y)
+                    result = true;
+                else if (y > other.y)
+                    result = false;
+                else
+                    result = x < other.x;
+
+                return result;
+            }
         };
 
         template<class CoordT, class ScoreT>
@@ -53,6 +69,9 @@ namespace OpenLibrary
                         delete item;
                 }
         };
+
+
+
     }
 }
 
