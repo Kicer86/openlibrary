@@ -39,6 +39,7 @@ namespace
     {
 	Coordinates<int> s(0, 0), e(9, 9);
 	router.route(s, e);
+        return 0;
     }
 }
 
