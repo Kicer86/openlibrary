@@ -9,6 +9,7 @@
 #define OPENLIBRARY_A_START_ROUTER_HPP
 
 #include <cmath>
+#include <vector>
 
 namespace OpenLibrary
 {
@@ -92,6 +93,15 @@ namespace OpenLibrary
                             status = true;
                             break;
                         }
+
+                        m_closedSet.insert(currentPoint);
+
+                        const std::vector<PointT *> tentaives = get_neighbours(currentPoint);
+
+                        for (PointT *tentative: tentaives)
+                        {
+
+                        }
                     }
 
                     return status;
@@ -108,6 +118,22 @@ namespace OpenLibrary
 
                 virtual void reconstruct_path(PointT *)
                 {
+                }
+
+                virtual std::vector<PointT *> get_neighbours(PointT *p)
+                {
+                    std::vector<PointT *> result(8);
+
+                    result.push_back( new PointT(p->x + 0, p->y - 1) );
+                    result.push_back( new PointT(p->x + 1, p->y - 1) );
+                    result.push_back( new PointT(p->x + 1, p->y + 0) );
+                    result.push_back( new PointT(p->x + 1, p->y + 1) );
+                    result.push_back( new PointT(p->x + 0, p->y + 1) );
+                    result.push_back( new PointT(p->x - 1, p->y + 1) );
+                    result.push_back( new PointT(p->x - 1, p->y + 0) );
+                    result.push_back( new PointT(p->x - 1, p->y - 1) );
+
+                    return std::move(result);
                 }
         };
     }
