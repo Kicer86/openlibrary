@@ -31,7 +31,8 @@ namespace
 {
     using namespace OpenLibrary::Router;
     typedef Point<int, double> PointT;
-    AStar<PointT, std::set<PointT>, std::set<PointT>> router;
+    typedef ClosedSet<PointT> ClosedSetT;
+    AStar<PointT, std::set<PointT *>, ClosedSetT> router;
     
     int r()
     {
