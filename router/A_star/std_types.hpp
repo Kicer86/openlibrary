@@ -52,9 +52,10 @@ namespace OpenLibrary
             Point(const CoordT &_x, const CoordT &_y): Coordinates<CoordT>(_x, _y), f_score(0), g_score(0), origin(nullptr) {}
             Point(Point && ) = delete;
             Point(const Point &) = delete;
+            virtual ~Point() {}
+
             Point &operator=(Point && ) = delete;
             Point &operator=(Point &) = delete;
-            virtual ~Point() {}
         };
 
 
