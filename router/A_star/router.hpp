@@ -1,7 +1,7 @@
 
 /***************************************
  *    Base for A* routing algorithm    *
- *      Author: Micha≥ Walenciak       *
+ *      Author: Micha≈Ç Walenciak       *
  *      Creation date: 14.08.2012      *
  ***************************************/
 
