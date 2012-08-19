@@ -10,6 +10,7 @@
 #ifndef OPENLIBRARY_A_START_ROUTER_STD_TYPES_HPP
 #define OPENLIBRARY_A_START_ROUTER_STD_TYPES_HPP
 
+#include <assert.h>
 #include <set>
 #include <list>
 
@@ -41,6 +42,11 @@ namespace OpenLibrary
 
                 return result;
             }
+
+            bool operator==(const Coordinates &other) const
+            {
+		return x == other.x && y == other.y;
+	    }
         };
 
         template<class CoordT, class ScoreT>
@@ -70,6 +76,23 @@ namespace OpenLibrary
 		    clear();
 		}
 
+		PointT *getBest()
+		{
+		    typename std::set<PointT *>::const_iterator f = m_value.begin();
+		    PointT *result = *f;
+
+		    m_value.erase(f);
+		    m_points.erase(result);
+
+		    assert(m_points.size() == m_value.size());
+
+		    return result;
+		}
+
+		bool exists(const PointT *) const
+		{
+		}
+
                 void clear()
 		{
 		    //free memory
@@ -85,6 +108,15 @@ namespace OpenLibrary
 		{
 		    m_points.insert(p);
 		    m_value.insert(p);
+
+		    assert(m_points.size() == m_value.size());
+		}
+
+		bool isEmpty() const
+		{
+		    assert(m_points.size() == m_value.size());
+
+		    return m_points.empty();
 		}
 
             private:
