@@ -53,7 +53,7 @@ namespace OpenLibrary
                     PointT lastPoint(endPoint.x, endPoint.y);
 
                     //prepare sets
-                    init(&firstPoint);
+                    init(&firstPoint, &lastPoint);
 
                     //find path
                     const bool status = findPath(&lastPoint);
@@ -67,8 +67,10 @@ namespace OpenLibrary
                 OpenSetT  m_openSet;
                 ClosedSetT m_closedSet;
 
-                virtual void init(PointT *startPoint)
+                virtual void init(PointT *startPoint, PointT *endPoint)
                 {
+                    startPoint->f_score = heuristic_cost_estimate(startPoint, endPoint);
+
                     m_openSet.clear();
                     m_closedSet.clear();
                     m_openSet.insert(startPoint);
