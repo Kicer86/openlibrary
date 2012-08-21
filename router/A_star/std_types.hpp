@@ -89,14 +89,21 @@ namespace OpenLibrary
                     return result;
                 }
 
-                bool exists(const PointT *) const
+                bool exists(const PointT *p, PointT* &ret) const
                 {
+                    typename std::set<PointT *>::const_iterator it = m_points.find(const_cast<PointT *>(p));
+                    const bool successed = it != m_points.end();
+
+                    if (successed)
+                        ret = *it;
+
+                    return successed;
                 }
 
                 void clear()
                 {
                     //free memory
-                for(auto item: m_points)          //m_points and m_value keep the same points, delete them once
+                    for(auto item: m_points)          //m_points and m_value keep the same points, delete them once
                         delete item;
 
                     //remove items
@@ -164,9 +171,8 @@ namespace OpenLibrary
                 }
         };
 
-
-
     }
 }
 
 #endif
+
