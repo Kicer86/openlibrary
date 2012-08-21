@@ -27,20 +27,26 @@
 #include "A_star/std_types.hpp"
 
 #include <set>
+#include <forward_list>
 namespace
 {
     using namespace OpenLibrary::Router;
     typedef Point<int, double> PointT;
+    typedef Coordinates<int> CoordinatesT;
     typedef OpenSet<PointT> OpenSetT;
     typedef ClosedSet<PointT> ClosedSetT;
     AStar<PointT, OpenSetT, ClosedSetT> router;
 
-    int r()
+    static class r
     {
-	Coordinates<int> s(0, 0), e(9, 9);
-	router.route(s, e);
-        return 0;
-    }
+        public:
+            r()
+            {
+                typedef std::forward_list<CoordinatesT> PathT;
+                Coordinates<int> s(0, 0), e(9, 9);
+                PathT path = router.route<PathT>(s, e);
+            }
+    } _run;
 }
 
 
