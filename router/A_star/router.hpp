@@ -28,14 +28,15 @@ namespace OpenLibrary
 
             \arg OpenSetT:     type for open points container. Must implement functions:
                                * PointT getBest() - which returns point with lowest f_score. Function must remove point from container
-                               * bool exists(PointT) - which checks if point exists in open set
+                               * bool exists(const PointT *) - which checks if point exists in open set
                                * void clear() - clear container and delete point's!
                                * void insert(T *) - function for adding points. Set must take care of deletion of it's points
                                * bool isEmpty() const - function for checking if container is empty
 
             \arg ClosedSetT:   type for closed points container. Must implement functions:
                                * void clear() - clear container and delete point's!
-                               * voin insert(T *) - function for adding points. Set must take care of deletion of it's points
+                               * bool exists(const Point *) - which checks if point exists in open set
+                               * void insert(T *) - function for adding points. Set must take care of deletion of it's points
 
             \arg flags:      options
         */
@@ -96,11 +97,13 @@ namespace OpenLibrary
 
                         m_closedSet.insert(currentPoint);
 
-                        const std::vector<PointT *> tentaives = get_neighbours(currentPoint);
+                        const std::vector<PointT *> tentatives = get_neighbours(currentPoint);
 
-                        for (PointT *tentative: tentaives)
+                        for (PointT *tentative: tentatives)
                         {
-
+                            //check if any of tenatives is already processed
+                            if (m_closedSet.exists(tentative))
+                                continue;
                         }
                     }
 
