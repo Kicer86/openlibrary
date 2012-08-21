@@ -55,7 +55,7 @@ namespace OpenLibrary
             ScoreT f_score, g_score;     //scores
             Point *origin;               //origin of point
 
-            Point(const CoordT &_x, const CoordT &_y): Coordinates<CoordT>(_x, _y), f_score(0), g_score(0), origin(nullptr) {}
+            Point(const CoordT &_x, const CoordT &_y, Point *p = nullptr): Coordinates<CoordT>(_x, _y), f_score(0), g_score(0), origin(p) {}
             Point(Point && ) = delete;
             Point(const Point &) = delete;
             virtual ~Point() {}
