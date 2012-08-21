@@ -45,8 +45,8 @@ namespace OpenLibrary
 
             bool operator==(const Coordinates &other) const
             {
-		return x == other.x && y == other.y;
-	    }
+                return x == other.x && y == other.y;
+            }
         };
 
         template<class CoordT, class ScoreT>
@@ -72,58 +72,58 @@ namespace OpenLibrary
             public:
                 OpenSet() {}
                 virtual ~OpenSet()
-		{
-		    clear();
-		}
+                {
+                    clear();
+                }
 
-		PointT *getBest()
-		{
-		    typename std::set<PointT *>::const_iterator f = m_value.begin();
-		    PointT *result = *f;
+                PointT *getBest()
+                {
+                    typename std::set<PointT *>::const_iterator f = m_value.begin();
+                    PointT *result = *f;
 
-		    m_value.erase(f);
-		    m_points.erase(result);
+                    m_value.erase(f);
+                    m_points.erase(result);
 
-		    assert(m_points.size() == m_value.size());
+                    assert(m_points.size() == m_value.size());
 
-		    return result;
-		}
+                    return result;
+                }
 
-		bool exists(const PointT *) const
-		{
-		}
+                bool exists(const PointT *) const
+                {
+                }
 
                 void clear()
-		{
-		    //free memory
-		    for(auto item: m_points)          //m_points and m_value keep the same points, delete them once
+                {
+                    //free memory
+                for(auto item: m_points)          //m_points and m_value keep the same points, delete them once
                         delete item;
 
-		    //remove items
-		    m_points.clear();
-		    m_value.clear();
-		}
+                    //remove items
+                    m_points.clear();
+                    m_value.clear();
+                }
 
-		void insert(PointT *p)
-		{
-		    m_points.insert(p);
-		    m_value.insert(p);
+                void insert(PointT *p)
+                {
+                    m_points.insert(p);
+                    m_value.insert(p);
 
-		    assert(m_points.size() == m_value.size());
-		}
+                    assert(m_points.size() == m_value.size());
+                }
 
-		bool isEmpty() const
-		{
-		    assert(m_points.size() == m_value.size());
+                bool isEmpty() const
+                {
+                    assert(m_points.size() == m_value.size());
 
-		    return m_points.empty();
-		}
+                    return m_points.empty();
+                }
 
             private:
                 class ValueComp
                 {
-		    public:
-			bool operator() (PointT *left, PointT *right)
+                    public:
+                        bool operator() (PointT *left, PointT *right)
                         {
                             return left->f_score < right->f_score;
                         }
@@ -142,7 +142,7 @@ namespace OpenLibrary
                 ClosedSet(): std::set<PointT *>() {}
                 virtual ~ClosedSet()
                 {
-		    clear();
+                    clear();
                 }
 
                 bool exists(const PointT *p) const
@@ -154,14 +154,14 @@ namespace OpenLibrary
                 }
 
                 void clear()
-		{
-		    //free memory
-		    for(auto item: *this)
+                {
+                    //free memory
+                    for(auto item: *this)
                         delete item;
 
-		    //remove items
-		    std::set<PointT *>::clear();
-		}
+                    //remove items
+                    std::set<PointT *>::clear();
+                }
         };
 
 
