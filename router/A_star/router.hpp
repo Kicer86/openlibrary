@@ -97,13 +97,24 @@ namespace OpenLibrary
 
                         m_closedSet.insert(currentPoint);
 
-                        const std::vector<PointT *> tentatives = get_neighbours(currentPoint);
+                        const std::vector<PointT *> neighbours = get_neighbours(currentPoint);
 
-                        for (PointT *tentative: tentatives)
+                        for (PointT *neighbour: neighbours)
                         {
                             //check if any of tenatives is already processed
-                            if (m_closedSet.exists(tentative))
+                            if (m_closedSet.exists(neighbour))
                                 continue;
+
+                            neighbour->g_score = currentPoint->g_score + distance(currentPoint, neighbour);
+
+                            static PointT dummy(0 ,0);
+                            PointT *existing = &dummy;
+
+                            if (m_openSet.exists(neighbour, existing) == false ||
+                                neighbour->g_score < existing->g_score)
+                            {
+                            }
+
                         }
                     }
 
@@ -112,9 +123,7 @@ namespace OpenLibrary
 
                 virtual FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const
                 {
-                    const auto pow2 = [](long double x) -> long double { return x * x; };
-
-                    const FScoreT dist = sqrt( pow2(p1->x - p2->x) + pow2(p1->y - p2->y) );
+                    const FScoreT dist = distance(p1, p2);
 
                     return dist;
                 }
@@ -137,6 +146,13 @@ namespace OpenLibrary
                     result.push_back( new PointT(p->x - 1, p->y - 1) );
 
                     return std::move(result);
+                }
+
+                long double distance(const PointT *p1, const PointT *p2) const
+                {
+                    const auto pow2 = [](long double x) -> long double { return x * x; };
+                    const long double dist = sqrt( pow2(p1->x - p2->x) + pow2(p1->y - p2->y) );
+                    return dist;
                 }
         };
     }
