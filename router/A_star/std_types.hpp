@@ -145,6 +145,14 @@ namespace OpenLibrary
 		    clear();
                 }
 
+                bool exists(const PointT *p) const
+                {
+                    typename std::set<PointT *>::const_iterator it = this->find(const_cast<PointT *>(p));
+                    const bool status = it != this->end();
+
+                    return status;
+                }
+
                 void clear()
 		{
 		    //free memory
