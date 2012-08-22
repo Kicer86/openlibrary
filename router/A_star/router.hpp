@@ -105,7 +105,9 @@ namespace OpenLibrary
 
                         if ( *currentPoint == *endPoint )
                         {
-                            endPoint->origin = currentPoint;
+                            endPoint->origin = currentPoint->origin;
+                            endPoint->f_score = currentPoint->f_score;
+                            endPoint->g_score = currentPoint->g_score;
                             status = true;
                             break;
                         }
@@ -165,7 +167,8 @@ namespace OpenLibrary
 
                 virtual std::vector<PointT *> get_neighbours(PointT *p)
                 {
-                    std::vector<PointT *> result(8);
+                    std::vector<PointT *> result;
+                    result.reserve(8);
 
                     result.push_back( new PointT(p->x + 0, p->y - 1, p) );
                     result.push_back( new PointT(p->x + 1, p->y - 1, p) );
