@@ -82,7 +82,7 @@ namespace OpenLibrary
                     PointT *result = *f;
 
                     m_value.erase(f);
-                    m_points.erase(result);
+                    m_points.erase(result);         //TODO: optimize it
 
                     assert(m_points.size() == m_value.size());
 
@@ -136,8 +136,8 @@ namespace OpenLibrary
                         }
                 };
 
-                std::set<PointT *> m_points;              //for point fast finding
-                std::set<PointT *, ValueComp> m_value;    //for points sorting
+                std::set<PointT *> m_points;                  //for point fast finding
+                std::multiset<PointT *, ValueComp> m_value;   //for points sorting
         };
 
 
