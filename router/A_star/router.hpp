@@ -53,7 +53,9 @@ namespace OpenLibrary
 
                 /**
                     \brief function for finding path
-                    @tparam PathT       - container for points (coordinates) which supports push_front operator
+                    @tparam PathT       - container for points (coordinates) which supports push_front operator like std::list<CoordinateT>.
+                                          There must exists assigment operator for CoordinateT which takes PointT.
+                                          Easiest way is to inherite PointT from CoordinateT
                     @tparam CoordinateT - coordinate type (must provide two public variables: 'x' and 'y')
 
                     @param startPoint   - first point
