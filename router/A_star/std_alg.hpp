@@ -6,6 +6,8 @@
  *           Creation date: 23.08.2012            *
  **************************************************/
 
+#include <deque>
+
 #include "base.hpp"
 #include "std_types.hpp"
 
@@ -13,15 +15,40 @@ namespace OpenLibrary
 {
     namespace Router
     {
+        namespace
+        {
+            template<class PointT>
+            class OpenSetSortingContainer: public std::deque<PointT *>
+            {
+                public:
+                    OpenSetSortingContainer(): std::deque<PointT *>() {}
+                    virtual ~OpenSetSortingContainer() {}
+
+                    void insert(PointT *item)
+                    {
+                        this->push_back(item);
+                    }
+
+                    PointT* first()
+                    {
+                        PointT *result = this->front();
+
+                        this->pop_front();
+
+                        return result;
+                    }
+            };
+        }
+
         template<class PointT, class ClosedSetT, FlagsT flags = 0>
-        class StdAStar: public AStar<PointT, OpenSet<PointT>, ClosedSetT, flags>
+        class StdAStar: public AStar<PointT, OpenSet<PointT, OpenSetSortingContainer<PointT>>, ClosedSetT, flags>
         {
             public:
                 StdAStar() {}
                 virtual ~StdAStar() {}
 
             protected:
-                typedef AStar<PointT, OpenSet<PointT>, ClosedSetT, flags> AStarBase;
+                typedef AStar<PointT, OpenSet<PointT, OpenSetSortingContainer<PointT>>, ClosedSetT, flags> AStarBase;
 
                 virtual typename AStarBase::FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const override
                 {
