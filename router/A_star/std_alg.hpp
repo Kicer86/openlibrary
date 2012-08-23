@@ -1,6 +1,7 @@
 
 /**************************************************
  *    standard version of A* routing algorithm    *
+ *               with no heuristic                *
  *           Author: Michał Walenciak             *
  *           Creation date: 23.08.2012            *
  **************************************************/
@@ -22,14 +23,14 @@ namespace OpenLibrary
             protected:
                 typedef AStar<PointT, OpenSetT, ClosedSetT, flags> AStarBase;
 
-                virtual typename AStarBase::FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const
+                virtual typename AStarBase::FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const override
                 {
                     const typename AStarBase::FScoreT dist = AStarBase::distance(p1, p2);
 
                     return dist;
                 }
 
-                virtual std::vector<PointT *> get_neighbours(PointT *p)
+                virtual std::vector<PointT *> get_neighbours(PointT *p) override
                 {
                     std::vector<PointT *> result;
                     result.reserve(8);
