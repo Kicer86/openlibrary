@@ -13,15 +13,15 @@ namespace OpenLibrary
 {
     namespace Router
     {
-        template<class PointT, class OpenSetT, class ClosedSetT, FlagsT flags = 0>
-        class StdAStar: public AStar<PointT, OpenSetT, ClosedSetT, flags>
+        template<class PointT, class ClosedSetT, FlagsT flags = 0>
+        class StdAStar: public AStar<PointT, OpenSet<PointT>, ClosedSetT, flags>
         {
             public:
                 StdAStar() {}
                 virtual ~StdAStar() {}
 
             protected:
-                typedef AStar<PointT, OpenSetT, ClosedSetT, flags> AStarBase;
+                typedef AStar<PointT, OpenSet<PointT>, ClosedSetT, flags> AStarBase;
 
                 virtual typename AStarBase::FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const override
                 {
