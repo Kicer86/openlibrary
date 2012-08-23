@@ -72,6 +72,7 @@ namespace OpenLibrary
         //* void insert(PointT *) - for adding point
         //* PointT* first() - for getting first (best) point. Function must remove point from container
         //* void clear() - for clearing container. Contained pointers cannot be destroyed
+        //* size_t size() - number of elements
         template<class PointT, class SortedPointT>
         class OpenSet
         {
@@ -131,15 +132,6 @@ namespace OpenLibrary
                 }
 
             private:
-                class ValueComp
-                {
-                    public:
-                        bool operator() (PointT *left, PointT *right)
-                        {
-                            return left->f_score < right->f_score;
-                        }
-                };
-
                 std::set<PointT *> m_points;     //for point fast finding
                 SortedPointT m_value;            //for points sorting
         };
