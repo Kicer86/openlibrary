@@ -28,7 +28,7 @@ namespace OpenLibrary
                                 * operator == which compares coordinates only
 
             @tparam OpenSetT:   type for open points container. Must implement functions:
-                                * PointT getBest() - which returns point with lowest f_score. Function must remove point from container
+                                * PointT* getBest() - which returns point with lowest f_score. Function must remove point from container
                                 * bool exists(const PointT *, PointT* &) - which checks if point exists in open set, and returns it if it does (second parameter)
                                 * void clear() - clear container and delete point's!
                                 * void insert(T *) - function for adding points. Set must take care of deletion of it's points
