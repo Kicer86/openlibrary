@@ -23,8 +23,7 @@
 #include "routerdemo.hpp"
 #include "router.hpp"
 
-#include "A_star/router.hpp"
-#include "A_star/std_types.hpp"
+#include "A_star/std_alg.hpp"
 
 #include <set>
 #include <forward_list>
@@ -35,7 +34,7 @@ namespace
     typedef Coordinates<int> CoordinatesT;
     typedef OpenSet<PointT> OpenSetT;
     typedef ClosedSet<PointT> ClosedSetT;
-    AStar<PointT, OpenSetT, ClosedSetT> router;
+    StdAStar<PointT, OpenSetT, ClosedSetT> router;
 
     static class r
     {
