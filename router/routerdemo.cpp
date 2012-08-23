@@ -32,7 +32,7 @@ namespace
     using namespace OpenLibrary::Router;
     typedef Point<int, double> PointT;
     typedef Coordinates<int> CoordinatesT;
-    typedef OpenSet<PointT> OpenSetT;
+    //typedef OpenSet<PointT> OpenSetT;
     typedef ClosedSet<PointT> ClosedSetT;
     StdAStar<PointT, ClosedSetT> router;
 
