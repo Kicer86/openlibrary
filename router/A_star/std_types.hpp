@@ -12,7 +12,7 @@
 
 #include <assert.h>
 #include <set>
-#include <list>
+#include <vector>
 
 namespace OpenLibrary
 {
@@ -65,8 +65,14 @@ namespace OpenLibrary
         };
 
 
-        //basic implementation of OpenSet type for A* router. PointT must meet the same rules as required for 'PointT' in router.hpp
-        template<class PointT>
+        //basic implementation of OpenSet type for A* router.
+        //PointT must meet the same rules as required for 'PointT' in router.hpp
+        //
+        //SortedPointT is a container which implements functions:
+        //* void insert(PointT *) - for adding point
+        //* PointT* first() - for getting first (best) point. Function must remove point from container
+        //* void clear() - for clearing container. Contained pointers cannot be destroyed
+        template<class PointT, class SortedPointT>
         class OpenSet
         {
             public:
@@ -78,10 +84,8 @@ namespace OpenLibrary
 
                 PointT *getBest()
                 {
-                    typename std::set<PointT *>::const_iterator f = m_value.begin();
-                    PointT *result = *f;
+                    PointT *result = m_value.first();
 
-                    m_value.erase(f);
                     m_points.erase(result);         //TODO: optimize it
 
                     assert(m_points.size() == m_value.size());
@@ -136,8 +140,8 @@ namespace OpenLibrary
                         }
                 };
 
-                std::set<PointT *> m_points;                  //for point fast finding
-                std::multiset<PointT *, ValueComp> m_value;   //for points sorting
+                std::set<PointT *> m_points;     //for point fast finding
+                SortedPointT m_value;            //for points sorting
         };
 
 
