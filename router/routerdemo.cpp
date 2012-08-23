@@ -34,7 +34,7 @@ namespace
     typedef Coordinates<int> CoordinatesT;
     typedef OpenSet<PointT> OpenSetT;
     typedef ClosedSet<PointT> ClosedSetT;
-    StdAStar<PointT, OpenSetT, ClosedSetT> router;
+    StdAStar<PointT, ClosedSetT> router;
 
     static class r
     {
