@@ -97,6 +97,7 @@ namespace OpenLibrary
                     m_openSet.insert(startPoint);
                 }
 
+                //main loop of algorithm
                 virtual bool findPath(PointT *endPoint)
                 {
                     bool status = false;
@@ -146,12 +147,8 @@ namespace OpenLibrary
                     return status;
                 }
 
-                virtual FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const
-                {
-                    const FScoreT dist = distance(p1, p2);
-
-                    return dist;
-                }
+                virtual FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const = 0;
+                virtual std::vector<PointT *> get_neighbours(PointT *p) = 0;
 
                 template<class PathT>
                 PathT reconstruct_path(PointT *last)
@@ -163,23 +160,6 @@ namespace OpenLibrary
 
                     while (p != nullptr)
                         result.push_front(*p), p = p->origin;
-
-                    return std::move(result);
-                }
-
-                virtual std::vector<PointT *> get_neighbours(PointT *p)
-                {
-                    std::vector<PointT *> result;
-                    result.reserve(8);
-
-                    result.push_back( new PointT(p->x + 0, p->y - 1, p) );
-                    result.push_back( new PointT(p->x + 1, p->y - 1, p) );
-                    result.push_back( new PointT(p->x + 1, p->y + 0, p) );
-                    result.push_back( new PointT(p->x + 1, p->y + 1, p) );
-                    result.push_back( new PointT(p->x + 0, p->y + 1, p) );
-                    result.push_back( new PointT(p->x - 1, p->y + 1, p) );
-                    result.push_back( new PointT(p->x - 1, p->y + 0, p) );
-                    result.push_back( new PointT(p->x - 1, p->y - 1, p) );
 
                     return std::move(result);
                 }
