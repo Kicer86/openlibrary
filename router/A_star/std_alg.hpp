@@ -18,11 +18,11 @@ namespace OpenLibrary
         namespace
         {
             template<class PointT>
-            class OpenSetSortingContainer: public std::deque<PointT *>
+            class SortingContainer: public std::deque<PointT *>
             {
                 public:
-                    OpenSetSortingContainer(): std::deque<PointT *>() {}
-                    virtual ~OpenSetSortingContainer() {}
+                    SortingContainer(): std::deque<PointT *>() {}
+                    virtual ~SortingContainer() {}
 
                     void insert(PointT *item)
                     {
@@ -41,14 +41,14 @@ namespace OpenLibrary
         }
 
         template<class PointT, class ClosedSetT, FlagsT flags = 0>
-        class StdAStar: public AStar<PointT, OpenSet<PointT, OpenSetSortingContainer<PointT>>, ClosedSetT, flags>
+        class StdAStar: public AStar<PointT, OpenSet<PointT, SortingContainer<PointT>>, ClosedSetT, flags>
         {
             public:
                 StdAStar() {}
                 virtual ~StdAStar() {}
 
             protected:
-                typedef AStar<PointT, OpenSet<PointT, OpenSetSortingContainer<PointT>>, ClosedSetT, flags> AStarBase;
+                typedef AStar<PointT, OpenSet<PointT, SortingContainer<PointT>>, ClosedSetT, flags> AStarBase;
 
                 virtual typename AStarBase::FScoreT heuristic_cost_estimate(const PointT *p1, const PointT *p2) const override
                 {
