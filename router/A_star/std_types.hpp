@@ -81,6 +81,17 @@ namespace OpenLibrary
             }
         };
 
+        //used for comparing points itself, not pointers to them
+        template<class PointT>
+        class CompareCoordinates
+        {
+            public:
+                bool operator() (const PointT *const p1, const PointT *const p2) const
+                {
+                    return *p1 < *p2;
+                }
+        };
+
 
         //basic implementation of OpenSet type for A* router.
         //PointT must meet the same rules as required for 'PointT' in router.hpp
@@ -148,8 +159,21 @@ namespace OpenLibrary
                     return m_points.empty();
                 }
 
+
+                friend std::ostream& operator<<(std::ostream &stream, const OpenSet &openSet)
+                {
+                    stream << "[" << openSet.m_points.size() << "] [";
+
+                    for (auto item: openSet.m_points)
+                        stream << " (" << (*item) << ")";
+
+                    stream << " ]";
+
+                    return stream;
+                }
+
             private:
-                std::set<PointT *> m_points;     //for point fast finding
+                std::set<PointT *, CompareCoordinates<PointT>> m_points;     //for point fast finding
                 SortedPointT m_value;            //for points sorting
         };
 
@@ -181,6 +205,18 @@ namespace OpenLibrary
 
                     //remove items
                     std::set<PointT *>::clear();
+                }
+
+                friend std::ostream& operator<<(std::ostream &stream, const ClosedSet &closedSet)
+                {
+                    stream << "[" << closedSet.size() << "] [";
+
+                    for (auto item: closedSet)
+                        stream << " (" << (*item) << ")";
+
+                    stream << " ]";
+
+                    return stream;
                 }
         };
 
