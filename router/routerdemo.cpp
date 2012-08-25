@@ -44,6 +44,8 @@ namespace
                 typedef std::forward_list<CoordinatesT> PathT;
                 Coordinates<int> s(0, 0), e(9, 9);
                 PathT path = router.route<PathT>(s, e);
+
+                (void) path;
             }
     } _run;
 }
