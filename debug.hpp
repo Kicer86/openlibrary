@@ -25,6 +25,10 @@
 
 #define debug(l) Debug(__PRETTY_FUNCTION__, l)
 
+//control macros:
+//DEBUG_QSTRING_SUPPORT - support for QString
+//DEBUG_VERBOSE         - more verbose output
+
 #ifdef DEBUG_QSTRING_SUPPORT
 #include <QString>
 #endif
@@ -58,8 +62,13 @@ class Debug
     public:
         Debug(const char *f_name, DebugLevel::Level l = DebugLevel::Info): data(), level(l)
         {
+#ifdef DEBUG_VERBOSE
             if (enableOutput())
                 data << f_name << ": ";
+#else
+            if (enableOutput())
+                (void) f_name;
+#endif
         }
 
         ~Debug()
