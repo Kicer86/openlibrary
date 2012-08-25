@@ -29,6 +29,7 @@
 //control macros:
 //DEBUG_QSTRING_SUPPORT - support for QString
 //DEBUG_VERBOSE         - more verbose output
+//DEBUG_DISABLE_OUTPUT  - disable output
 
 #ifdef DEBUG_QSTRING_SUPPORT
 #include <QString>
@@ -53,11 +54,15 @@ class Debug
         bool enableOutput() const
         {
             //debugging off?
-#ifdef NDEBUG
+#ifdef DEBUG_DISABLE_OUTPUT
+            return false;
+#else
+    #ifdef NDEBUG
             if (level == DebugLevel::Debug)      //no output if NDEBUG was defined and output level==DEBUG
                 return false;
-#endif
+    #endif
             return true;
+#endif
         }
 
     public:
