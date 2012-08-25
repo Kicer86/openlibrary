@@ -31,56 +31,56 @@
 
 namespace DebugLevel
 {
-  enum Level
-  {
-    Debug,
-    Info,
-    Warning,
-    Error
-  };
+    enum Level
+    {
+        Debug,
+        Info,
+        Warning,
+        Error
+    };
 }
 
 class Debug
 {
-    std::stringstream data;
-    DebugLevel::Level level;
+        std::stringstream data;
+        DebugLevel::Level level;
 
-    bool enableOutput() const
-    {
-      //debugging off?
+        bool enableOutput() const
+        {
+            //debugging off?
 #ifdef NDEBUG
-      if (level==DebugLevel::Debug)        //no output if NDEBUG was defined and output level==DEBUG
-        return false;
+            if (level == DebugLevel::Debug)      //no output if NDEBUG was defined and output level==DEBUG
+                return false;
 #endif
-      return true;
-    }
+            return true;
+        }
 
-  public:
-    Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(), level(l)
-    {
-      if (enableOutput())
-        data << f_name << ": ";
-    }
+    public:
+        Debug(const char *f_name, DebugLevel::Level l = DebugLevel::Info): data(), level(l)
+        {
+            if (enableOutput())
+                data << f_name << ": ";
+        }
 
-    ~Debug()
-    {
-      if (enableOutput())
-        std::clog << data.str() << std::endl;
-    }
+        ~Debug()
+        {
+            if (enableOutput())
+                std::clog << data.str() << std::endl;
+        }
 
-    template <typename T> Debug &operator<<(const T &arg)
-    {
-      if (enableOutput())
-        data << arg;
-      
-      return *this;
-    }
+        template <typename T> Debug &operator<<(const T &arg)
+        {
+            if (enableOutput())
+                data << arg;
+
+            return *this;
+        }
 
 #ifdef DEBUG_QSTRING_SUPPORT
-    Debug &operator<<(const QString &arg)
-    {
-      return (*this) << arg.toLocal8Bit().data();
-    }
+        Debug &operator<<(const QString &arg)
+        {
+            return (*this) << arg.toLocal8Bit().data();
+        }
 #endif
 };
 
