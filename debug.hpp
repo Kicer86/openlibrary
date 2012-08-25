@@ -22,6 +22,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #define debug(l) Debug(__PRETTY_FUNCTION__, l)
 
@@ -77,7 +78,7 @@ class Debug
                 std::clog << data.str() << std::endl;
         }
 
-        template <typename T> Debug &operator<<(const T &arg)
+        template <typename T> Debug& operator<<(const T &arg)
         {
             if (enableOutput())
                 data << arg;
@@ -85,8 +86,26 @@ class Debug
             return *this;
         }
 
+        template <typename T> Debug& operator<<(const std::vector<T *> &v)
+        {
+            if (enableOutput())
+                for(T* item: v)
+                    data << *item << "; ";
+
+            return *this;
+        }
+
+        template <typename T> Debug& operator<<(const std::vector<T> &v)
+        {
+            if (enableOutput())
+                for(T& item: v)
+                    data << item << "; ";
+
+            return *this;
+        }
+
 #ifdef DEBUG_QSTRING_SUPPORT
-        Debug &operator<<(const QString &arg)
+        Debug& operator<<(const QString &arg)
         {
             return (*this) << arg.toLocal8Bit().data();
         }
