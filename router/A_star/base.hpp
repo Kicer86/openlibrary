@@ -134,45 +134,49 @@ namespace OpenLibrary
 
                         for (PointT *neighbour: neighbours)
                         {
+                            bool saved = false;
                             debug(DebugLevel::Debug) << "\tprocessing neigbhbour " << *neighbour;
 
-                            //check if any of neigbhbours is already processed
+                            //check if neigbhbour is already processed
                             if (m_closedSet.exists(neighbour))
-                            {
                                 debug(DebugLevel::Debug) << "\t\tin closed set";
-                                continue;
-                            }
-
-                            const GScoreT neighbour_g_score = currentPoint->g_score + distance(currentPoint, neighbour);
-
-                            static PointT dummy(0 ,0);
-                            PointT *existing = &dummy;
-
-                            if (m_openSet.exists(neighbour, existing) == false ||
-                                neighbour_g_score < existing->g_score)
+                            else
                             {
-                                if (existing != &dummy)  //just update existing point
-                                {
-                                    debug(DebugLevel::Debug) << "\t\tbetter than point already existing in open set. Updating";
-                                    existing->origin = neighbour->origin;
-                                    existing->g_score = neighbour_g_score;
+                                const GScoreT neighbour_g_score = currentPoint->g_score + distance(currentPoint, neighbour);
 
-                                    //due to potencial complexity of heuristic_cost_estimate function, recalculate f_score
-                                    existing->f_score = heuristic_cost_estimate(existing, endPoint);
+                                static PointT dummy(0 ,0);
+                                PointT *existing = &dummy;
+
+                                //check if in open set
+                                if (m_openSet.exists(neighbour, existing) == false || neighbour_g_score < existing->g_score)
+                                {
+                                    if (existing != &dummy)  //just update existing point
+                                    {
+                                        debug(DebugLevel::Debug) << "\t\tbetter than point already existing in open set. Updating";
+                                        existing->origin = neighbour->origin;
+                                        existing->g_score = neighbour_g_score;
+
+                                        //due to potencial complexity of heuristic_cost_estimate function, recalculate f_score
+                                        existing->f_score = heuristic_cost_estimate(existing, endPoint);
+                                    }
+                                    else
+                                    {
+                                        debug(DebugLevel::Debug) << "\t\tnot in open set. Adding";
+                                        neighbour->g_score = neighbour_g_score;
+                                        neighbour->f_score = heuristic_cost_estimate(neighbour, endPoint);
+                                        //neighbour->origin already set
+
+                                        //add new point or update existing one
+                                        m_openSet.insert(neighbour);
+                                        saved = true;
+                                    }
                                 }
                                 else
-                                {
-                                    debug(DebugLevel::Debug) << "\t\tnot in open set. Adding";
-                                    neighbour->g_score = neighbour_g_score;
-                                    neighbour->f_score = heuristic_cost_estimate(neighbour, endPoint);
-                                    //neighbour->origin already set
-
-                                    //add new point or update existing one
-                                    m_openSet.insert(neighbour);
-                                }
+                                    debug(DebugLevel::Debug) << "\t\talready in open set";
                             }
-                            else
-                                debug(DebugLevel::Debug) << "\t\talready in open set";
+
+                            if (saved == false)
+                                delete neighbour;
                         }
                     }
 
