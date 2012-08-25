@@ -13,6 +13,7 @@
 #include <vector>
 #include <iostream>
 
+#define DEBUG_DISABLE_OUTPUT
 #include "../debug.hpp"
 
 namespace OpenLibrary
@@ -29,6 +30,7 @@ namespace OpenLibrary
                                 * PointT(T x, T y, PointT *p = nullptr) - constructor with 'x' and 'y' coordinates (where T is any type you wish ;) ), and 'origin' == 'p'
                                 * probably some operators to allow keeping points in sets/maps
                                 * operator == which compares coordinates only
+                                * friend std::ostream& operator<<(std::ostream &, const PointT &) - for debbuging reasons
 
             @tparam OpenSetT:   type for open points container. Must implement functions:
                                 * PointT* getBest() - which returns point with lowest f_score. Function must remove point from container
@@ -36,11 +38,13 @@ namespace OpenLibrary
                                 * void clear() - clear container and delete point's!
                                 * void insert(T *) - function for adding points. Set must take care of deletion of it's points
                                 * bool isEmpty() const - function for checking if container is empty
+                                * * friend std::ostream& operator<<(std::ostream &, const OpenSetT &) - for debbuging reasons
 
             @tparam ClosedSetT: type for closed points container. Must implement functions:
                                 * void clear() - clear container and delete point's!
                                 * bool exists(const Point *) - which checks if point exists in open set
                                 * void insert(T *) - function for adding points. Set must take care of deletion of it's points
+                                * friend std::ostream& operator<<(std::ostream &, const ClosedSetT &) - for debbuging reasons
 
             @tparam flags:      options
         */
@@ -107,12 +111,15 @@ namespace OpenLibrary
 
                     while (m_openSet.isEmpty() == false)
                     {
+                        debug(DebugLevel::Debug) << "\nopen set: " << m_openSet;
+                        debug(DebugLevel::Debug) << "closed set: " << m_closedSet;
                         PointT *currentPoint = m_openSet.getBest();
 
                         debug(DebugLevel::Debug) << "current point: " << *currentPoint;
 
                         if ( *currentPoint == *endPoint )
                         {
+                            debug(DebugLevel::Debug) << "\t== end point";
                             endPoint->origin = currentPoint->origin;
                             endPoint->f_score = currentPoint->f_score;
                             endPoint->g_score = currentPoint->g_score;
@@ -123,12 +130,18 @@ namespace OpenLibrary
                         m_closedSet.insert(currentPoint);
 
                         const std::vector<PointT *> neighbours = get_neighbours(currentPoint);
+                        debug(DebugLevel::Debug) << "\tneighbours: " << neighbours;
 
                         for (PointT *neighbour: neighbours)
                         {
-                            //check if any of tenatives is already processed
+                            debug(DebugLevel::Debug) << "\tprocessing neigbhbour " << *neighbour;
+
+                            //check if any of neigbhbours is already processed
                             if (m_closedSet.exists(neighbour))
+                            {
+                                debug(DebugLevel::Debug) << "\t\tin closed set";
                                 continue;
+                            }
 
                             const GScoreT neighbour_g_score = currentPoint->g_score + distance(currentPoint, neighbour);
 
@@ -138,14 +151,28 @@ namespace OpenLibrary
                             if (m_openSet.exists(neighbour, existing) == false ||
                                 neighbour_g_score < existing->g_score)
                             {
-                                neighbour->g_score = neighbour_g_score;
-                                neighbour->f_score = heuristic_cost_estimate(neighbour, endPoint);
-                                //neighbour->origin already set
+                                if (existing != &dummy)  //just update existing point
+                                {
+                                    debug(DebugLevel::Debug) << "\t\tbetter than point already existing in open set. Updating";
+                                    existing->origin = neighbour->origin;
+                                    existing->g_score = neighbour_g_score;
 
-                                //add new point or update existing one
-                                m_openSet.insert(neighbour);
+                                    //due to potencial complexity of heuristic_cost_estimate function, recalculate f_score
+                                    existing->f_score = heuristic_cost_estimate(existing, endPoint);
+                                }
+                                else
+                                {
+                                    debug(DebugLevel::Debug) << "\t\tnot in open set. Adding";
+                                    neighbour->g_score = neighbour_g_score;
+                                    neighbour->f_score = heuristic_cost_estimate(neighbour, endPoint);
+                                    //neighbour->origin already set
+
+                                    //add new point or update existing one
+                                    m_openSet.insert(neighbour);
+                                }
                             }
-
+                            else
+                                debug(DebugLevel::Debug) << "\t\talready in open set";
                         }
                     }
 
