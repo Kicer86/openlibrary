@@ -13,6 +13,8 @@
 #include <vector>
 #include <iostream>
 
+#include "../debug.hpp"
+
 namespace OpenLibrary
 {
     namespace Router
@@ -107,7 +109,7 @@ namespace OpenLibrary
                     {
                         PointT *currentPoint = m_openSet.getBest();
 
-                        std::cout << "current point: " << *currentPoint << std::endl;
+                        debug(DebugLevel::Debug) << "current point: " << *currentPoint;
 
                         if ( *currentPoint == *endPoint )
                         {
