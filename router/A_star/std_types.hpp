@@ -70,6 +70,15 @@ namespace OpenLibrary
 
             Point &operator=(Point && ) = delete;
             Point &operator=(Point &) = delete;
+
+            friend std::ostream& operator<<(std::ostream &stream, const Point &p)
+            {
+               stream << static_cast<const Coordinates<CoordT> &>(p);
+
+               stream << "; q_score = " << p.g_score << ", f_score = " << p.f_score;
+
+               return stream;
+            }
         };
 
 
