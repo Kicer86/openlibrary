@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 namespace OpenLibrary
 {
@@ -105,6 +106,8 @@ namespace OpenLibrary
                     while (m_openSet.isEmpty() == false)
                     {
                         PointT *currentPoint = m_openSet.getBest();
+
+                        std::cout << "current point: " << *currentPoint << std::endl;
 
                         if ( *currentPoint == *endPoint )
                         {

@@ -13,6 +13,7 @@
 #include <assert.h>
 #include <set>
 #include <vector>
+#include <iostream>
 
 namespace OpenLibrary
 {
@@ -46,6 +47,13 @@ namespace OpenLibrary
             bool operator==(const Coordinates &other) const
             {
                 return x == other.x && y == other.y;
+            }
+
+            friend std::ostream& operator<<(std::ostream &stream, const Coordinates &c)
+            {
+               stream << c.x << ", " << c.y;
+
+               return stream;
             }
         };
 
