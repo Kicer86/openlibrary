@@ -46,6 +46,8 @@ namespace
                 PathT path = router.route<PathT>(s, e);
 
                 (void) path;
+
+                exit(0);
             }
     } _run;
 }
