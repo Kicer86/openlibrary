@@ -8,6 +8,8 @@
   #include "css.tab.hh"         //include bison's definitions
 %}
 
+
+%option never-interactive      
 %option reentrant
 %option bison-bridge
 %option noyywrap
