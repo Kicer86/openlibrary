@@ -21,56 +21,67 @@
 #define DEBUG_HPP
 
 #include <iostream>
-#include <string>
+#include <sstream>
 
 #define debug(l) Debug(__PRETTY_FUNCTION__, l)
 
+#ifdef DEBUG_QSTRING_SUPPORT
+#include <QString>
+#endif
 
 namespace DebugLevel
 {
   enum Level
-    {
-      Debug,
-      Info,
-      Warning,
-      Error
-    };
+  {
+    Debug,
+    Info,
+    Warning,
+    Error
+  };
 }
 
 class Debug
 {
-    std::string data;
+    std::stringstream data;
     DebugLevel::Level level;
 
     bool enableOutput() const
     {
       //debugging off?
 #ifdef NDEBUG
-      if (level==Debug)        //no output if NDEBUG was defined and output level==DEBUG
+      if (level==DebugLevel::Debug)        //no output if NDEBUG was defined and output level==DEBUG
         return false;
 #endif
       return true;
     }
-  
+
   public:
-    Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(f_name), level(l)
+    Debug(const char* f_name, DebugLevel::Level l=DebugLevel::Info): data(), level(l)
     {
       if (enableOutput())
-        data+=": ";
+        data << f_name << ": ";
     }
 
     ~Debug()
     {
       if (enableOutput())
-        std::clog << data << std::endl;;
+        std::clog << data.str() << std::endl;
     }
 
-    template <class T> Debug &operator<<(const T &arg)
+    template <typename T> Debug &operator<<(const T &arg)
     {
       if (enableOutput())
-        data+=arg;
+        data << arg;
+      
       return *this;
     }
+
+#ifdef DEBUG_QSTRING_SUPPORT
+    Debug &operator<<(const QString &arg)
+    {
+      return (*this) << arg.toLocal8Bit().data();
+    }
+#endif
 };
 
 
