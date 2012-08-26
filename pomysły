@@ -1,0 +1,6 @@
+
+parser kdevelopa:
+
+analiza poprawności (zbyteczny, źle wstawiony etc) includów
+sprawdzanie zasad z ksiązki od Pawła (krzyzowe dependencje etc), analiza struktury plików i klas (drzewiasta, plaska, poionowa, wykrywanie cykli etc)
+rysowanie grafów z ksiązki - co odczego zalezy, dziedziczenie etc
