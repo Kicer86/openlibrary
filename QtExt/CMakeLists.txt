@@ -9,10 +9,12 @@ include_directories(${QT_INCLUDES})
 
 set(LIB_SRC
   qtext_choosefile.cpp
+  qtext_progressbar.cpp
 )
 
 set(LIB_HEADERS
   qtext_choosefile.hpp
+  qtext_progressbar.hpp
 )
 
 qt4_automoc(${LIB_SRC})
