@@ -38,7 +38,7 @@ namespace OpenLibrary
             {
                 BitType<32, true>::type oko = 0xffffffff;
 
-                std::cout << typeid(oko).name() << ": " << oko << std::endl;
+                std::cout << typeid(oko).name() << ": " << oko + 1 << std::endl;
             }
         } test;
 
