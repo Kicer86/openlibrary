@@ -17,6 +17,32 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#ifndef NDEBUG
+#include <iostream>
+#include <typeinfo>
+#endif
 
 #include "math.hpp"
 
+namespace OpenLibrary
+{
+    namespace Math
+    {
+
+        //debug code
+#ifndef NDEBUG
+
+        struct Test
+        {
+            Test()
+            {
+                BitType<32, true>::type oko = 0xffffffff;
+
+                std::cout << typeid(oko).name() << ": " << oko << std::endl;
+            }
+        } test;
+
+#endif
+
+    }
+}
