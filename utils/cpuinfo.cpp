@@ -61,7 +61,7 @@ namespace OpenLibrary
         }
 
 
-        Cpu::Cpu(): m_cpu_manufacturer()
+        Cpu::Cpu(): m_cpu_manufacturer(manufacturer())
         {
 
         }
@@ -74,7 +74,7 @@ namespace OpenLibrary
 
         /////////////////////////////////////////////////////////////////////////////////
 
-        CpuInfo::CpuInfo()
+        CpuInfo::CpuInfo(): m_cpu()
         {
 
 
