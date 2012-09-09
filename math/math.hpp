@@ -23,8 +23,6 @@
 
 #include <sys/types.h>
 
-__int16_t dffd;
-
 namespace OpenLibrary
 {
     namespace Math
@@ -70,6 +68,36 @@ namespace OpenLibrary
         struct BitType<64, false>
         {
             typedef __uint64_t type;
+        };
+
+
+
+        template<int size>
+        class Int
+        {
+                typedef typename BitType<size, true>::type ValType;
+                typedef typename BitType<size * 2, true>::type WiderType;
+
+            public:
+                Int(): m_value(0) {}
+                template<class T> Int(const T &o): m_value(o) {}
+
+                virtual ~Int() {}
+
+                operator const ValType&() const __attribute__((warning ("direct access to data may cause uncontroled overflow")))
+                {
+                    return m_value;
+                }
+
+                WiderType operator*(const ValType &o)
+                {
+                    const WiderType result = static_cast<WiderType>(m_value) * o;
+
+                    return result;
+                }
+
+            private:
+                ValType m_value;
         };
 
     }
