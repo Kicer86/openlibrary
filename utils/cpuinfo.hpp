@@ -21,9 +21,32 @@
 #ifndef OPENLIBRARY_CPUINFO_HPP
 #define OPENLIBRARY_CPUINFO_HPP
 
+#include <string>
+
 namespace OpenLibrary
 {
+    namespace Utils
+    {
+        struct Cpu
+        {
+            const std::string m_cpu_manufacturer;
 
+            Cpu();
+            virtual ~Cpu();
+        };
+
+        class CpuInfo
+        {
+            public:
+                virtual ~CpuInfo();
+
+                static CpuInfo* getInstance();
+
+            private:
+                CpuInfo();
+
+        };
+    }
 }
 
 #endif
