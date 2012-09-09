@@ -37,8 +37,7 @@ namespace OpenLibrary
         Crc32::Crc32()
         {
             //detect cpu's features and choose proper algoritm
-            asm("cpuid\n\t"
-                :"=
+
         }
 
         Crc32::~Crc32()
