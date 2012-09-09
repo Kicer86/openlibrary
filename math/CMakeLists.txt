@@ -5,10 +5,12 @@ cmake_minimum_required( VERSION 2.6 )
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 set(MATH_SRC
+  crc32.cpp
   math.cpp
 )
 
 set(MATH_HEADERS
+  crc32.hpp
   math.hpp
 )
 
@@ -16,7 +18,7 @@ set(MATH_HEADERS
 add_library(math SHARED ${MATH_SRC} )
 
 
-set_target_properties(math PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS}"
+set_target_properties(math PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
                                       COMPILE_FLAGS_DEBUG "-Weffc++")
 
 
