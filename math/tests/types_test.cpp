@@ -1,12 +1,16 @@
 
 #include "../math.hpp"
 
+#include "../../utils/cpuinfo.hpp"
+
 using namespace OpenLibrary::Math;
 
 #define EQUALS(a, b, ec) if ( (a) != (b) ) return ec;
 
 int main()
 {
+    OpenLibrary::Utils::CpuInfo::getInstance();
+
     OpenLibrary::Math::BitType<32, false>::type u32_var = 0xffffffff;
 
     EQUALS(u32_var, 0xffffffff, 1);         //truly at least 32bit?
