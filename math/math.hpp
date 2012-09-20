@@ -71,7 +71,6 @@ namespace OpenLibrary
         };
 
 
-
         template<int size>
         class Int
         {

@@ -25,10 +25,10 @@ namespace OpenLibrary
     namespace Math
     {
 
-        struct Impl
+        struct Crc32Impl
         {
-            Impl() {}
-            virtual ~Impl() {}
+            Crc32Impl() {}
+            virtual ~Crc32Impl() {}
 
             virtual __uint32_t calc(void *, int) const = 0;
 
