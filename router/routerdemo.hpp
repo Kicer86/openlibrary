@@ -21,35 +21,4 @@
 #ifndef ROUTERDEMO_HPP
 #define ROUTERDEMO_HPP
 
-#include <QWidget>
-#include <QThread>
-#include <QTimer>
-
-class Router;
-
-class RoutingThread:public QThread
-{
-  Router *router;
-  
-  protected:
-    virtual void run();
-    
-  public:
-    virtual ~RoutingThread();
-    char **getField();
-};
-
-
-class RouterDemo : public QWidget
-{
-    RoutingThread thread;
-    QTimer timer;
-
-  protected:
-    virtual void paintEvent(QPaintEvent* );
-
-  public:
-    explicit RouterDemo(QWidget* parent = 0, Qt::WindowFlags f = 0);
-};
-
 #endif // ROUTERDEMO_HPP
