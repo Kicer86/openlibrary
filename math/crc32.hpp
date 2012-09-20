@@ -22,14 +22,13 @@
 #define OPENLIBRARY_CRC32_HPP
 
 #include <sys/types.h>
-#include <memory>
 
 namespace OpenLibrary
 {
 
     namespace Math
     {
-        struct Impl;
+        struct Crc32Impl;
 
         class Crc32
         {
@@ -41,8 +40,7 @@ namespace OpenLibrary
                 __uint32_t calculate(void *, int len) const;
 
             private:
-                friend class Impl;
-                std::unique_ptr<Impl> m_impl;
+                Crc32Impl *m_impl;
         };
     }
 }
