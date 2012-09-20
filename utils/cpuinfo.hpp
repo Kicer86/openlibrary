@@ -29,7 +29,13 @@ namespace OpenLibrary
     {
         struct __attribute__ ((visibility ("default"))) Cpu
         {
-            const std::string m_cpu_manufacturer;
+            const std::string m_manufacturer;
+            const __uint64_t m_features;
+
+            bool mmx() const;
+            bool sse() const;
+            bool sse2() const;
+
 
             Cpu();
             virtual ~Cpu();
@@ -41,11 +47,11 @@ namespace OpenLibrary
                 virtual ~CpuInfo();
 
                 static CpuInfo* getInstance();
+                const Cpu& getInfo() const;
 
             private:
                 CpuInfo();
                 Cpu m_cpu;
-
         };
     }
 }

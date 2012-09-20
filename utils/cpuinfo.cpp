@@ -58,10 +58,21 @@ namespace OpenLibrary
 
                 return result;
             }
+
+            __uint64_t features()
+            {
+                Regs32 regs;
+                regs.eax = 1;
+                cpuid(&regs);
+
+                const __uint64_t result = (static_cast<__uint64_t>(regs.ecx) << 32) | (regs.edx & 0xffffffff);
+
+                return result;
+            }
         }
 
 
-        Cpu::Cpu(): m_cpu_manufacturer(manufacturer())
+        Cpu::Cpu(): m_manufacturer(manufacturer()), m_features(features())
         {
 
         }
@@ -71,6 +82,25 @@ namespace OpenLibrary
         {
 
         }
+
+
+        bool Cpu::mmx() const
+        {
+            return (m_features & (1 << 23)) != 0;
+        }
+
+
+        bool Cpu::sse() const
+        {
+            return (m_features & (1 << 25)) != 0;
+        }
+
+
+        bool Cpu::sse2() const
+        {
+            return (m_features & (1 << 26)) != 0;
+        }
+
 
         /////////////////////////////////////////////////////////////////////////////////
 
@@ -93,6 +123,13 @@ namespace OpenLibrary
 
             return &instance;
         }
+
+
+        const Cpu& CpuInfo::getInfo() const
+        {
+            return m_cpu;
+        }
+
 
     }
 }
