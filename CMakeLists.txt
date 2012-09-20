@@ -1,8 +1,49 @@
+
 project(library)
 cmake_minimum_required(VERSION 2.8)
 
 
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
+
+#some usefull fuctions
+function(register_library args)
+
+    set(name "")
+    set(var "")
+
+    foreach(arg ${args})
+
+        if ("${name}" EQUAL "")
+            set(name ${arg})
+        elseif ("${arg}" MATCHES "(HEADERS)|(SOURCES)" )
+            set(var ${arg})
+        elseif ("${var}" NOT EQUAL "")
+            set(${${var}} ${arg})
+        else()
+            message(ERROR "unknown argument for register_library: ${arg}" )
+        endif ("${name}" EQUAL "")
+
+    endforeach(arg ${args})
+
+    if (${sources} NOT EQUAL "")
+        add_library(${name} SHARED ${sources} )
+
+        set_target_properties(${name} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
+                                                 COMPILE_FLAGS_DEBUG "-Weffc++")
+
+        #install files
+        if(WIN32)  # for windows (dll = runtime)
+            install (TARGETS ${name} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+        else(WIN32)
+            install (TARGETS ${name} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+        endif(WIN32)
+
+    endif (${sources} NOT EQUALS "")
+
+    install (FILES ${headers} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+
+endfunction(register_library)
+
 
 add_subdirectory(htmlParser htmlParser)
 #add_subdirectory(qextserialport qextserialport)
