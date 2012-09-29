@@ -7,7 +7,6 @@ include_directories(${QT_INCLUDES} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DI
 
 set(routerDemo_SRCS
     main.cpp
-    routerdemo.cpp
    )
 
 set(router_HPP
