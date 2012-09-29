@@ -1,11 +1,25 @@
 
-#include <QApplication>
+#include "A_star/std_alg.hpp"
 
-#include "routerdemo.hpp"
+#include <set>
+#include <forward_list>
 
-int main(int argc, char **argv)
+
+int main(int /*argc*/, char **/*argv*/)
 {
-  QApplication app(argc, argv);
 
-  return app.exec();
+    using namespace OpenLibrary::Router;
+    typedef Point<int, double> PointT;
+    typedef Coordinates<int> CoordinatesT;
+    //typedef OpenSet<PointT> OpenSetT;
+    typedef ClosedSet<PointT> ClosedSetT;
+    StdAStar<PointT, ClosedSetT> router;
+
+    typedef std::forward_list<CoordinatesT> PathT;
+    Coordinates<int> s(0, 0), e(9, 9);
+    PathT path = router.route<PathT>(s, e);
+
+    (void) path;
+
+    return 0;
 }
