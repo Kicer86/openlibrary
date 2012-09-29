@@ -16,10 +16,40 @@
 #define DEBUG_DISABLE_OUTPUT
 #include "../debug.hpp"
 
+#include "traits.hpp"
+
 namespace OpenLibrary
 {
     namespace Router
     {
+
+        namespace
+        {
+            template<class T, class U, bool>
+            struct _H
+            {
+                static void insert(T &, const U &) {}
+            };
+
+            template<class T, class U>
+            struct _H<T, U, true>
+            {
+                static void insert(T &container, const U &element)
+                {
+                    container.push_front(element);
+                }
+            };
+
+            template<class T, class U>
+            struct _H<T, U, false>
+            {
+                static void insert(T &container, const U &element)
+                {
+                    container.push_back(element);
+                }
+            };
+        };
+
         /**
             \class AStar
 
@@ -70,8 +100,11 @@ namespace OpenLibrary
                   */
 
                 template<class PathT, class CoordinateT>
-                PathT route(const CoordinateT &startPoint, const CoordinateT &endPoint)
+                PathT route(CoordinateT startPoint, CoordinateT endPoint)
                 {
+                    if (Container<PathT>::prependable == false)    //if containter is not prependable - switch start and end points
+                        std::swap(startPoint, endPoint);
+
                     PointT firstPoint(startPoint.x, startPoint.y);
                     PointT lastPoint(endPoint.x, endPoint.y);
 
@@ -195,7 +228,7 @@ namespace OpenLibrary
                     PointT *p = last;
 
                     while (p != nullptr)
-                        result.push_front(*p), p = p->origin;
+                        _H<PathT, PointT, Container<PathT>::prependable>::insert(result, *p), p = p->origin;
 
                     return std::move(result);
                 }
