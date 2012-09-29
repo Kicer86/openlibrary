@@ -6,27 +6,24 @@ cmake_minimum_required(VERSION 2.8)
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
 
 #some usefull fuctions
-function(register_library args)
+function(register_library name)
 
-    set(name "")
     set(var "")
 
-    foreach(arg ${args})
+    foreach(arg ${ARGN})
 
-        if ("${name}" EQUAL "")
-            set(name ${arg})
-        elseif ("${arg}" MATCHES "(HEADERS)|(SOURCES)" )
+        if ("${arg}" MATCHES "(HEADERS)|(SOURCES)" )
             set(var ${arg})
         elseif (NOT "${var}" EQUAL "")
-            set(${${var}} ${arg})
+            set(${var}  ${${var}} ${arg})
         else()
             message(ERROR "unknown argument for register_library: ${arg}" )
-        endif ("${name}" EQUAL "")
+        endif ("${arg}" MATCHES "(HEADERS)|(SOURCES)")
 
     endforeach(arg ${args})
 
-    if (NOT ${sources} EQUAL "")
-        add_library(${name} SHARED ${sources} )
+    if (NOT ${SOURCES} EQUAL "")
+        add_library(${name} SHARED ${SOURCE} )
 
         set_target_properties(${name} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
                                                  COMPILE_FLAGS_DEBUG "-Weffc++")
@@ -34,13 +31,20 @@ function(register_library args)
         #install files
         if(WIN32)  # for windows (dll = runtime)
             install (TARGETS ${name} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+            set(LIB_INSTALLATION_DIR ${CMAKE_INSTALL_PREFIX})
         else(WIN32)
             install (TARGETS ${name} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+            set(LIB_INSTALLATION_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
         endif(WIN32)
 
-    endif (NOT ${sources} EQUAL "")
+    endif (NOT ${SOURCES} EQUAL "")
 
-    install (FILES ${headers} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+    set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/OL/${name})
+    install (FILES ${HEADERS} DESTINATION ${HEADERS_INSTALL_PREFIX})
+
+    message( "library ${name} registered.
+    Sources: ${SOURCES} -> installation path: ${LIB_INSTALLATION_DIR}
+    Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
 
 endfunction(register_library)
 
