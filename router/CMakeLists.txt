@@ -21,4 +21,4 @@ target_link_libraries( routerDemo ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} )
 set_target_properties(routerDemo PROPERTIES COMPILE_FLAGS "--std=c++11"
                                             COMPILE_FLAGS_DEBUG "-Weffc++")
 
-register_library(router, ${router_HPP})
+register_library(router HEADERS ${router_HPP})
