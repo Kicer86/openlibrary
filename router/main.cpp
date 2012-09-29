@@ -2,7 +2,7 @@
 #include "A_star/std_alg.hpp"
 
 #include <set>
-#include <forward_list>
+#include <vector>
 
 
 int main(int /*argc*/, char **/*argv*/)
@@ -14,7 +14,7 @@ int main(int /*argc*/, char **/*argv*/)
     typedef ClosedSet<PointT> ClosedSetT;
     StdAStar<PointT, ClosedSetT> router;
 
-    typedef std::forward_list<CoordinatesT> PathT;
+    typedef std::vector<CoordinatesT> PathT;
     Coordinates<int> s(0, 0), e(9, 9);
     PathT path = router.route<PathT>(s, e);
 
