@@ -17,7 +17,7 @@ function(register_library args)
             set(name ${arg})
         elseif ("${arg}" MATCHES "(HEADERS)|(SOURCES)" )
             set(var ${arg})
-        elseif ("${var}" NOT EQUAL "")
+        elseif (NOT "${var}" EQUAL "")
             set(${${var}} ${arg})
         else()
             message(ERROR "unknown argument for register_library: ${arg}" )
@@ -25,7 +25,7 @@ function(register_library args)
 
     endforeach(arg ${args})
 
-    if (${sources} NOT EQUAL "")
+    if (NOT ${sources} EQUAL "")
         add_library(${name} SHARED ${sources} )
 
         set_target_properties(${name} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
@@ -38,7 +38,7 @@ function(register_library args)
             install (TARGETS ${name} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
         endif(WIN32)
 
-    endif (${sources} NOT EQUALS "")
+    endif (NOT ${sources} EQUAL "")
 
     install (FILES ${headers} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
