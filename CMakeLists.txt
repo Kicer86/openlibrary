@@ -40,7 +40,9 @@ function(register_library name)
     endif (NOT ${SOURCES} EQUAL "")
 
     set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/OL/${name})
-    install (FILES ${HEADERS} DESTINATION ${HEADERS_INSTALL_PREFIX})
+    install (FILES ${HEADERS}
+             DESTINATION ${HEADERS_INSTALL_PREFIX}
+             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
     message( "library ${name} registered.
     Sources: ${SOURCES} -> installation path: ${LIB_INSTALLATION_DIR}
@@ -57,9 +59,7 @@ add_subdirectory(utils utils)
 
 set(LIBRARY_HEADERS debug.hpp std_macros.hpp str_op.hpp)
 
-install(FILES ${LIBRARY_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include
-        PERMISSIONS OWNER_READ GROUP_READ WORLD_READ )
+register_library(common HEADERS ${LIBRARY_HEADERS})
 
 # install(FILES cmake/ForceAddFlags.cmake
 #         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules
