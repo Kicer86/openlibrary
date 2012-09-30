@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
+set(OPEN_LIBRARY_DIR OpenLib)
 
 #some usefull fuctions
 function(register_library name)
@@ -39,14 +40,19 @@ function(register_library name)
 
     endif (NOT ${SOURCES} EQUAL "")
 
-    set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/OL/${name})
+    set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPEN_LIBRARY_DIR}/${name})
     install (FILES ${HEADERS}
              DESTINATION ${HEADERS_INSTALL_PREFIX}
              PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
-    message( "library ${name} registered.
-    Sources: ${SOURCES} -> installation path: ${LIB_INSTALLATION_DIR}
-    Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
+    message("library ${name} registered.")
+    if(SOURCES)
+        message("       Sources: ${SOURCES} -> installation path: ${LIB_INSTALLATION_DIR}")
+    endif(SOURCES)
+
+    if(HEADERS)
+        message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
+    endif(HEADERS)
 
 endfunction(register_library)
 
