@@ -1,0 +1,1152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--[if IE 7]>
+<html id="ie7" xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
+<![endif]-->
+<!--[if (gt IE 7) | (!IE)]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en"><!--<![endif]--><head profile="http://gmpg.org/xfn/11">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Jump Point Search « Shortest Path</title>
+
+	<style type="text/css" media="screen">
+		@import url( http://s1.wp.com/wp-content/themes/pub/rubric/style.css?m=1323118653g );
+	</style>
+
+	<link rel="pingback" href="http://harablog.wordpress.com/xmlrpc.php">
+	<link rel="alternate" type="application/rss+xml" title="Shortest Path » Feed" href="http://harablog.wordpress.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="Shortest Path » Comments Feed" href="http://harablog.wordpress.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="Shortest Path » Jump Point&nbsp;Search Comments Feed" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/feed/">
+<script type="text/javascript" async="" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/quant.js"></script><script type="text/javascript">
+/* <![CDATA[ */
+function addLoadEvent(func){var oldonload=window.onload;if(typeof window.onload!='function'){window.onload=func;}else{window.onload=function(){oldonload();func();}}}
+/* ]]> */
+</script>
+<link rel="stylesheet" id="all-css-0" href="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/a.css" type="text/css" media="all">
+<script type="text/javascript">
+/* <![CDATA[ */
+var LoggedOutFollow = {"invalid_email":"Your subscription did not succeed, please try again with a valid email address."};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/a.js"></script>
+<link rel="stylesheet" id="all-css-0" href="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/style.css" type="text/css" media="all">
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='highlander-comments-ie7-css'  href='http://s2.wp.com/wp-content/mu-plugins/highlander-comments/style-ie7.css?m=1307172283g&#038;ver=20110606' type='text/css' media='all' />
+<![endif]-->
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://harablog.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://harablog.wordpress.com/wp-includes/wlwmanifest.xml"> 
+<link rel="prev" title="Rectangular Symmetry&nbsp;Reduction" href="http://harablog.wordpress.com/2011/09/01/rectangular-symmetry-reduction/">
+<link rel="next" title="My Apple&nbsp;II/c" href="http://harablog.wordpress.com/2011/10/07/my-apple-iic/">
+<meta name="generator" content="WordPress.com">
+<link rel="canonical" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/">
+<link rel="shortlink" href="http://wp.me/pppJO-eu">
+<link rel="alternate" type="application/json+oembed" href="http://public-api.wordpress.com/oembed/1.0/?format=json&amp;url=http%3A%2F%2Fharablog.wordpress.com%2F2011%2F09%2F07%2Fjump-point-search%2F&amp;for=wpcom-auto-discovery"><link rel="alternate" type="application/xml+oembed" href="http://public-api.wordpress.com/oembed/1.0/?format=xml&amp;url=http%3A%2F%2Fharablog.wordpress.com%2F2011%2F09%2F07%2Fjump-point-search%2F&amp;for=wpcom-auto-discovery"><meta property="og:type" content="article">
+<meta property="og:title" content="Jump Point&nbsp;Search">
+<meta property="og:url" content="http://harablog.wordpress.com/2011/09/07/jump-point-search/">
+<meta property="og:description" content="This is the final article in my three-part look at symmetry reduction algorithms for speeding up pathfinding on uniform-cost grid maps. Recapping the story so far: Part one introduces the notion of...">
+<meta property="og:site_name" content="Shortest Path">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/jps_natural.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/jps_forced.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/jps_recursestraight.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/jps_recursediagonally.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/bg_astar.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/bg_rsr.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/bg_jps.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/ad_astar.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/ad_rsr.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/ad_jps.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/rooms_astar.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/rooms_rsr.png">
+<meta property="og:image" content="http://harablog.files.wordpress.com/2011/09/rooms_jps.png">
+<meta name="twitter:image" content="http://harablog.files.wordpress.com/2011/09/jps_natural.png">
+<meta name="twitter:card" content="summary">
+<meta property="fb:app_id" content="249643311490">
+<link rel="shortcut icon" type="image/x-icon" href="http://s2.wp.com/i/favicon.ico?m=1311976024g" sizes="16x16 24x24 32x32 48x48">
+<link rel="icon" type="image/x-icon" href="http://s2.wp.com/i/favicon.ico?m=1311976024g" sizes="16x16 24x24 32x32 48x48">
+<link rel="apple-touch-icon-precomposed" href="http://s0.wp.com/i/webclip.png?m=1311618091g">
+<link rel="openid.server" href="http://harablog.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="http://harablog.wordpress.com/">
+<link rel="search" type="application/opensearchdescription+xml" href="http://harablog.wordpress.com/osd.xml" title="Shortest Path">
+<link rel="search" type="application/opensearchdescription+xml" href="http://wordpress.com/opensearch.xml" title="WordPress.com">
+<meta name="application-name" content="Shortest Path"><meta name="msapplication-window" content="width=device-width;height=device-height"><meta name="msapplication-tooltip" content="Pathfinding and AI in games"><meta name="msapplication-task" content="name=Subscribe;action-uri=http://harablog.wordpress.com/feed/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=Sign up for a free blog;action-uri=http://wordpress.com/signup/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Support;action-uri=http://support.wordpress.com/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="msapplication-task" content="name=WordPress.com Forums;action-uri=http://forums.wordpress.com/;icon-uri=http://s2.wp.com/i/favicon.ico"><meta name="title" content="Jump Point&nbsp;Search | Shortest Path on WordPress.com">
+<meta name="description" content="This is the final article in my three-part look at symmetry reduction algorithms for speeding up pathfinding on uniform-cost grid maps. Recapping the story so far: Part one introduces the notion of path symmetry: a property of uniform-cost grid maps which can significantly slow down search. Part two discusses Rectangular Symmetry Reduction (RSR) [2]: a…">
+<style type="text/css">
+#header{
+	background: url(http://s1.wp.com/wp-content/themes/pub/rubric/images/rubric/pen-sm.jpg) no-repeat top right;
+}
+#header a {
+	color:#B54141;
+}
+</style>
+
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/google_service.js">
+</script>
+<script type="text/javascript">
+GS_googleAddAdSenseService("ca-pub-3443918307802676");
+GS_googleEnableAllServices();
+</script><script src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/google_ads.js"></script>
+<script type="text/javascript">
+GA_googleAddSlot("ca-pub-3443918307802676", "wpcom_below_post");
+</script>
+<script type="text/javascript">
+GA_googleFetchAds();
+</script>
+<script type="text/javascript"> 
+	window.google_analytics_uacct = "UA-52447-2"; 
+</script>
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-52447-2']);
+	_gaq.push(['_setDomainName', 'wordpress.com']);
+	_gaq.push(['_initData']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+	})();
+</script><script src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ga.js" async="" type="text/javascript"></script>
+<script src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/osd.js" type="text/javascript"></script><link rel="stylesheet" type="text/css" id="gravatar-card-css" href="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/hovercard.css"><link rel="stylesheet" type="text/css" id="gravatar-card-services-css" href="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/services.css"></head>
+
+<body class="single single-post postid-898 single-format-standard highlander-enabled highlander-light">
+<div id="rap">
+<h1 id="header"><a href="http://harablog.wordpress.com/">Shortest Path</a></h1>
+
+<div id="content">
+<!-- end header -->
+
+
+<h2>September 7, 2011</h2>
+<div class="post-898 post type-post status-publish format-standard hentry category-pathfinding tag-grids tag-pathfinding tag-symmetry" id="post-898">
+	 <h3 class="storytitle">
+			Jump Point&nbsp;Search		 </h3>
+	<div class="meta">Filed under:  <a href="http://harablog.wordpress.com/category/pathfinding/" title="View all posts in pathfinding" rel="category tag">pathfinding</a> — dharabor @ 16:32 <br>Tags: <a href="http://harablog.wordpress.com/tag/grids/" rel="tag">grids</a>, <a href="http://harablog.wordpress.com/tag/pathfinding/" rel="tag">pathfinding</a>, <a href="http://harablog.wordpress.com/tag/symmetry/" rel="tag">symmetry</a><br></div>
+
+	<div class="storycontent">
+		<div style="text-align:justify;">
+This is the final article in my three-part look at symmetry reduction 
+algorithms for speeding up pathfinding on uniform-cost grid maps. 
+Recapping the story so far:<p></p>
+<ul>
+<li>
+<a href="http://harablog.wordpress.com/2011/08/26/fast-pathfinding-via-symmetry-breaking/">Part one</a> introduces the notion of path symmetry: a property of uniform-cost grid maps which can significantly slow down search.
+</li>
+<li>
+<a href="http://harablog.wordpress.com/2011/09/01/rectangular-symmetry-reduction/">Part two</a> discusses Rectangular Symmetry Reduction (RSR) <a href="#2">[2]</a>:
+ a simple yet effective preprocessing algorithm that eliminates many 
+path symmetries by decomposing a grid map into a set of empty 
+rectangles.
+</li>
+</ul>
+<p>In this article I describe Jump Point Search (JPS) <a href="#3">[3]</a>:
+ an online symmetry breaking algorithm which speeds up pathfinding on 
+uniform-cost grid maps by “jumping over” many locations that would 
+otherwise need to be explicitly considered. JPS is faster and more 
+powerful than RSR: it can consistently speed up A* search by over an 
+order of magnitude and more. Unlike other similar algorithms JPS 
+requires no preprocessing and has no memory overheads. Further, it is 
+easily combined with most existing speedup techniques — including 
+abstraction and memory heuristics.</p>
+<p>
+<b>Please note:</b> this work was developed in conjunction with <a href="http://www.grastien.net/ban/">Alban Grastien</a>. It forms part of my doctoral research into pathfinding at <a href="http://www.nicta.com.au/">NICTA</a> and The <a href="http://www.anu.edu.au/">Australian National University</a>. Electronic copies of the paper in which this idea was first described are available from <a href="http://users.cecs.anu.edu.au/%7Edharabor/publications.html">my homepage</a>.
+</p></div>
+<p>
+</p><h2 style="font-size:130%;">The Algorithm</h2>
+<div style="text-align:justify;">
+This section and the next describe the mechanical details and 
+algorithmic properties of Jump Point Search. If you don’t care for such 
+things, feel free to jump ahead and check out some <a href="#screenshots">screenshots</a>.<p></p>
+<p>
+JPS <a href="#3">[3]</a> can be described in terms of two simple pruning
+ rules which are	applied recursively during search: one rule is specific
+ to straight steps, the other for diagonal steps. The key intuition in 
+both cases is to prune the set of immediate neighbours around a node by 
+trying to prove that an optimal path (symmetric or otherwise) exists 
+from the parent of the current node to each neighbour and that path does
+ not involve visiting the current node. Figure 1 outlines the basic 
+idea.
+</p></div>
+<div style="width:auto;border:1px solid;height:auto;margin:20px;padding:15px;">
+<div style="display:table-cell;text-align:justify;">
+<div style="float:right;margin-left:10px;">
+<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/jps_natural.png" title="Natural Neighbours">
+</div>
+<div>
+<b>Figure 1: Neighbour Pruning</b><p></p>
+<p>
+Node <b>x</b> is currently being expanded. The arrow indicates the 
+direction of travel from its parent, either straight or diagonal. In 
+both cases we can immediately prune all grey neighbours as these can be 
+reached optimally from the parent of <b>x</b> without ever going through node <b>x</b>.
+</p></div>
+</div>
+</div>
+<p>We will refer to the set of nodes that remain after pruning as the <i>natural neighbours</i>
+ of the current node. These are marked white in Figure 1. Ideally, we 
+only ever want to consider the set of natural neighbours during 
+expansion. However, in some cases, the presence of obstacles may mean 
+that we need to also consider a small set of up to <i>k</i> additional nodes (0 ≤ <i>k</i> ≤ 2). We say that these nodes are  <i>forced neighbours</i> of the current node. Figure 2 gives an overview of this idea. </p>
+<div style="width:auto;border:1px solid;height:auto;margin:20px;padding:15px;">
+<div style="display:table-cell;">
+<div style="float:right;margin-left:10px;">
+<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/jps_forced.png" title="Forced Neighbours">
+</div>
+<div style="text-align:justify;">
+<b>Figure 2: Forced Neighbours</b><p></p>
+<p>
+Node <b>x</b> is currently being expanded. The arrow indicates the 
+direction of travel from its parent, either straight or diagonal. Notice
+ that when <b>x</b> is adjacent to an obstacle the highlighted neighbours cannot be pruned; any alternative optimal path, from the parent of <b>x</b> to each of these nodes, is blocked.
+</p></div>
+</div>
+</div>
+<div style="text-align:justify;">
+We apply these pruning rules during search as follows: instead of  
+generating each natural and forced neighbour we instead recursively  
+prune the set of neighbours around each such node.  Intuitively, the 
+objective is to eliminate symmetries by recursively “jumping over” all 
+nodes which can be reached optimally by a path that does not visit the 
+current node.  We stop the recursion when we hit an obstacle or when we 
+find a so-called <i>jump point</i> successor. Jump points are 
+interesting because they have neighbours that cannot be reached  by an 
+alternative symmetric path: the optimal path must go through the current
+ node. <p></p>
+<p>
+The details of the recursive pruning algorithm are reasonably 
+straightforward: to ensure optimality we need only assign an ordering to
+  how we process natural neighbours (straight steps before diagonal). I 
+will not attempt to outline it further here; the full details are in the
+ paper and my aim is only to provide a flavour for the work. Figures 3 
+gives two examples of the pruning algorithm in action.  In the first 
+case we identify a jump point by recursing straight; in the second case 
+we identify a jump point by recursing diagonally.
+</p></div>
+<div style="width:auto;border:1px solid;height:auto;text-align:center;margin:20px;padding:15px;">
+<div style="width:530px;margin:0 auto;">
+<div style="display:table-cell;text-align:center;padding:10px;">
+<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/jps_recursestraight.png" title="Jumping Straight" style="width:250px;"><br>
+<b>(a)</b> Jumping Straight
+</div>
+<div style="display:table-cell;padding:10px text-align:center;">
+<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/jps_recursediagonally.png" title="Jumping Diagonally" style="width:250px;"><br>
+<b>(b)</b> Jumping Diagonally
+</div>
+</div>
+<div style="padding-top:5px;text-align:justify;">
+<b>Figure 3: Jumping Examples. </b> Node <b>x</b> is currently being expanded. <b>p(x)</b> is its parent. <p></p>
+<p>
+(a) We recursively apply the straight pruning rule and identify  <b>y</b> as a jump point successor of <b>x</b>. This node is interesting because it has a neighbour <b>z</b> that cannot be reached optimally except by a path that visits <b>x</b> then <b>y</b>. The intermediate nodes are never explicitly generated or even evaluated. </p>
+<p>
+(b) We recursively apply the diagonal pruning rule and identify <b>y</b> as a jump point successor of <b>x</b>.
+ Notice that before each diagonal step we first recurse straight (dashed
+ lines). Only if both straight recursions fail to identify a jump point 
+do we step diagonally again. Node <b>w</b>, which is simply a forced neighbour of <b>x</b>, is generated as normal.
+</p></div>
+</div>
+<h2 style="font-size:130%;">Properties and Performance</h2>
+<div style="text-align:justify;">
+Jump Point Search is nice for a number of reasons: <p></p>
+<ol>
+<li>
+It is optimal.
+</li>
+<li>
+It involves no pre-processing.
+</li>
+<li>
+It requires no extra-memory overheads.
+</li>
+<li>
+It can consistently speed up A* search by over 10 times; making it not 
+only competitive with, but often better than, approximate  techniques 
+such as HPA* <a href="#1">[1]</a>.
+</li>
+</ol>
+<p>Properties 1-3 are interesting theoretical results, and rather 
+surprising, but I will not address them further here. My main objective 
+in this article is simply provide a flavour for the work; for a full 
+discussion, including proofs, please see the original paper <a href="#3">[3]</a>. Property 4 is perhaps of broadest practical interest so I will give a short summary of our findings below. </p>
+<p>
+We evaluated JPS on four map sets taken  from <a href="http://web.cs.du.edu/%7Esturtevant/">Nathan Sturtevant’s</a> freely available pathfinding library, <a href="http://code.google.com/p/hog2/">Hierarchical Open Graph</a>. Two of the benchmarks are realistic, originating from popular <a href="http://www.bioware.com/">BioWare</a> video games <i>Baldur’s Gate II: Shadows of Amn</i> and <i>Dragon Age: Origins</i>. The other two <i>Adaptive Depth</i> and <i>Rooms</i>
+ are synthetic though the former could be described as semi-realistic. 
+In each case we measured the relative speedup of A* + JPS vs. A* alone. </p>
+<p>
+</p><p>Briefly: JPS can speed up A* by a factor of between 3-15 times 
+(Adaptive Depth), 2-30 times (Baldur’s Gate), 3-26 times (Dragon Age) 
+and 3-16 times (Rooms). In each case the lower figure represents average
+ performance for short pathfinding problems and the higher figure for 
+long pathfinding problems (i.e. the longer the optimal path to be found,
+ the more benefit is derived from applying JPS). 		 </p>
+<p>
+What makes these results even more compelling is that in 3 of the 4 
+benchmarks A* + JPS was able to consistently outperform the well known 
+HPA* algorithm <a href="#1">[1]</a>. This is remarkable as A* + JPS is 
+always performing optimal search while HPA* is only performing 
+approximate search. On the remaining benchmark, Dragon Age, we found 
+there was  very little to differentiate the performance of the two 
+algorithms. </p>
+<p>
+<b>Caveat emptor:</b> It is important to highlight at this stage that A*
+ + JPS only achieves these kids of speedups because each benchmark 
+problem set contains a large number of symmetric path segments (usually 
+manifested in the form of large open areas on the map). In such cases 
+JPS can exploit the symmetry and ignore large parts of the search space.
+ This means A* both generates and expands a much smaller number of nodes
+ and consequently reaches the goal much sooner. When there is very 
+little symmetry to exploit however we expect that our gains will be more
+ modest.
+</p></div>
+<h2 style="font-size:130%;"><a name="screenshots">Screenshots</a></h2>
+<div style="text-align:justify;">
+Below in Figure 4 are screenshots of A* + JPS in action. In each case 
+tiles marked red must be explored in order to find the optimal solution 
+(marked in blue).  For comparison, I also show the number of tiles 
+explored by A* + RSR and vanilla A* when solving the same problem 
+instances.
+</div>
+<div style="width:auto;border:1px solid;height:auto;text-align:center;margin:20px;padding:15px;">
+(Click on an image to view a larger version.)<br>
+<p></p>
+<div style="width:800px;margin:0 auto;">
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/bg_astar.png"><br>
+<img style="width:225px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/bg_astar.png" alt="" title="Search Effort: A* (Baldur's Gate)"></a><br>
+<b>(a)</b> A* (Baldur’s Gate)
+</div>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/bg_rsr.png"><br>
+<img style="width:225px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/bg_rsr.png" alt="" title="Search Effort: A* + RSR (Baldur's Gate)"></a><br>
+<b>(b)</b> A* + RSR (Baldur’s Gate)
+</div>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/bg_jps.png"><br>
+<img style="border:1px solid;width:224px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/bg_jps.png" alt="" title="Search Effort: A* + JPS (Baldur's Gate)"></a><br>
+<b>(c)</b> A* + JPS (Baldur’s Gate)
+</div>
+<p></p>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/ad_astar.png"><br>
+<img style="width:225px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ad_astar.png" alt="" title="Search Effort: A* (Adaptive Depth)"></a><br>
+<b>(d)</b> A* (Adaptive Depth)
+</div>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/ad_rsr.png"><br>
+<img style="width:225px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ad_rsr.png" alt="" title="Search Effort: A* + RSR (Adaptive Depth)"></a><br>
+<b>(e)</b> A* + RSR (Adaptive Depth)
+</div>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/ad_jps.png"><br>
+<img style="border:1px solid;width:224px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ad_jps.png" alt="" title="Search Effort: A* + JPS (Adaptive Depth)"></a><br>
+<b>(f)</b> A* + JPS (Adaptive Depth)
+</div>
+<p></p>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/rooms_astar.png"><br>
+<img style="width:225px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/rooms_astar.png" alt="" title="Search Effort: A* (Rooms)"></a><br>
+<b>(g)</b> A* (Rooms)
+</div>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/rooms_rsr.png"><br>
+<img style="width:225px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/rooms_rsr.png" alt="" title="Search Effort: A* + RSR (Rooms)"></a><br>
+<b>(h)</b> A* + RSR (Rooms)
+</div>
+<div style="display:table-cell;padding:10px;">
+<a href="http://harablog.files.wordpress.com/2011/09/rooms_jps.png"><br>
+<img style="border:1px solid;width:224px;" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/rooms_jps.png" alt="" title="Search Effort: A* + JPS (Rooms)"></a><br>
+<b>(i)</b> A* + JPS (Rooms)
+</div>
+</div>
+<div style="text-align:justify;">
+<b>Figure 4: Search Effort.</b> Comparative pathfinding examples from 
+our experimental results. Images in the first column show total nodes 
+expanded by A* (marked red) in order to find the optimal path to the 
+goal (marked blue). Images in the middle and last columns are total 
+nodes expanded by A* + RSR and A* + JPS respectively. Notice that A* + 
+JPS ignores many symmetric	path segments (more than A* + RSR even) and 
+typically reaches the goal with much less effort.
+</div>
+</div>
+<h2 style="font-size:130%;">Final Thoughts</h2>
+<div style="text-align:justify;">
+The explicit identification and elimination of symmetries in pathfinding
+ domains is an idea that until now has received little attention in the 
+academic literature. Approaches for dealing with symmetry, such as Jump 
+Point Search, provide us with powerful new tools for reducing the size 
+of explicit regular search spaces. By eliminating symmetry we speed up 
+not just A* but entire classes of similar pathfinding algorithms. Also, 
+consider: JPS is entirely orthogonal to almost every other speedup 
+technique applicable to grid maps. Thus, there is no reason why we 
+couldn’t combine it, or other similar methods, with hierarchical 
+pathfinding approaches, memory heuristics or even other 
+optimality-preserving state-space reduction	techniques. That means the 
+results presented thus far are only the tip of the iceberg in terms of 
+performant grid-based pathfinding methods. <p></p>
+<p>
+Another exciting aspect of this work is the possibilities it opens for 
+further research. For example: could we pre-process the map and go even 
+faster? Or: are there analogous jumping rules that one could develop for
+ weighted grids?  What about other domains? Could we apply the lessons 
+learned thus far to help solve other interesting search problems? The 
+answers to the first two questions already appear to be positive; the 
+third is something I want to explore in the near future. Regardless of 
+how it all turns out, one thing is certain: it’s an exciting time to be 
+working on pathfinding!
+</p></div>
+<h2> References </h2>
+<div style="text-align:justify;margin:20px;padding:10px;">
+<b><a name="1">[1]</a></b> A. Botea, M. Müller, and J. Schaeffer. <i>Near Optimal Hierarchical Path-finding. </i>In Journal of Game Development (Issue 1, Volume 1), 2004.<p></p>
+<p>
+<b><a name="2">[2]</a></b> D. Harabor, A. Botea, and P. Kilby. <i>Path Symmetries in Uniform-cost Grid Maps. </i>In Symposium on Abstraction Reformulation and Approximation (SARA), 2011.</p>
+<p>
+<b><a name="3">[3]</a></b> D. Harabor and A. Grastien. <i>Online Graph Pruning for Pathfinding on Grid Maps.</i> In National Conference on Artificial Intelligence (AAAI), 2011.</p>
+<p>
+</p></div>
+
+<div class="wpadvert" style="text-align: center; padding: 5px; background: #; padding: 5px; margin: 10px auto;">
+<script type="text/javascript">
+GA_googleAddAttr("AdOpt", "1");
+GA_googleAddAttr("Origin", "other");
+GA_googleAddAttr("theme_bg", "ffffff"); 
+GA_googleAddAttr("theme_text", "000000"); 
+GA_googleAddAttr("theme_link", "b54141"); 
+GA_googleAddAttr("theme_border", "eeeeee"); 
+GA_googleAddAttr("theme_url", "b54141"); 
+GA_googleAddAttr("LangId", "1");
+GA_googleAddAttr("Domain", "harablog.wordpress.com");
+GA_googleAddAttr("Autotag", "technology");
+GA_googleAddAttr("Autotag", "science");
+GA_googleAddAttr("Autotag", "health");
+GA_googleAddAttr("Tag", "pathfinding");
+GA_googleAddAttr("Tag", "grids");
+GA_googleAddAttr("Tag", "pathfinding");
+GA_googleAddAttr("Tag", "symmetry");
+
+GA_googleFillSlot("wpcom_below_post");
+</script><script src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ads"></script><div id="google_ads_div_wpcom_below_post_ad_wrapper">
+<div id="google_ads_div_wpcom_below_post_ad_container" style="display:inline-block;"><a href="http://wordpress.com/signup/?ref=housead_e"><img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/wpcom_house_e_400x200.png" alt="We'll bring the audience.  Blog on WordPress.com." border="0" height="200" width="400"></a>
+
+</div>
+</div>
+
+</div><div id="jp-post-flair" class="sharedaddy sd-like-enabled sd-sharing-enabled"><div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon-text sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-print"><a rel="nofollow" class="share-print sd-button share-icon" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/#print" title="Click to print"><span>Print</span></a></li><li class="share-email share-service-visible"><a rel="nofollow" class="share-email sd-button share-icon" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/?share=email&amp;nb=1" title="Click to email this to a friend"><span>Email</span></a></li><li class="share-digg"><a rel="nofollow" class="share-digg sd-button share-icon" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/?share=digg&amp;nb=1" title="Click to Digg this post"><span>Digg</span></a></li><li class="share-reddit"><a rel="nofollow" class="share-reddit sd-button share-icon" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/?share=reddit&amp;nb=1" title="Click to share on Reddit"><span>Reddit</span></a></li><li class="share-end"></li></ul><div class="sharing-clear"></div></div></div></div><div class="wpl-likebox sd-block sd-like"><h3 class="sd-title">Like this:</h3><div class="sd-content"><div id="like-898" class="wpl-button "><a href="http://harablog.wordpress.com/2011/09/07/jump-point-search/?like=1&amp;_wpnonce=b4c8db312c" title="I like this." class="like needs-login sd-button" rel="nofollow"><span>Like</span></a></div><div class="wpl-count sd-like-count">One blogger likes this.</div><ul class="wpl-avatars sd-like-gravatars"><li><a href="http://gravatar.com/ccyee" class="wpl-liker" rel="nofollow"><img id="grav-3eeaa03de270555f3167e2ae189abd94-0" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/3eeaa03de270555f3167e2ae189abd94.jpg" class="avatar avatar-30 grav-hashed" alt="cc yee" height="30" width="30"></a></li></ul></div></div></div>	</div>
+
+	<div class="feedback">
+                        <a href="http://harablog.wordpress.com/2011/09/07/jump-point-search/#comments" title="Comment on Jump Point&nbsp;Search">Comments (18)</a>	</div>
+
+</div>
+
+
+<h2 id="comments">18 Comments	<a href="#postcomment" title="Leave a comment">»</a>
+</h2>
+
+<ol id="commentlist">
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-54">
+	<div id="div-comment-54">
+		<div class="comment-author vcard">
+						<p>The last image rooms_jps.png links to ad_jps.png</p>
+			<p><cite>Comment by <span class="fn"><a href="http://gravatar.com/jonenst" rel="external nofollow" class="url">jonenst</a></span> — September 7, 2011 @ <a href="#comment-54">21:59</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment byuser comment-author-dharabor bypostauthor odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-55">
+	<div id="div-comment-55">
+		<div class="comment-author vcard">
+						<p>@jonenst: fixed. thank you so much for pointing that out!</p>
+			<p><cite>Comment by <span class="fn">dharabor</span> — September 7, 2011 @ <a href="#comment-55">23:07</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-56">
+	<div id="div-comment-56">
+		<div class="comment-author vcard">
+						<p><a href="http://news.ycombinator.com/item?id=2969008" rel="nofollow">http://news.ycombinator.com/item?id=2969008</a></p>
+			<p><cite>Comment by <span class="fn"><a href="http://news.ycombinator.com/item?id=2969008" rel="external nofollow" class="url">Name (required)</a></span> — September 7, 2011 @ <a href="#comment-56">23:49</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="pingback odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-57">
+	<div id="div-comment-57">
+		<div class="comment-author vcard">
+						<p>[...] Jump Point Search « Shortest Path (tags: optimization 
+algorithm pathfinding search gamedev)   Share 
+this:StumbleUponDiggRedditLike this:LikeBe the first to like this post. 
+[...]</p>
+			<p><cite>Pingback by <span class="fn"><a href="http://blarneyfellow.wordpress.com/2011/09/08/links-for-2011-09-07/" rel="external nofollow" class="url">links for 2011-09-07 « Blarney Fellow</a></span> — September 8, 2011 @ <a href="#comment-57">10:39</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-62">
+	<div id="div-comment-62">
+		<div class="comment-author vcard">
+						<p>The speed-up comes from specializing the general graph search to a uniform grid, right?</p>
+<p>Cayley graphs are one way to say “uniform grid”. To express a 2d 
+rectangular grid, you could give a group presentation, which is 
+something like saying “There are four directions, north, south, east 
+west. North followed by South comes back to the same place, East 
+followed by West comes back to the same place, and North East West South
+ comes back to the same place.”. (Actually, you would say that all 
+directions have inverses because it is a group, and so there would be 
+two generators and one word, but group theory might be too rigid, you 
+might want semigroups or monoids – I just want to point out that there 
+are ways of describing uniform grids.)</p>
+<p>A generalized jump point search algorithm might consume a 
+presentation and output a specialized jump point search algorithm for 
+maps on that grid.</p>
+<p>A hexagonal grid can be presented with three generators, each equal 
+to its own inverse, and going around in a hexagon (abcabc) leads back to
+ the same place. It’s easy to construct hyperbolic grids, too. For 
+example, the 2-3-7 triangle group (there’s an image here <a href="http://en.wikipedia.org/wiki/%282,3,7%29_triangle_group" rel="nofollow">http://en.wikipedia.org/wiki/%282,3,7%29_triangle_group</a>)can
+ be described as having two generators x and y, such that xx comes back 
+to the same place, yyy comes back to the same place and (xy)^7 comes 
+back to the same place. Probably, there is a presentation of the 
+movement of a chess knight, though I don’t know it (I’m pretty sure it’s
+ the same group as the usual 2d rectangular grid, just a different 
+presentation).</p>
+<p>More exotically, the regularity in rolling-cube mazes (as described here: <a href="http://www.logicmazes.com/rc/cubes.html" rel="nofollow">http://www.logicmazes.com/rc/cubes.html</a>) could be captured with a group presentation. Possibly even pathfinding inside of transposition puzzles?</p>
+			<p><cite>Comment by <span class="fn"><a href="http://gravatar.com/johnicholas" rel="external nofollow" class="url">johnicholas</a></span> — September 14, 2011 @ <a href="#comment-62">03:02</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment byuser comment-author-dharabor bypostauthor odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-63">
+	<div id="div-comment-63">
+		<div class="comment-author vcard">
+						<p>Hi John,</p>
+<p>Excellent points. The speedup does indeed come from specialising the 
+graph to uniform grids. At the moment you’d have to cook up, by hand, 
+variants for other types of uniform cost grids (hexagons etc). This is 
+not difficult in most cases but the situation is not ideal. I thus quite
+ like your suggestion for how a generalised solution should work!</p>
+<p>My thoughts for solving this problem have been quite similar: what’s 
+needed is a pre-processing algorithm that generates an appropriate 
+automaton for a given type of map. Said automaton would take a node and 
+generate a set of jump point successors. In the 90s Korf published a 
+paper which tries to do something like this but, iirc, his method was 
+limited to the search spaces of combinatorial puzzles like the Rubik’s 
+Cube. Detecting symmetries in such cases is a bit simpler than in 
+grid-based pathfinding because the goal is fixed and there are no 
+obstacles.</p>
+			<p><cite>Comment by <span class="fn">dharabor</span> — September 14, 2011 @ <a href="#comment-63">12:11</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-70">
+	<div id="div-comment-70">
+		<div class="comment-author vcard">
+						<p>Amazing work! I would love to implement this myself but I don’t
+ see how it would work with influence weighted grids in which case it 
+wouldn’t be as useful.</p>
+			<p><cite>Comment by <span class="fn">Henrik Johansson</span> — September 27, 2011 @ <a href="#comment-70">14:39</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-71">
+	<div id="div-comment-71">
+		<div class="comment-author vcard">
+						<p>You might model influence-weighted grids by representing the 
+map as a uniform three-dimensional grid, where everything except a 
+two-dimensional surface is an obstacle. That would make it possible to 
+apply Jump Point Search, but maps without open straightaways would 
+reduce its advantage.</p>
+<p>Possibly it would be useful if the influence spread out in a nice way
+ – taxicab-metric cones, for example – so that the search can jump up 
+and down slopes relatively easily. Possibly it would be useful if you’re
+ willing to heavily discretize the levels of influence, so that the map 
+looks nearly flat with a few contours on it. In that case the search 
+could jump up to the contour, step across it, then jump onward.</p>
+			<p><cite>Comment by <span class="fn"><a href="http://www.johnicholas.com/" rel="external nofollow" class="url">Johnicholas</a></span> — September 30, 2011 @ <a href="#comment-71">03:54</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment byuser comment-author-dharabor bypostauthor even thread-even depth-1 highlander-comment" id="comment-84">
+	<div id="div-comment-84">
+		<div class="comment-author vcard">
+						<p>Henrik, </p>
+<p>I think Johnicholas is on the right track. Here is my simple take on the problem:</p>
+<p>If your grid maps contain uniform cost regions, simply treat any 
+neighbour which is of a different terrain type to the current node, as 
+forced. This will allow you to quickly search across a uniform-cost 
+region, stop to expand a node when crossing into a different region, and
+ continue jumping on the other side. I don’t yet know how well this 
+approach works because I haven’t tried. I suspect however that it should
+ be reasonably effective on a typical RTS map such as <a href="http://movingai.com/benchmarks/wc3maps512/nighthaven.jpg" rel="nofollow">this</a> one from Warcraft 3.</p>
+<p>I hope to write a detailed article on this problem in the near future. With, I hope, a better generalisation and some results.</p>
+<p>Stay tuned! :)</p>
+			<p><cite>Comment by <span class="fn">dharabor</span> — October 7, 2011 @ <a href="#comment-84">13:57</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-101">
+	<div id="div-comment-101">
+		<div class="comment-author vcard">
+						<p>Just finished implementing JPS into my game’s A* algorithm. 
+Have been experiencing solid 10x-20x speedups in all of my tests, which 
+was great to learn. I imagine JPS will soon become the industry-standard
+ optimization when it comes to uniform grid-based pathfinding. </p>
+<p>Thanks!</p>
+			<p><cite>Comment by <span class="fn"><a href="http://www.zombox.net/" rel="external nofollow" class="url">Tyson Ibele</a></span> — January 5, 2012 @ <a href="#comment-101">06:38</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-102">
+	<div id="div-comment-102">
+		<div class="comment-author vcard">
+						<p>By the way, I can confirm that your last suggestion regarding weighted grids works. </p>
+<p>After grabbing all the neighbors of an expanded node, I do a quick 
+check to see if any of them have a weight that is different than the 
+node being expanded. If they do, they’re marked as forced……. and the 
+paths that are returned will follow the route of least resistance, as 
+expected.</p>
+<p>So…JPS isn’t limited to uniform-cost grids, which is great!</p>
+			<p><cite>Comment by <span class="fn"><a href="http://www.zombox.net/" rel="external nofollow" class="url">Tyson Ibele</a></span> — January 5, 2012 @ <a href="#comment-102">07:50</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-103">
+	<div id="div-comment-103">
+		<div class="comment-author vcard">
+						<p>This looks absolutely great. Have anyone done an implementation
+ one can look at? I’m trying to optimize an Actionscript 3 
+implementation of A* but I don’t understand the syntax in the paper.</p>
+			<p><cite>Comment by <span class="fn"><a href="http://potmo.com/" rel="external nofollow" class="url">Nisse Bergman</a></span> — January 12, 2012 @ <a href="#comment-103">09:23</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="pingback even thread-even depth-1 highlander-comment" id="comment-104">
+	<div id="div-comment-104">
+		<div class="comment-author vcard">
+						<p>[...] attempting to pace up my pathfinding and found out A* 
+with JPS. It essentially prunes tiles before to adding them in the 
+direction of available [...]</p>
+			<p><cite>Pingback by <span class="fn"><a href="http://www.qandasystem.info/gamedev/is-jump-point-search-a-with-jps-appliable-to-non-diagonal-grids/" rel="external nofollow" class="url">Is Jump Point Search (A* with JPS) appliable to non-diagonal grids? | Q&amp;A System</a></span> — January 21, 2012 @ <a href="#comment-104">14:36</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-105">
+	<div id="div-comment-105">
+		<div class="comment-author vcard">
+						<p>Amazing work! I implemented A* + JSP as a method to identify a 
+path from a start to a goal that tried to stay as far away from 
+obstacles as it could and saw a huge improvement. Standard A* took about
+ 44 hours to identify the minimum distance on a 1000 by 1000 grid and A*
+ + JSP took merely 17 minutes. Absolutely wonderful!</p>
+			<p><cite>Comment by <span class="fn">HarryChriss</span> — January 28, 2012 @ <a href="#comment-105">01:18</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-106">
+	<div id="div-comment-106">
+		<div class="comment-author vcard">
+						<p>Hello, can this algorithm be used for solving routing problems, eg finds a path between a start point and end-point?</p>
+			<p><cite>Comment by <span class="fn">Prouso01</span> — February 3, 2012 @ <a href="#comment-106">21:13</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-107">
+	<div id="div-comment-107">
+		<div class="comment-author vcard">
+						<p>Nice, I’ll try to implement this.<br>
+Is A* + JPS only efficient with 2D squared grids ?<br>
+What if one is working with hexagonal grid or other map representations ? Will it still be efficient ?</p>
+			<p><cite>Comment by <span class="fn"><a href="http://gravatar.com/roland223" rel="external nofollow" class="url">akismet-50617b23d4317f7edf65af426d146b65</a></span> — May 16, 2012 @ <a href="#comment-107">20:10</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment even thread-even depth-1 highlander-comment" id="comment-108">
+	<div id="div-comment-108">
+		<div class="comment-author vcard">
+						<p>This is awesome! Is any source code available? I would greatly appreciate it :)</p>
+			<p><cite>Comment by <span class="fn">Vittorio Romeo</span> — May 31, 2012 @ <a href="#comment-108">01:07</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+<li class="comment odd alt thread-odd thread-alt depth-1 highlander-comment" id="comment-109">
+	<div id="div-comment-109">
+		<div class="comment-author vcard">
+						<p>Hi, Vittorio,<br>
+Maybe you might be interested in Jumper, a Lua implementation of JPS.<br>
+See here: <a href="https://github.com/Yonaba/Jumper" rel="nofollow">https://github.com/Yonaba/Jumper</a></p>
+			<p><cite>Comment by <span class="fn">Roland_Yonaba</span> — May 31, 2012 @ <a href="#comment-109">02:25</a></cite> 				<span class="reply">
+									</span>
+			</p>
+		</div>
+	</div>
+</li>
+</ol>
+	<div class="navigation">
+		<div class="alignleft"></div>
+		<div class="alignright"></div>
+	</div>
+	<br>
+
+	<p><a href="http://harablog.wordpress.com/2011/09/07/jump-point-search/feed/"><abbr title="Really Simple Syndication">RSS</abbr> feed for comments on this post.</a>	<a href="http://harablog.wordpress.com/2011/09/07/jump-point-search/trackback/" rel="trackback">TrackBack <abbr title="Uniform Resource Identifier">URI</abbr></a>
+</p>
+
+								<div class="js" id="respond">
+				<h3 id="reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="http://harablog.wordpress.com/2011/09/07/jump-point-search/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://harablog.wordpress.com/wp-comments-post.php" method="post" id="commentform">
+																										
+
+
+												
+<input name="hc_post_as" id="hc_post_as" value="guest" type="hidden">
+
+<div class="comment-form-field comment-textarea">
+	
+	<div id="comment-form-comment"><textarea tabindex="-1" style="height: 37px; resize: none; overflow-y: hidden; position: absolute; top: 0px; left: -9999px; width: 914px; line-height: 17px; text-decoration: none; letter-spacing: normal;" placeholder="Enter your comment here..."></textarea><textarea style="height: 37px; resize: none; overflow-y: hidden;" placeholder="Enter your comment here..." id="comment" name="comment"></textarea></div>
+</div>
+
+<div style="display: none;" id="comment-form-identity">
+
+	<div id="comment-form-nascar">
+		<p>Fill in your details below or click an icon to log in:</p>
+		<ul>
+			<li class="selected" style="display:none;">
+				<a href="#comment-form-guest" id="postas-guest" title="Guest">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:WordPress.com" id="postas-wordpress" title="WordPress.com">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Twitter" id="postas-twitter" title="Twitter">
+					<span></span>
+				</a>
+			</li>
+			<li>
+				<a href="#comment-form-load-service:Facebook" id="postas-facebook" title="Facebook">
+					<span></span>
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<div id="comment-form-guest" class="comment-form-service selected">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+<a href="https://gravatar.com/site/signup/" target="_blank">				<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ad516503a11cd5ca435acc9bb6523536.jpg" alt="Gravatar" class="no-grav" width="25">
+</a>			</div>
+
+				<div class="comment-form-fields">
+				<div class="comment-form-field comment-form-email">
+					<label for="email">Email <span class="required">(required)</span> <span class="nopublish">(Address never made public)</span></label>
+					<div class="comment-form-input"><input id="email" name="email" type="text"></div>
+				</div>
+				<div class="comment-form-field comment-form-author">
+					<label for="author">Name <span class="required">(required)</span></label>
+					<div class="comment-form-input"><input id="author" name="author" type="text"></div>
+				</div>
+				<div class="comment-form-field comment-form-url">
+					<label for="url">Website</label>
+					<div class="comment-form-input"><input id="url" name="url" type="text"></div>
+				</div> 
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-wordpress" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/wplogo.png" alt="WordPress.com Logo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="wp_avatar" id="wordpress-avatar" class="comment-meta-wordpress" value="" type="hidden">
+				<input name="wp_user_id" id="wordpress-user_id" class="comment-meta-wordpress" value="" type="hidden">
+				<input name="wp_access_token" id="wordpress-access_token" class="comment-meta-wordpress" value="" type="hidden">
+				<p class="comment-form-posting-as pa-wordpress"><strong></strong> You are commenting using your WordPress.com account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'wordpress'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-twitter" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ad516503a11cd5ca435acc9bb6523536.png" alt="Twitter picture" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="twitter_avatar" id="twitter-avatar" class="comment-meta-twitter" value="" type="hidden">
+				<input name="twitter_user_id" id="twitter-user_id" class="comment-meta-twitter" value="" type="hidden">
+				<input name="twitter_access_token" id="twitter-access_token" class="comment-meta-twitter" value="" type="hidden">
+				<p class="comment-form-posting-as pa-twitter"><strong></strong> You are commenting using your Twitter account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'twitter'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+	<div id="comment-form-facebook" class="comment-form-service">
+		<div class="comment-form-padder">
+			<div class="comment-form-avatar">
+				<img src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/ad516503a11cd5ca435acc9bb6523536.png" alt="Facebook photo" class="no-grav" width="25">
+			</div>
+
+				<div class="comment-form-fields">
+				<input name="fb_avatar" id="facebook-avatar" class="comment-meta-facebook" value="" type="hidden">
+				<input name="fb_user_id" id="facebook-user_id" class="comment-meta-facebook" value="" type="hidden">
+				<input name="fb_access_token" id="facebook-access_token" class="comment-meta-facebook" value="" type="hidden">
+				<p class="comment-form-posting-as pa-facebook"><strong></strong> You are commenting using your Facebook account. <span class="comment-form-log-out">(&nbsp;<a href="javascript:HighlanderComments.doExternalLogout(%20'facebook'%20);">Log&nbsp;Out</a>&nbsp;/&nbsp;<a href="#" onclick="javascript:HighlanderComments.switchAccount();return false;">Change</a>&nbsp;)</span></p>
+			</div>
+	
+		</div>
+	</div>
+
+
+	<div id="comment-form-load-service" class="comment-form-service">
+		<div class="comment-form-posting-as-cancel"><a href="javascript:HighlanderComments.cancelExternalWindow();">Cancel</a></div>
+		<p>Connecting to %s</p>
+	</div>
+	
+	
+</div>
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	var input = document.createElement( 'input' ),
+	    comment = jQuery( '#comment' );
+
+	if ( 'placeholder' in input ) {
+		comment.attr( 'placeholder', jQuery( '.comment-textarea label' ).remove().text() );
+	}
+
+	// Expando Mode: start small, then auto-resize on first click + text length
+	jQuery( '#comment-form-identity' ).hide();
+	jQuery( '#comment-form-subscribe' ).hide();
+	jQuery( '#commentform .form-submit' ).hide();
+
+	comment.css( { 'height':'10px' } ).one( 'focus', function() {
+		var timer = setInterval( HighlanderComments.resizeCallback, 10 )
+		jQuery( this ).animate( { 'height': HighlanderComments.initialHeight } ).delay( 100 ).queue( function(n) { clearInterval( timer ); HighlanderComments.resizeCallback(); n(); } );
+		jQuery( '#comment-form-identity' ).slideDown();
+		jQuery( '#comment-form-subscribe' ).slideDown();
+		jQuery( '#commentform .form-submit' ).slideDown();
+	});
+});
+</script>
+
+<div style="display: none;" id="comment-form-subscribe"> 
+	<p class="comment-subscription-form"><input name="subscribe" id="subscribe" value="subscribe" style="width: auto;" tabindex="6" type="checkbox"> <label class="subscribe-label" id="subscribe-label" for="subscribe">Notify me of follow-up comments via email.</label></p></div>
+
+<style type="text/css">
+#respond .comment-form-avatar { display: none !important; }
+#respond .comment-form-fields { margin-left: 0 !important; }
+</style>
+												<p style="display: none;" class="form-submit">
+							<input name="submit" id="comment-submit" value="Post Comment" type="submit">
+							<input name="comment_post_ID" value="898" id="comment_post_ID" type="hidden">
+<input name="comment_parent" id="comment_parent" value="0" type="hidden">
+						</p>
+						
+<input name="genseq" value="1344970313" type="hidden">
+<p style="display: none;"><input id="akismet_comment_nonce" name="akismet_comment_nonce" value="a2308be713" type="hidden"></p><script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/form.js"></script>
+<p style="display: none;"><input id="ak_js" name="ak_js" value="1344970323189" type="hidden"></p>					</form>
+							</div><!-- #respond -->
+			<div style="clear: both"></div>			
+
+
+<!-- begin footer -->
+</div>
+
+
+<!-- begin sidebar -->
+<div id="menu">
+
+<ul>
+<li id="search-2" class="widget widget_search"><form role="search" method="get" id="searchform" action="http://harablog.wordpress.com/">
+	<div><label class="screen-reader-text" for="s">Search for:</label>
+	<input name="s" id="s" type="text">
+	<input id="searchsubmit" value="Search" type="submit">
+	</div>
+	</form></li>
+<li id="pages-2" class="widget widget_pages"><h2 class="widgettitle">Pages</h2>
+		<ul>
+			<li class="page_item page-item-2"><a href="http://harablog.wordpress.com/about/">About</a></li>
+		</ul>
+		</li>
+		<li id="recent-posts-2" class="widget widget_recent_entries">		<h2 class="widgettitle">Recent Posts</h2>
+		<ul>
+				<li><a href="http://harablog.wordpress.com/2011/10/07/my-apple-iic/" title="My Apple&nbsp;II/c">My Apple&nbsp;II/c</a></li>
+				<li><a href="http://harablog.wordpress.com/2011/09/07/jump-point-search/" title="Jump Point&nbsp;Search">Jump Point&nbsp;Search</a></li>
+				<li><a href="http://harablog.wordpress.com/2011/09/01/rectangular-symmetry-reduction/" title="Rectangular Symmetry&nbsp;Reduction">Rectangular Symmetry&nbsp;Reduction</a></li>
+				<li><a href="http://harablog.wordpress.com/2011/08/26/fast-pathfinding-via-symmetry-breaking/" title="Fast Pathfinding via Symmetry&nbsp;Breaking">Fast Pathfinding via Symmetry&nbsp;Breaking</a></li>
+				<li><a href="http://harablog.wordpress.com/2011/07/11/the-paper/" title="The&nbsp;Paper">The&nbsp;Paper</a></li>
+				</ul>
+		</li>
+<li id="categories-320175801" class="widget widget_categories"><h2 class="widgettitle">Categories</h2>
+		<ul>
+			<li class="cat-item cat-item-33525"><a href="http://harablog.wordpress.com/category/conference/" title="View all posts filed under conference">conference</a>
+</li>
+	<li class="cat-item cat-item-47932"><a href="http://harablog.wordpress.com/category/non-technical/" title="View all posts filed under non-technical">non-technical</a>
+</li>
+	<li class="cat-item cat-item-2263985"><a href="http://harablog.wordpress.com/category/pathfinding/" title="View all posts filed under pathfinding">pathfinding</a>
+</li>
+		</ul>
+</li>
+<li id="meta-2" class="widget widget_meta"><h2 class="widgettitle">Meta</h2>
+			<ul>
+			<li><a href="http://harablog.wordpress.com/wp-login.php?action=register">Register</a></li>			<li><a href="http://harablog.wordpress.com/wp-login.php">Log in</a></li>
+			<li><a href="http://harablog.wordpress.com/feed/" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://harablog.wordpress.com/comments/feed/" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://wordpress.com/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.com</a></li>
+						</ul>
+</li>
+
+</ul>
+
+</div>
+
+
+<p class="credit"><cite>Theme: <a href="http://theme.wordpress.com/themes/rubric/" title="Learn more about this theme">Rubric</a>. <a href="http://wordpress.com/?ref=footer" rel="generator">Blog at WordPress.com</a>.</cite></p>
+
+</div>
+
+
+<script type="text/javascript">
+var _qevents = _qevents || [], wpcomQuantcastData = {"qacct":"p-18-mFEk4J448M","labels":",language.en,type.wpcom,posttag.grids,posttag.pathfinding,posttag.symmetry,as"};
+function wpcomQuantcastPixel( labels, options ) {
+	var i, defaults = wpcomQuantcastData, data = { event: 'ajax' };
+
+	labels  = labels  || '';
+	options = options || {};
+
+	if ( typeof labels != 'string' )
+		options = labels;
+
+	for ( i in defaults ) {
+		data[i] = defaults[i];
+	}
+
+	for ( i in options ) {
+		data[i] = options[i];
+	}
+
+	if ( data.labels ) {
+		data.labels += ',' + labels;
+	} else {
+		data.labels = labels;
+	}
+
+	_qevents.push( data );
+};
+(function() {var elem = document.createElement('script');elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";elem.async = true;elem.type = "text/javascript";var scpt = document.getElementsByTagName('script')[0];scpt.parentNode.insertBefore(elem, scpt);  })();
+_qevents.push( wpcomQuantcastData );
+</script>
+<noscript><div style="display: none;"><img src="//pixel.quantserve.com/pixel/p-18-mFEk4J448M.gif?labels=%2Clanguage.en%2Ctype.wpcom%2Cposttag.grids%2Cposttag.pathfinding%2Cposttag.symmetry%2Cas" height="1" width="1" alt="" /></div></noscript>
+
+
+	<script type="text/javascript">
+	/* <![CDATA[ */
+	(function($){
+		$(document).on( 'ready post-load', function() {
+
+			// Remove the login box when clicking the page
+			$( document ).mousedown( function( e ) {
+				if ( null == $( e.target ).closest( '#wpl-mustlogin' ).get( 0 ) ) {
+					$( '#wpl-mustlogin' ).remove();
+				}
+			});
+
+			// Handle clicking the like button itself
+			$('.wpl-button > a.like').click( function(e) {
+				e.preventDefault();
+
+				var postid = $(this).parent().attr('id').split('like-')[1];
+				$.post( 'http://harablog.wordpress.com/wp-admin/admin-ajax.php', {
+					'action': 'wpl_record_stat',
+					'stat_name': 'loggedout_like_click'
+				} );
+
+				var tenMins = new Date();
+				tenMins.setTime( tenMins.getTime() + 600000 );
+				document.cookie = 'wpl_rand=b50dae5bcd; expires=' + tenMins.toGMTString() + '; domain=wordpress.com; path=/;';
+
+				$(this).parent().siblings('.wpl-count').after( '\
+					<div id="wpl-mustlogin"> \
+						<form action="https://harablog.wordpress.com/wp-login.php" method="post"> \
+							<p>Just one more step to like this:</p> \
+							<label><span>Username</span> <input type="text" name="log" id="user_login" class="input" value="" size="20" tabindex="80" /></label> \
+							<label><span>Password</span> <input type="password" name="pwd" id="user_pass" class="input" value="" size="20" tabindex="81" /></label> \
+							<input type="submit" name="wp-submit" id="wp-submit" class="button-primary" value="Log In" tabindex="82" /> \
+							<input type="hidden" name="postid" value="' + postid + '" /> \
+							<input type="hidden" name="redirect_to" value="http://harablog.wordpress.com/2011/09/07/jump-point-search?year=2011&#038;monthnum=09&#038;day=07&#038;name=jump-point-search&#038;like=1" /> \
+							<input type="hidden" name="wpl_rand" value="b50dae5bcd" /> \
+							<p>Not a member yet? <a href="http://wordpress.com/signup/?ref=likebox" id="wpl-signup-link">Sign up with WordPress.com</a></p> \
+						</form> \
+					</div> \
+				');
+
+				$('#wpl-mustlogin').hide().slideDown('fast');
+			} );
+
+			$('#wpl-mustlogin input.input').live( 'focus', function() {
+				$(this).prev().hide();
+			}).live( 'blur', function() {
+				if ( $(this).val() == '' ) {
+					$(this).prev().show();
+				}
+			});
+
+			$('#wpl-mustlogin input#wp-submit').live( 'click', function(e) {
+				e.preventDefault();
+
+				$.post( 'http://harablog.wordpress.com/wp-admin/admin-ajax.php', {
+					'action': 'wpl_record_stat',
+					'stat_name': 'loggedout_login_submit'
+				}, function() {
+					$('#wpl-mustlogin form').submit();
+				} );
+			});
+
+			$('#wpl-mustlogin a#wpl-signup-link').live( 'click', function(e) {
+				e.preventDefault();
+
+				var link = $(this).attr('href');
+
+				$.post( 'http://harablog.wordpress.com/wp-admin/admin-ajax.php', {
+					'action': 'wpl_record_stat',
+					'stat_name': 'loggedout_signup_click'
+				}, function() {
+					location.href = link;
+				} );
+			});
+		})
+	})(jQuery);
+	/* ]]> */
+	</script>
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/gprofiles.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/wpgroho.js"></script>
+<script>jQuery(document).ready(function($){ Gravatar.profile_cb = function( h, d ) { WPGroHo.syncProfileData( h, d );	}; Gravatar.my_hash = WPGroHo.my_hash; Gravatar.init( 'body', '#wp-admin-bar-my-account' ); });</script>	<div style="display:none">
+	</div>
+<script type="text/javascript">
+/* <![CDATA[ */
+var HighlanderComments = {"loggingInText":"Logging In\u2026","submittingText":"Posting Comment\u2026","postCommentText":"Post Comment","connectingToText":"Connecting to %s","commentingAsText":"%1$s: You are commenting using your %2$s account.","logoutText":"Log Out","loginText":"Log In","connectURL":"http:\/\/harablog.wordpress.com\/public.api\/connect\/?action=request","logoutURL":"http:\/\/harablog.wordpress.com\/wp-login.php?action=logout&_wpnonce=b96286cbcc","homeURL":"http:\/\/harablog.wordpress.com\/","postID":"898","gravDefault":"mystery","enterACommentError":"Please enter a comment","enterEmailError":"Please enter your email address here","invalidEmailError":"Invalid email address","enterAuthorError":"Please enter your name here","gravatarFromEmail":"This picture will show whenever you leave a comment. Click to customize it.","logInToExternalAccount":"Log in to use details from one of these accounts.","change":"Change","changeAccount":"Change Account","comment_registration":"","userIsLoggedIn":"","isJetpack":"0"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/script.js"></script>
+	
+	<div style="bottom: -207px;" id="bit" class="loggedout-follow-normal">
+		<a class="bsub" href="javascript:void(0)"><span id="bsub-text">Follow</span></a>
+		<div id="bitsubscribe">
+			
+					<h3><label for="loggedout-follow-field">Follow “Shortest Path”</label></h3>
+		
+			<form action="https://subscribe.wordpress.com" method="post" accept-charset="utf-8" id="loggedout-follow">
+			<p>Get every new post delivered to your Inbox.</p>
+			
+			<p id="loggedout-follow-error" style="display: none;"></p>
+
+					
+			
+			<p><input name="email" style="width: 95%; padding: 1px 2px" value="Enter your email address" onfocus='this.value=(this.value=="Enter your email address") ? "" : this.value;' onblur='this.value=(this.value=="") ? "Enter email address" : this.value;' id="loggedout-follow-field" type="email"></p>
+
+			<input name="action" value="subscribe" type="hidden">
+			<input name="blog_id" value="6057140" type="hidden">
+			<input name="source" value="http://harablog.wordpress.com/2011/09/07/jump-point-search/" type="hidden">
+			<input name="sub-type" value="loggedout-follow" type="hidden">
+
+			<input id="_wpnonce" name="_wpnonce" value="92a3ba609a" type="hidden"><input name="_wp_http_referer" value="/2011/09/07/jump-point-search/" type="hidden">
+			<p id="bsub-subscribe-button"><input value="Sign me up" type="submit"></p>
+			</form>
+					<div id="bsub-credit"><a href="http://wordpress.com/signup/?ref=lof">Powered by WordPress.com</a></div>
+		</div><!-- #bitsubscribe -->
+	</div><!-- #bit -->
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/sharing.js"></script>
+	<div id="sharing_email" style="display: none;">
+		<form action="" method="post">
+			<label for="target_email">Send to Email Address</label>
+			<input name="target_email" id="target_email" type="text">
+			
+			
+				<label for="source_name">Your Name</label>
+				<input name="source_name" id="source_name" type="text">
+				
+				<label for="source_email">Your Email Address</label>
+				<input name="source_email" id="source_email" type="text">
+
+						
+			<div class="recaptcha" id="sharing_recaptcha"></div>
+			<img style="float: right; display: none" class="loading" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/loading.gif" alt="loading" height="16" width="16">
+			<input value="Send Email" class="sharing_send" type="submit">
+			<a href="#cancel" class="sharing_cancel">Cancel</a>
+			
+			<div class="errors errors-1" style="display: none;">
+				Post was not sent - check your email addresses!			</div>
+
+			<div class="errors errors-2" style="display: none;">
+				Email check failed, please try again			</div>
+			
+			<div class="errors errors-3" style="display: none;">
+				Sorry, your blog cannot share posts by email.			</div>
+		</form>
+	</div>
+<script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/beacon.js"></script><script type="text/javascript">try{COMSCORE.beacon({c1:2,c2:7518284});}catch(e){}</script><noscript><p class="robots-nocontent"><img src="http://b.scorecardresearch.com/p?cj=1c1=2&#038;c2=7518284" alt="" style="display:none" width="1" height="1" /></p></noscript><script type="text/javascript" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/devicepx.js"></script>
+<script type="text/javascript">
+// <![CDATA[
+(function() {
+try{
+  if ( window.external &&'msIsSiteMode' in window.external) {
+    if (window.external.msIsSiteMode()) {
+      var jl = document.createElement('script');
+      jl.type='text/javascript';
+      jl.async=true;
+      jl.src='/wp-content/plugins/ie-sitemode/custom-jumplist.php';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(jl, s);
+    }
+  }
+}catch(e){}
+})();
+// ]]>
+</script><script src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/w.js" type="text/javascript"></script>
+<script type="text/javascript">
+st_go({'blog':'6057140','v':'wpcom','user_id':'0','post':'898','subd':'harablog'});
+ex_go({'crypt':'UE5XaGUuOTlwaD85flAmcm1mcmZsaDhkV11YdWFnNncxc1tjZG9XVXhRaTZjdDZZSHpITlM4P19SYi41JStmOXJJPVpBMnBUYk9+LE8ta1A5N1FkelhOX2VfNHloK3RKNFNCYVRSQ1M0OEd6RGstX2wzVy1WYnBteUMwbnhSK0lfMGQ2YnEzZWVTTUwlUVtYbCtlQX5hTGdiay15UXdGYTVfeCVyR1h8bSwsS3BpT2o1QVV1R3UscW1oWy5vX2w/eEpjbU1ZUzdYbXRSTW1USjJBS241LkpqaHktOW5RZTlmLkFkc0NQRz9zcGdDX2pMeWNOJnUxaEUlNlBNcS5vcHElV1JQREdZTXhwSFM='});
+addLoadEvent(function(){linktracker_init('6057140',898);});
+	</script><img id="wpstats" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/g_002.gif" alt=""><img id="wpstats2" src="Jump%20Point%20Search%20-%20Shortest%20Path_pliki/g.gif" alt="" style="display:none">
+<noscript><img src="http://stats.wordpress.com/b.gif?v=noscript" style="height:0px;width:0px;overflow:hidden" alt="" /></noscript>
+
+
+</body></html>
