@@ -2,6 +2,7 @@
 project(library)
 cmake_minimum_required(VERSION 2.8)
 
+include( ${CMAKE_SOURCE_DIR}/OpenLibrary.cmake )
 
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
 
@@ -22,31 +23,35 @@ function(register_library name)
 
     endforeach(arg ${args})
 
-    if (NOT ${SOURCES} EQUAL "")
+    if(NOT ${SOURCES} EQUAL "")
         add_library(${name} SHARED ${SOURCE} )
 
         set_target_properties(${name} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
                                                  COMPILE_FLAGS_DEBUG "-Weffc++")
 
+        set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}${name})
         #install files
         if(WIN32)  # for windows (dll = runtime)
-            install (TARGETS ${name} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
-            set(LIB_INSTALLATION_DIR ${CMAKE_INSTALL_PREFIX})
+            install (TARGETS ${LIBRARY_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
+            set(LIB_INSTALATION_DIR ${CMAKE_INSTALL_PREFIX})
         else(WIN32)
-            install (TARGETS ${name} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
-            set(LIB_INSTALLATION_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+            install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+            set(LIB_INSTALATION_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
         endif(WIN32)
 
-    endif (NOT ${SOURCES} EQUAL "")
+    endif(NOT ${SOURCES} EQUAL "")
 
-    set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/OL/${name})
+    set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME}/${name})
     install (FILES ${HEADERS}
              DESTINATION ${HEADERS_INSTALL_PREFIX}
              PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
-    message( "library ${name} registered.
-    Sources: ${SOURCES} -> installation path: ${LIB_INSTALLATION_DIR}
-    Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
+    message( "library ${name} registered." )
+    if(${SOURCES})
+        message( "Sources: ${SOURCES} -> installation path: ${LIB_INSTALATION_DIR}" )
+    endif(${SOURCES})
+
+    message( "Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
 
 endfunction(register_library)
 
