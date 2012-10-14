@@ -27,10 +27,10 @@ namespace OpenLibrary
         {
             struct Regs32
             {
-                __uint32_t eax,
-                           ebx,
-                           ecx,
-                           edx;
+                uint32_t eax,
+                         ebx,
+                         ecx,
+                         edx;
 
                 Regs32(): eax(0), ebx(0), ecx(0), edx(0) {}
             };
@@ -41,9 +41,9 @@ namespace OpenLibrary
                     :"+a"(regs->eax), "=b"(regs->ebx), "=c"(regs->ecx), "=d"(regs->edx));
             }
 
-            std::string reg32_to_str(__uint32_t reg)
+            std::string reg32_to_str(uint32_t reg)
             {
-                __uint64_t ereg = reg;                              //cast 32 bit value to 64 bit (to create 32 bits of data + zeros)
+                uint64_t ereg = reg;                                 //cast 32 bit value to 64 bit (to create 32 bits of data + zeros)
                 std::string result = reinterpret_cast<char*>(&ereg); //4 chars + 4 zeros
 
                 return result;
@@ -59,13 +59,13 @@ namespace OpenLibrary
                 return result;
             }
 
-            __uint64_t features()
+            uint64_t features()
             {
                 Regs32 regs;
                 regs.eax = 1;
                 cpuid(&regs);
 
-                const __uint64_t result = (static_cast<__uint64_t>(regs.ecx) << 32) | (regs.edx & 0xffffffff);
+                const uint64_t result = (static_cast<uint64_t>(regs.ecx) << 32) | (regs.edx & 0xffffffff);
 
                 return result;
             }

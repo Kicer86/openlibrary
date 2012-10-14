@@ -30,7 +30,7 @@ namespace OpenLibrary
             Crc32Impl() {}
             virtual ~Crc32Impl() {}
 
-            virtual __uint32_t calc(void *, int) const = 0;
+            virtual uint32_t calc(void *, int) const = 0;
 
         };
 
