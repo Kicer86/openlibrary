@@ -13,4 +13,4 @@ set(LIB_HEADERS
     cpuinfo.hpp
 )
 
-register_library(${LIB_NAME} HEADERS ${LIB_HEADERS})
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})
