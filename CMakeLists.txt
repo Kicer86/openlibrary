@@ -56,6 +56,7 @@ add_subdirectory(htmlParser htmlParser)
 add_subdirectory(router router)
 add_subdirectory(QtExt QtExt)
 add_subdirectory(utils utils)
+add_subdirectory(math math)
 
 set(LIBRARY_HEADERS debug.hpp std_macros.hpp str_op.hpp)
 
