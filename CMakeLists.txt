@@ -23,24 +23,25 @@ function(register_library name)
 
     endforeach(arg ${args})
 
-    if(NOT ${SOURCES} EQUAL "")
-        add_library(${name} SHARED ${SOURCE} )
+    if(SOURCES)
+        set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}_${name})
 
-        set_target_properties(${name} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
-                                                 COMPILE_FLAGS_DEBUG "-Weffc++")
-
-        set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}${name})
+        add_library(${LIBRARY_NAME} SHARED ${SOURCES})
+        set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
+                                              COMPILE_FLAGS_DEBUG "-Weffc++")
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
-            install (TARGETS ${LIBRARY_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
-            set(LIB_INSTALATION_DIR ${CMAKE_INSTALL_PREFIX})
+            set(RUNTIME_TYPE RUNTIME)
+            set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX})
         else(WIN32)
-            install (TARGETS ${LIBRARY_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
-            set(LIB_INSTALATION_DIR ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+            set(RUNTIME_TYPE LIBRARY)
+            set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
         endif(WIN32)
 
-    endif(NOT ${SOURCES} EQUAL "")
+        install (TARGETS ${LIBRARY_NAME} ${RUNTIME_TYPE} DESTINATION ${LIB_DESTINATION})
+
+    endif(SOURCES)
 
     set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME}/${name})
 
@@ -48,9 +49,10 @@ function(register_library name)
              DESTINATION ${HEADERS_INSTALL_PREFIX}
              PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
+    #sime debug
     message("library ${name} registered.")
     if(SOURCES)
-        message("       Sources: ${SOURCES} -> installation path: ${LIB_INSTALATION_DIR}")
+        message("       Sources: ${SOURCES} -> installation path: ${LIB_DESTINATION}")
     endif(SOURCES)
 
     if(HEADERS)
