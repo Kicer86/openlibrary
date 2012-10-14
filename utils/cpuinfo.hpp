@@ -22,6 +22,7 @@
 #define OPENLIBRARY_CPUINFO_HPP
 
 #include <string>
+#include <inttypes.h>
 
 namespace OpenLibrary
 {
@@ -30,7 +31,7 @@ namespace OpenLibrary
         struct __attribute__ ((visibility ("default"))) Cpu
         {
             const std::string m_manufacturer;
-            const __uint64_t m_features;
+            const uint64_t m_features;
 
             bool mmx() const;
             bool sse() const;

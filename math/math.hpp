@@ -21,7 +21,7 @@
 #ifndef OPENLIBRARY_MATH_HPP
 #define OPENLIBRARY_MATH_HPP
 
-#include <sys/types.h>
+#include <inttypes.h>
 
 namespace OpenLibrary
 {
@@ -37,37 +37,37 @@ namespace OpenLibrary
         template<>
         struct BitType<16, true>
         {
-            typedef __int16_t type;
+            typedef int16_t type;
         };
 
         template<>
         struct BitType<16, false>
         {
-            typedef __uint16_t type;
+            typedef uint16_t type;
         };
 
         template<>
         struct BitType<32, true>
         {
-            typedef __int32_t type;
+            typedef int32_t type;
         };
 
         template<>
         struct BitType<32, false>
         {
-            typedef __uint32_t type;
+            typedef uint32_t type;
         };
 
         template<>
         struct BitType<64, true>
         {
-            typedef __int64_t type;
+            typedef int64_t type;
         };
 
         template<>
         struct BitType<64, false>
         {
-            typedef __uint64_t type;
+            typedef uint64_t type;
         };
 
 

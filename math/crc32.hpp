@@ -21,7 +21,7 @@
 #ifndef OPENLIBRARY_CRC32_HPP
 #define OPENLIBRARY_CRC32_HPP
 
-#include <sys/types.h>
+#include <inttypes.h>
 
 namespace OpenLibrary
 {
@@ -37,7 +37,7 @@ namespace OpenLibrary
                 Crc32();
                 virtual ~Crc32();
 
-                __uint32_t calculate(void *, int len) const;
+                uint32_t calculate(void *, int len) const;
 
             private:
                 Crc32Impl *m_impl;
