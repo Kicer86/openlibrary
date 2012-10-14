@@ -30,6 +30,7 @@ function(register_library name)
                                                  COMPILE_FLAGS_DEBUG "-Weffc++")
 
         set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}${name})
+
         #install files
         if(WIN32)  # for windows (dll = runtime)
             install (TARGETS ${LIBRARY_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
@@ -42,16 +43,19 @@ function(register_library name)
     endif(NOT ${SOURCES} EQUAL "")
 
     set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME}/${name})
+
     install (FILES ${HEADERS}
              DESTINATION ${HEADERS_INSTALL_PREFIX}
              PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
-    message( "library ${name} registered." )
-    if(${SOURCES})
-        message( "Sources: ${SOURCES} -> installation path: ${LIB_INSTALATION_DIR}" )
-    endif(${SOURCES})
+    message("library ${name} registered.")
+    if(SOURCES)
+        message("       Sources: ${SOURCES} -> installation path: ${LIB_INSTALATION_DIR}")
+    endif(SOURCES)
 
-    message( "Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
+    if(HEADERS)
+        message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
+    endif(HEADERS)
 
 endfunction(register_library)
 

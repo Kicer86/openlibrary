@@ -17,6 +17,8 @@ namespace OpenLibrary
     {
         namespace
         {
+            //standard sorting algorithm:
+            //points are sorted by their's age - typical fifo
             template<class PointT>
             class SortingContainer: public std::deque<PointT *>
             {
