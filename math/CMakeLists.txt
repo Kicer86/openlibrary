@@ -36,7 +36,7 @@ install (FILES ${MATH_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
 
 enable_testing()
 
-add_executable(TestTypes tests/types_test.cpp)
-target_link_libraries(TestTypes math utils)
+#add_executable(TestTypes tests/types_test.cpp)
+#target_link_libraries(TestTypes math utils)
 
-add_test(test_types ${CMAKE_CURRENT_BINARY_DIR}/TestTypes TestingTypes)
+#add_test(test_types ${CMAKE_CURRENT_BINARY_DIR}/TestTypes TestingTypes)
