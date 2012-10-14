@@ -3,6 +3,7 @@ project(library)
 cmake_minimum_required(VERSION 2.8)
 
 include( ${CMAKE_SOURCE_DIR}/OpenLibrary.cmake )
+include( ${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt )
 
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
 
@@ -23,12 +24,16 @@ function(register_library name)
 
     endforeach(arg ${args})
 
+    #c/c++ part
     if(SOURCES)
         set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}_${name})
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
         set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
                                               COMPILE_FLAGS_DEBUG "-Weffc++")
+
+        #create variables for library
+        generate_variables(${name} ${LIBRARY_NAME})
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
@@ -52,7 +57,9 @@ function(register_library name)
     #sime debug
     message("library ${name} registered.")
     if(SOURCES)
-        message("       Sources: ${SOURCES} -> installation path: ${LIB_DESTINATION}")
+        get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)
+        get_filename_component(library_file_name ${library_location} NAME)
+        message("       Sources: ${SOURCES} -> ${library_file_name} -> installation path: ${LIB_DESTINATION}")
     endif(SOURCES)
 
     if(HEADERS)
