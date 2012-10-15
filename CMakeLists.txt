@@ -7,6 +7,12 @@ include( ${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt )
 
 set(LIB_CXXFLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
 
+#prepare target for manual updates
+add_custom_target(manual)
+
+#prepare target for cration of cmake variables for each sub-library of OpenLibrary
+generate_variables_file()
+
 #some usefull fuctions
 function(register_library name)
 
@@ -32,7 +38,7 @@ function(register_library name)
         set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
                                               COMPILE_FLAGS_DEBUG "-Weffc++")
 
-        #create variables for library
+        #create variables for sub-library
         generate_variables(${name} ${LIBRARY_NAME})
 
         #install files
@@ -54,7 +60,7 @@ function(register_library name)
              DESTINATION ${HEADERS_INSTALL_PREFIX}
              PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
-    #sime debug
+    #some debug
     message("library ${name} registered.")
     if(SOURCES)
         get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)
@@ -80,7 +86,6 @@ set(LIBRARY_HEADERS debug.hpp std_macros.hpp str_op.hpp)
 
 register_library(common HEADERS ${LIBRARY_HEADERS})
 
-generate_variables_file()
 
 # install(FILES cmake/ForceAddFlags.cmake
 #         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules
