@@ -35,7 +35,7 @@ function(register_library name)
         set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}_${name})
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
-        set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "--std=c++0x ${LIB_CXXFLAGS} -masm=intel"
+        set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "${GET_CPP11_SWITCH} ${LIB_CXXFLAGS} -masm=intel"
                                               COMPILE_FLAGS_DEBUG "-Weffc++")
 
         #create variables for sub-library
