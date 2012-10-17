@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 
-include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_definitions(-DYYDEBUG=1)
