@@ -36,7 +36,6 @@ endfunction(generate_variables_file)
 
 
 #functions providing platform independed stuff
-
 function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "--std=c++11")
@@ -53,3 +52,12 @@ function(turnOnIntelSyntax target)
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnIntelSyntax)
+
+
+function(exportSymbols target)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
+    elseif(MSVC90)
+        add_definitions()
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+endfunction(exportSymbols)
