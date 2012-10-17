@@ -35,7 +35,7 @@ namespace OpenLibrary
         };
 
 
-        template<>
+        //template<>
         template<class U>
         struct Container< std::list<U> >
         {
@@ -43,7 +43,7 @@ namespace OpenLibrary
         };
 
 
-        template<>
+        //template<>
         template<class U>
         struct Container< std::forward_list<U> >
         {
