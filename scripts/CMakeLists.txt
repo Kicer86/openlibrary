@@ -43,7 +43,7 @@ function(turnOnCpp11 target)
     elseif(MSVC90)
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
-endfunction(tunOnCpp11)
+endfunction(turnOnCpp11)
 
 
 function(turnOnIntelSyntax target)
