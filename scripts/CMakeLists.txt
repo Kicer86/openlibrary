@@ -105,8 +105,10 @@ function(prepareExportFile filePath)
 
     file (WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
 
+    #message(flag test "${MSVC}, ${MSVC_IDE}, ${MSVC60}, ${MSVC70}, ${MSVC71}, ${MSVC80}, ${CMAKE_COMPILER_2005}, ${MSVC90}, ${MSVC10} , ${CMAKE_GENERATOR}, ${WIN32}  ")
+
     if(CMAKE_COMPILER_IS_GNUCXX)
-        file (APPEND ${filePath} "
+        file(APPEND ${filePath} "
             #ifndef OPENLIBRARY_INTERNAL_HPP
             #define OPENLIBRARY_INTERNAL_HPP
 
@@ -114,8 +116,8 @@ function(prepareExportFile filePath)
 
             #endif
             ")
-    elseif(MSVC90)
-        file (APPEND ${filePath} "
+    else() #Visual Studio
+        file(APPEND ${filePath} "
             #ifndef OPENLIBRARY_INTERNAL_HPP
             #define OPENLIBRARY_INTERNAL_HPP
 
@@ -134,7 +136,7 @@ endfunction(prepareExportFile)
 function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "--std=c++11")
-    elseif(MSVC90)
+    else() #Visual Studio
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnCpp11)
@@ -143,7 +145,7 @@ endfunction(turnOnCpp11)
 function(turnOnIntelSyntax target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-masm=intel")
-    elseif(MSVC90)
+    else() #Visual Studio
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnIntelSyntax)
@@ -152,7 +154,7 @@ endfunction(turnOnIntelSyntax)
 function(exportSymbols target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
-    elseif(MSVC90)
-        add_definitions()
+    else() #Visual Studio
+        add_definitions(OPENLIBRARY_DO_EXPORT)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(exportSymbols)
