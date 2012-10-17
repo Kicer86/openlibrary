@@ -35,9 +35,21 @@ function(generate_variables_file)
 endfunction(generate_variables_file)
 
 
-#variables providing platform independed stuff
-if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CPP11_SWITCH "--std=c++11")
-elseif(MSVC90)
-    set(CPP11_SWITCH "")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+#functions providing platform independed stuff
+
+function(turnOnCpp11 target)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "--std=c++11")
+    elseif(MSVC90)
+
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+endfunction(tunOnCpp11)
+
+
+function(turnOnIntelSyntax target)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-masm=intel")
+    elseif(MSVC90)
+
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+endfunction(turnOnIntelSyntax)
