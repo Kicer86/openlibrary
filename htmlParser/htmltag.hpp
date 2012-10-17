@@ -24,7 +24,9 @@
 #include <vector>
 #include <ostream>
 
-class __attribute__ ((visibility ("default"))) HtmlTag
+#include <OpenLibraryExports.hpp>
+
+class OL_EXPORTS HtmlTag
 {
   public:
     HtmlTag(bool type=false);
