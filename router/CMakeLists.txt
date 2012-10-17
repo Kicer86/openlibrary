@@ -3,6 +3,8 @@ project(router)
 
 cmake_minimum_required( VERSION 2.6 )
 
+include(${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt)
+
 set(routerDemo_SRCS
     main.cpp
    )
@@ -16,7 +18,8 @@ set(router_HPP
 register_library(router HEADERS ${router_HPP})
 
 include_directories(${QT_INCLUDES} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
-add_executable( routerDemo ${routerDemo_SRCS})
+add_executable(routerDemo ${routerDemo_SRCS})
+turnOnCpp11(routerDemo)
 
-set_target_properties(routerDemo PROPERTIES COMPILE_FLAGS "--std=c++11"
-                                            COMPILE_FLAGS_DEBUG "-Weffc++")
+#set_target_properties(routerDemo PROPERTIES COMPILE_FLAGS "--std=c++11"
+#                                            COMPILE_FLAGS_DEBUG "-Weffc++")

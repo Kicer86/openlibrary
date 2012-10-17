@@ -1,1 +1,1 @@
-set ( MATH_LIBRARIES OL_math ) 
+'set ( MATH_LIBRARIES OL_math ) ' 
