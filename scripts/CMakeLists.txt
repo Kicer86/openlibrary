@@ -44,6 +44,9 @@ function(register_library name)
 
     endif(SOURCES)
 
+    source_group(${LIBRARY_NAME}\\sources FILES ${SOURCES})
+    source_group(${LIBRARY_NAME}\\headers FILES ${HEADERS})
+
     set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME}/${name})
 
     install (FILES ${HEADERS}
