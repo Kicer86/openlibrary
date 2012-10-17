@@ -12,6 +12,9 @@
 #include <list>
 #include <deque>
 
+#ifdef _MSC_VER
+	#define constexpr const
+#endif
 
 namespace OpenLibrary
 {
@@ -24,7 +27,7 @@ namespace OpenLibrary
         };
 
 
-        template<>
+        //template<>
         template<class U>
         struct Container< std::deque<U> >
         {
