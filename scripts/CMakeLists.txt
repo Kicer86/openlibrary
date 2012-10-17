@@ -1,5 +1,5 @@
 
-#some functions for generation useful stuff
+#some functions for generation useful stuff (internal use)
 
 #generate cmake variables for library
 #Function generates file with library specific cmake variables
