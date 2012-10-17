@@ -35,7 +35,38 @@ function(generate_variables_file)
 endfunction(generate_variables_file)
 
 
-#functions providing platform independed stuff
+#function which creates file to by used by sublibraries to export theirs classes and functions
+
+function(prepareExportFile filePath)
+
+    file (WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
+
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        file (APPEND ${filePath} "
+            #ifndef OPENLIBRARY_INTERNAL_HPP
+            #define OPENLIBRARY_INTERNAL_HPP
+
+            #define OL_EXPORTS __attribute__ ((visibility (\"default\")))
+
+            #endif
+            ")
+    elseif(MSVC90)
+        file (APPEND ${filePath} "
+            #ifndef OPENLIBRARY_INTERNAL_HPP
+            #define OPENLIBRARY_INTERNAL_HPP
+
+            #ifdef OPENLIBRARY_DO_EXPORT
+                #define OL_EXPORTS __declspec( dllexport )
+            #else
+                #define OL_EXPORTS __declspec( dllimport )
+            #endif
+
+            #endif
+            ")
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+endfunction(prepareExportFile)
+
+#functions providing platform independed compiler switches
 function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "--std=c++11")
