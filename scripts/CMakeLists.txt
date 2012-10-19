@@ -79,7 +79,7 @@ function(generate_variables name)
 
     #generate file with cmake variables
     add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/scripts/tmp/${name}
-                       COMMAND echo 'set(${UP_NAME}_LIBRARIES ${ARGN})' > ${CMAKE_SOURCE_DIR}/scripts/tmp/${name}
+                       COMMAND echo ARGS 'set(${UP_NAME}_LIBRARIES ${ARGN})' > ${CMAKE_SOURCE_DIR}/scripts/tmp/${name}
                        DEPENDS ${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt)   #depends on this file
 
     add_custom_target(variables_${name} DEPENDS ${CMAKE_SOURCE_DIR}/scripts/tmp/${name})
