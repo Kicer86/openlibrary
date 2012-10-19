@@ -65,6 +65,10 @@ function(register_library name)
         message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
     endif(HEADERS)
 
+    set(OPENLIBRARY_REGISTERED_LIBRARIES
+        "${CMAKE_SOURCE_DIR}/scripts/tmp/${name} ${OPENLIBRARY_REGISTERED_LIBRARIES}"
+        CACHE INTERNAL "List of registered sublibraries")
+
 endfunction(register_library)
 
 
