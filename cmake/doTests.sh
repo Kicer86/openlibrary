@@ -1,6 +1,9 @@
 #!/bin/bash
 #make sure, that generated rules are ok
 
+
+libraries_cmake=$1
+
 retpath=`pwd`
 cd ../build
 
@@ -33,10 +36,10 @@ for lib in $registerd_libs; do
     touch $lib
 
     echo "making sure that libraries.cmake will be regenerated:"
-    filemodtime=`stat -c %Y ../libraries.cmake`
+    filemodtime=`stat -c %Y $libraries_cmake`
     sleep 1                                            #make sure we will wait at least 1 second
     make libraries.cmake
-    filemodtime2=`stat -c %Y ../libraries.cmake`
+    filemodtime2=`stat -c %Y $libraries_cmake`
 
     if [ $filemodtime -ne $filemodtime2 ]; then
         echo "ok!"
@@ -66,9 +69,9 @@ done
 
 echo "performing #4 test"
 echo "making sure that libraries.cmake will not be regenerated without a reason"
-    filemodtime=`stat -c %Y ../libraries.cmake`
+    filemodtime=`stat -c %Y $libraries_cmake`
     make libraries.cmake
-    filemodtime2=`stat -c %Y ../libraries.cmake`
+    filemodtime2=`stat -c %Y $libraries_cmake`
 
     if [ $filemodtime -eq $filemodtime2 ]; then
         echo "ok!"
