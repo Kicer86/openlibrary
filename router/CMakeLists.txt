@@ -3,7 +3,7 @@ project(router)
 
 cmake_minimum_required( VERSION 2.6 )
 
-include(${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt)
+include(${CMAKE_SOURCE_DIR}/cmake/functions.cmake)
 
 set(routerDemo_SRCS
     main.cpp
