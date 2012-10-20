@@ -28,9 +28,6 @@ function(register_library name)
         #set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "${LIB_CXXFLAGS}"
         #                                      COMPILE_FLAGS_DEBUG "-Weffc++")
 
-        #create variables for sub-library
-        generate_variables(${name} ${LIBRARY_NAME})
-
         #install files
         if(WIN32)  # for windows (dll = runtime)
             set(RUNTIME_TYPE RUNTIME)
@@ -49,9 +46,9 @@ function(register_library name)
 
     set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME}/${name})
 
-    install (FILES ${HEADERS}
-             DESTINATION ${HEADERS_INSTALL_PREFIX}
-             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+    install(FILES ${HEADERS}
+            DESTINATION ${HEADERS_INSTALL_PREFIX}
+            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
     #some debug
     message("library ${name} registered.")
@@ -59,6 +56,9 @@ function(register_library name)
         get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)
         get_filename_component(library_file_name ${library_location} NAME)
         message("       Sources: ${SOURCES} -> ${library_file_name} -> installation path: ${LIB_DESTINATION}")
+
+        #create variables for sub-library
+        generate_variables(${name} ${LIBRARY_NAME})
     endif(SOURCES)
 
     if(HEADERS)
@@ -80,8 +80,11 @@ function(generate_variables name)
     #generate file with cmake variables
     add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/scripts/tmp/${name}
                        COMMAND echo ARGS 'set(${UP_NAME}_LIBRARIES ${ARGN})' > ${CMAKE_SOURCE_DIR}/scripts/tmp/${name}
-                       DEPENDS ${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt    #depends on this file
-                       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+                       DEPENDS ${CMAKE_SOURCE_DIR}/scripts/CMakeLists.txt)   #depends on this file
+
+    add_custom_target(${name}_variables DEPENDS ${CMAKE_SOURCE_DIR}/scripts/tmp/${name})
+
+    add_dependencies(libraries.cmake ${name}_variables)
 
     set(OPENLIBRARY_REGISTERED_LIBRARIES
         ${CMAKE_SOURCE_DIR}/scripts/tmp/${name} ${OPENLIBRARY_REGISTERED_LIBRARIES}
@@ -98,7 +101,6 @@ function(generate_variables_file)
     add_custom_command(OUTPUT ${CMAKE_SOURCE_DIR}/libraries.cmake
                        COMMAND cat ARGS "${CMAKE_SOURCE_DIR}/scripts/tmp/*" > ${CMAKE_SOURCE_DIR}/libraries.cmake
                        DEPENDS ${dependencies}
-                       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                       )
 
     add_custom_target(libraries.cmake
