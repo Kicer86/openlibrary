@@ -1,11 +1,15 @@
 #!/bin/bash
 #make sure, that generated rules are ok
 
+echo "Staring CMake's rules check"
 
 libraries_cmake=$1
 
 retpath=`pwd`
 cd ../build
+
+#before performing tests, make sure all targets exist
+make libraries.cmake
 
 #1 test: cmake should generate rules for cmake variables for each of registered libraries
 registerd_libs=`grep OPENLIBRARY_REGISTERED_LIBRARIES CMakeCache.txt | sed -e "s/OPENLIBRARY_REGISTERED_LIBRARIES:INTERNAL=//" -e "s/;/ /g"`

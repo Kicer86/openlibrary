@@ -28,4 +28,11 @@ if(CPPUTEST_FOUND)
 
     target_link_libraries(mathTests ${CPPUTEST_LIBRARIES})
 
+    add_custom_target(performMathCppUTests
+                      COMMAND ${CMAKE_CURRENT_BINARY_DIR}/mathTests
+                      DEPENDS mathTests)
+
+    #attach performMathCppUTests to 'test' target
+    add_dependencies(test performMathCppUTests)
+
 endif(CPPUTEST_FOUND)
