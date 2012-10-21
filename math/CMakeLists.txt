@@ -18,10 +18,14 @@ register_library(math SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
 
 ############################### tests ###############################
 
-include(${LIBRARIES_CMAKE})
+find_package(CppUTest)
 
-enable_testing()
+if(CPPUTEST_FOUND)
+    message("math: adding tests - CppUTest package found")
+    include_directories(${CPPUTEST_INCLUDE_DIRS})
+    add_executable(mathTests
+                   tests/RunAllTests.cpp tests/math_tests.cpp)
 
-add_executable(TestTypes tests/types_test.cpp)
-target_link_libraries(TestTypes ${MATH_LIBRARIES} ${UTILS_LIBRARIES})
-add_test(test_types ${CMAKE_CURRENT_BINARY_DIR}/TestTypes TestingTypes)
+    target_link_libraries(mathTests ${CPPUTEST_LIBRARIES})
+
+endif(CPPUTEST_FOUND)
