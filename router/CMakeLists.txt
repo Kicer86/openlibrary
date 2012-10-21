@@ -17,9 +17,7 @@ set(router_HPP
 
 register_library(router HEADERS ${router_HPP})
 
+#visualizer
 include_directories(${QT_INCLUDES} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 add_executable(routerDemo ${routerDemo_SRCS})
 turnOnCpp11(routerDemo)
-
-#set_target_properties(routerDemo PROPERTIES COMPILE_FLAGS "--std=c++11"
-#                                            COMPILE_FLAGS_DEBUG "-Weffc++")
