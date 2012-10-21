@@ -27,10 +27,4 @@ add_subdirectory(math math)
 set(LIBRARY_HEADERS debug.hpp std_macros.hpp str_op.hpp)
 
 register_library(common HEADERS ${LIBRARY_HEADERS})
-
-
-# install(FILES cmake/ForceAddFlags.cmake
-#         DESTINATION ${CMAKE_INSTALL_PREFIX}/share/cmake/Modules
-#         PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-
 runTests()
