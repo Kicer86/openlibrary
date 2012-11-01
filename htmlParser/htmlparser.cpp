@@ -70,7 +70,7 @@ void HtmlParser::parse(const std::string& html)
 
   //wyświetl dane
   for (unsigned int i=0; i<htmlCode->size(); i++)
-    std::cout << htmlCode->at(i).operator std::string() << std::endl;
+    std::cout << htmlCode->at(i) << std::endl;
 }
 
 
