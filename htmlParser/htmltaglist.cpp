@@ -26,38 +26,38 @@ HtmlTagList::HtmlTagList(): std::vector<HtmlTag>()
 }
 
 
-void HtmlTagList::push_back(const HtmlTag& x)
+void HtmlTagList::push_back(const HtmlTag &x)
 {
-  HtmlTag newTag=x;  //make a copy
-  if (size()>0)      //there are already some elements?
-  {
-    HtmlTag &last=back();   //last element
-    if (last.isClosing())   //last one is closing one? (</tag>)
+    HtmlTag newTag = x; //make a copy
+    if (size() > 0)     //there are already some elements?
     {
-      if (newTag.isClosing()) //new one is also closing one? - decrease it's depth-level
-        newTag.setLevel(last.getLevel()-1);
-      else                    //else - use the same one
-        newTag.setLevel(last.getLevel());
+        HtmlTag &last = back(); //last element
+        if (last.isClosing())   //last one is closing one? (</tag>)
+        {
+            if (newTag.isClosing()) //new one is also closing one? - decrease it's depth-level
+                newTag.setLevel(last.getLevel() - 1);
+            else                    //else - use the same one
+                newTag.setLevel(last.getLevel());
+        }
+        else //opening
+        {
+            if (newTag.isOpening()) //new one is also opening? - increase its depth-level
+                newTag.setLevel(last.getLevel() + 1);
+            else                    //else - use the same one
+                newTag.setLevel(last.getLevel());
+        }
     }
-    else //opening
-    {
-      if (newTag.isOpening()) //new one is also opening? - increase its depth-level
-        newTag.setLevel(last.getLevel()+1);
-      else                    //else - use the same one
-        newTag.setLevel(last.getLevel());
-    }
-  }
-  std::vector<HtmlTag>::push_back(newTag);
+    std::vector<HtmlTag>::push_back(newTag);
 }
 
 
-SearchList HtmlTagList::findAll(const std::string& id) const
+SearchList HtmlTagList::findAll(const std::string &id) const
 {
-  SearchList ret;
+    SearchList ret;
 
-  for (SearchListElement it=begin(); it<end(); it++ )
-    if (it->getId()==id && it->isOpening())
-      ret.push_back(it);
+    for (SearchListElement it = begin(); it < end(); it++ )
+        if (it->getId() == id && it->isOpening())
+            ret.push_back(it);
 
-  return ret;
+    return ret;
 }
