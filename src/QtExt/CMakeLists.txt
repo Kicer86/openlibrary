@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 
 find_package(Qt4 4.6 REQUIRED QtGui QtCore)
 
-include_directories(${QT_INCLUDES})
+include_directories(${QT_INCLUDES} ${CMAKE_SOURCE_DIR})
 
 set(LIB_SRC
   qtext_choosefile.cpp
@@ -21,7 +21,7 @@ qt4_automoc(${LIB_SRC})
 qt4_wrap_cpp(LIB_MOCFILES ${LIB_HEADERS})
 
 add_library(${LIB_NAME} SHARED ${LIB_SRC} ${LIB_MOCFILES} )
-set_target_properties(${LIB_NAME} PROPERTIES COMPILE_FLAGS "--std=c++11 ${LIB_CXXFLAGS}")
+turnOnCpp11(${LIB_NAME})
 
 target_link_libraries(${LIB_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
