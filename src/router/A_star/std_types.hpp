@@ -64,12 +64,16 @@ namespace OpenLibrary
             Point *origin;               //origin of point
 
             Point(const CoordT &_x, const CoordT &_y, Point *p = nullptr): Coordinates<CoordT>(_x, _y), f_score(0), g_score(0), origin(p) {}
+
+//remove this macro when all supported compiler will support c++11
+#if __cplusplus == 201103L
             Point(Point && ) = delete;
             Point(const Point &) = delete;
             virtual ~Point() {}
 
             Point &operator=(Point && ) = delete;
             Point &operator=(Point &) = delete;
+#endif
 
             friend std::ostream& operator<<(std::ostream &stream, const Point &p)
             {
