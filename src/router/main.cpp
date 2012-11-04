@@ -5,7 +5,7 @@
 #include <vector>
 
 
-int main(int /*argc*/, char **/*argv*/)
+int main(int /*argc*/, char ** /*argv*/)
 {
     using namespace OpenLibrary::Router;
     typedef Point<int, double> PointT;
