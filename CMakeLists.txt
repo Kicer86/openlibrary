@@ -19,14 +19,14 @@ unset(OPENLIBRARY_REGISTERED_LIBRARIES CACHE)
 #generate file with export/import stuff for sublibraries
 prepareExportFile(${PROJECT_SOURCE_DIR}/OpenLibraryExports.hpp)
 
-add_subdirectory(htmlParser htmlParser)
+add_subdirectory(src/htmlParser htmlParser)
 #add_subdirectory(qextserialport qextserialport)
-add_subdirectory(router router)
-add_subdirectory(QtExt QtExt)
-add_subdirectory(utils utils)
-add_subdirectory(math math)
+add_subdirectory(src/router router)
+add_subdirectory(src/QtExt QtExt)
+add_subdirectory(src/utils utils)
+add_subdirectory(src/math math)
 
-set(LIBRARY_HEADERS debug.hpp std_macros.hpp str_op.hpp)
+set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
 register_library(common HEADERS ${LIBRARY_HEADERS})
 
