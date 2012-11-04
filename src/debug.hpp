@@ -24,7 +24,13 @@
 #include <sstream>
 #include <vector>
 
-#define debug(l) Debug(__PRETTY_FUNCTION__, l)
+#ifdef __GNUC__
+	#define FUNCTION_NAME __PRETTY_FUNCTION__
+#else
+	#define FUNCTION_NAME __FUNCTION__
+#endif
+
+#define debug(l) Debug(FUNCTION_NAME, l)
 
 //control macros:
 //DEBUG_QSTRING_SUPPORT - support for QString
