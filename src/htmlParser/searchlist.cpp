@@ -27,100 +27,100 @@ SearchList::SearchList():
 
 void SearchList::setResults(const SearchList& list)
 {
-  clear(); //remove current elements
+    clear(); //remove current elements
 
-  debug(DebugLevel::Debug) << "after filtration:";
+    debug(DebugLevel::Debug) << "after filtration:";
 
-  for (size_t i = 0; i < list.size(); i++)
-  {
-	  push_back(list[i]);                       //copy all values
+    for (size_t i = 0; i < list.size(); i++)
+    {
+        push_back(list[i]);                       //copy all values
 
-	  SearchListElement &item = at(i);
-	  debug(DebugLevel::Debug) << *( (*this)[i] );
-  }
+        SearchListElement &item = at(i);
+        debug(DebugLevel::Debug) << *( (*this)[i] );
+    }
 }
 
 
 void SearchList::init(const HtmlTagList* tagList, const std::string& id)
 {
-  //get search results
-  debug(DebugLevel::Debug) << "creating SearchList with \"" << id << "\" as primary filter";
-  setResults(tagList->findAll(id));
+    //get search results
+    debug(DebugLevel::Debug) << "creating SearchList with \"" << id << "\" as primary filter";
+    setResults(tagList->findAll(id));
 }
 
 
 void SearchList::findDescendant(const std::string& id)
 {
-  debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
-  SearchList newResuls;                //new list of valid tags after filtration below
+    debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
+    SearchList newResuls;                //new list of valid tags after filtration below
 
-  for (iterator main = begin(); main != end(); ++main)
-  {
-    int level = (*main)->getLevel();
-    SearchListElement element=*main;   //element is now iterator on HtmlTagList (for accessing descentants etc)
-    element++;                         //go to next tag
-    while (true)
+    for (iterator main = begin(); main != end(); ++main)
     {
-      if (element->getLevel()==level+1) //this element is a child of main one ?
-      {
-        if (element->getId()==id)      //matches pattern?
+        int level = (*main)->getLevel();
+        SearchListElement element = *main; //element is now iterator on HtmlTagList (for accessing descentants etc)
+        element++;                         //go to next tag
+        while (true)
         {
-          newResuls.push_back(element); //save it as result
-          break;                        //go to next
+            if (element->getLevel() == level + 1) //this element is a child of main one ?
+            {
+                if (element->getId() == id)    //matches pattern?
+                {
+                    newResuls.push_back(element); //save it as result
+                    break;                        //go to next
+                }
+            }
+            else if (element->getLevel() <= level) //are we outside main element ?
+            {
+                //main element has no proper descentant - do not add it to new list
+                break;
+            }
         }
-      }
-      else if (element->getLevel()<=level) //are we outside main element ?
-      {
-        //main element has no proper descentant - do not add it to new list
-        break;
-      }
     }
-  }
 
-  //override current valid tags list with found tags
-  setResults(newResuls);
+    //override current valid tags list with found tags
+    setResults(newResuls);
 }
 
 
 void SearchList::withAttr(const std::string& name)
 {
-  debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << '"';
+    debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << '"';
 
-  SearchList newResuls;                //new list of valid tags after filtration below
+    SearchList newResuls;                //new list of valid tags after filtration below
 
-  for (iterator main=begin(); main!=end(); main++)
-  {
-    SearchListElement element=*main;   //el is now iterator on HtmlTagList
+    for (iterator main = begin(); main != end(); main++)
+    {
+        SearchListElement element = *main; //el is now iterator on HtmlTagList
 
-    if (element->hasAttr(name))      //does this tag have proper attribute?
-      newResuls.push_back(element); //save it as result
-  }
+        if (element->hasAttr(name))      //does this tag have proper attribute?
+            newResuls.push_back(element); //save it as result
+    }
 
-  //override current valid tags list with found tags
-  setResults(newResuls);
+    //override current valid tags list with found tags
+    setResults(newResuls);
 }
 
 
 void SearchList::withAttr(const std::string& name, const std::string& val)
 {
-  std::string value(val);   //make a writable copy
-  Strings::stripQuotas(&value);
+    std::string value(val);   //make a writable copy
+    Strings::stripQuotas(&value);
 
-  debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << "\" equal to \"" << value << '"';
-  SearchList newResuls;                //new list of valid tags after filtration below
+    debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << "\" equal to \"" << value << '"';
+    SearchList newResuls;                //new list of valid tags after filtration below
 
-  for (iterator main=begin(); main!=end(); main++)
-  {
-    SearchListElement element=*main;   //el is now iterator on HtmlTagList
-
-    if (element->hasAttr(name))      //does this tag have proper attribute?
+    for (iterator main = begin(); main != end(); main++)
     {
-      HtmlTag::Attr attr=element->getAttr(name);
-      if (attr.value==value)
-        newResuls.push_back(element); //save it as result
-    }
-  }
+        SearchListElement element = *main; //el is now iterator on HtmlTagList
 
-  //override current valid tags list with found tags
-  setResults(newResuls);
+        if (element->hasAttr(name))      //does this tag have proper attribute?
+        {
+            HtmlTag::Attr attr = element->getAttr(name);
+            if (attr.value == value)
+                newResuls.push_back(element); //save it as result
+        }
+    }
+
+    //override current valid tags list with found tags
+    setResults(newResuls);
 }
