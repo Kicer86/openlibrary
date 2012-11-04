@@ -25,6 +25,8 @@
 
 #include "searchlist.hpp"
 
+#include "OpenLibraryExports.hpp"
+
 class HtmlTagList;
 class HtmlTag;
 
@@ -32,7 +34,7 @@ class HtmlTag;
  * @brief Main HtmlParser class
  *
  **/
-class __attribute__ ((visibility ("default"))) HtmlParser
+class OL_EXPORTS HtmlParser
 {
     HtmlTagList *htmlCode;
 
