@@ -4,6 +4,8 @@
 
 #include <QObject>
 
+#include "OpenLibraryExports.hpp"
+
 class QAbstractButton;
 class QLineEdit;
 class QFileDialog;
@@ -16,7 +18,7 @@ class QtExtChooseFileDialog: public QObject
 };
 
 
-class __attribute__ ((visibility ("default"))) QtExtChooseFile: public QObject
+class OL_EXPORTS QtExtChooseFile: public QObject
 {
         Q_OBJECT
 

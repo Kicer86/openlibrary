@@ -7,10 +7,12 @@
 
 #include <QProgressBar>
 
+#include "OpenLibraryExports.hpp"
+
 class QProgressBar;
 
 //model
-class  __attribute__ ((visibility ("default"))) QExProgressBarModel: public QObject
+class OL_EXPORTS QExProgressBarModel: public QObject
 {
         Q_OBJECT
 
@@ -57,7 +59,7 @@ class  __attribute__ ((visibility ("default"))) QExProgressBarModel: public QObj
 };
 
 //view
-class  __attribute__ ((visibility ("default"))) QExProgressBarView: public QProgressBar
+class OL_EXPORTS QExProgressBarView: public QProgressBar
 {
         const QExProgressBarModel *model;
 
