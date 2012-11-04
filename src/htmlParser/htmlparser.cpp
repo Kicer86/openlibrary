@@ -99,7 +99,7 @@ std::vector< HtmlTag* > HtmlParser::findAll(const std::string& query)
 
   std::vector<HtmlTag *> ret;   //convert list of iterators to pointers
   for (unsigned int i=0; i<cssSPData.results.size(); i++)
-    ret.push_back(const_cast<HtmlTag*>(*cssSPData.results[i])); //take of constness
+    ret.push_back(const_cast<HtmlTag*>( &(*cssSPData.results[i]) )); //take of constness
 
   return ret;
 }
