@@ -5,6 +5,7 @@
 %parse-param {void *scanner}
 %lex-param {yyscan_t *scanner}
 %name-prefix="html_"
+%option never-interactive
 
 %{
 /*   #define YYPARSE_PARAM scanner  */
