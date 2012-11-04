@@ -36,7 +36,7 @@ HtmlTag::operator std::string() const
 std::string HtmlTag::toString() const
 {
   std::string ret;
-  for ( int i=0;i<getLevel();i++ )
+  for ( int i=0; i<getLevel(); i++ )
     ret += ' ';
   ret += ( closing? "</": "<" ) + id;
 

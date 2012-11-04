@@ -33,8 +33,10 @@ void SearchList::setResults(const SearchList& list)
 
   for (size_t i = 0; i < list.size(); i++)
   {
-    push_back(list[i]);                       //copy all values
-    debug(DebugLevel::Debug) << *(at(i).base());
+	  push_back(list[i]);                       //copy all values
+
+	  SearchListElement &item = at(i);
+	  debug(DebugLevel::Debug) << *( (*this)[i] );
   }
 }
 
@@ -52,10 +54,10 @@ void SearchList::findDescendant(const std::string& id)
   debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
   SearchList newResuls;                //new list of valid tags after filtration below
 
-  for (iterator main=begin(); main!=end(); main++)
+  for (iterator main = begin(); main != end(); ++main)
   {
-    int level=main->base()->getLevel();
-    SearchListElement element=*main;   //el is now iterator on HtmlTagList (for accessing descentants etc)
+    int level = (*main)->getLevel();
+    SearchListElement element=*main;   //element is now iterator on HtmlTagList (for accessing descentants etc)
     element++;                         //go to next tag
     while (true)
     {
