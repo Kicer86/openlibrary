@@ -13,7 +13,7 @@ set(MATH_HEADERS
   math.hpp
 )
 
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/src)
 register_library(math SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
 
 ############################### tests ###############################
