@@ -22,7 +22,7 @@
 #define OPENLIBRARY_CPUINFO_HPP
 
 #include <string>
-#include "integers.h"
+#include "integers.hpp"
 
 namespace OpenLibrary
 {
