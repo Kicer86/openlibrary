@@ -5,7 +5,6 @@
 %parse-param {void *scanner}
 %lex-param {yyscan_t *scanner}
 %name-prefix="css_"
-%option never-interactive
 
 %{         
   #define YYSTYPE std::string 
