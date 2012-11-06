@@ -35,8 +35,8 @@ void SearchList::setResults(const SearchList& list)
   {
 	  push_back(list[i]);                       //copy all values
 
-	  SearchListElement &item = at(i);
-	  debug(DebugLevel::Debug) << *( (*this)[i] );
+	  SearchListElement &item = *(this)[i];
+	  debug(DebugLevel::Debug) << *( item );
   }
 }
 

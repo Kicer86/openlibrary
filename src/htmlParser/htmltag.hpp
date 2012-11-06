@@ -66,11 +66,8 @@ class OL_EXPORTS HtmlTag
     std::string toString() const;
 
   private:
-    int level;         //depth level
-    bool closing;      //false: <tag>, true: </tag>
-    std::string id;
-    std::vector<Attr> attributes;
-    std::string plainText;
+	struct Data;
+	std::unique_ptr<Data> m_data;
 };
 
 #endif // HTMLTAG_HPP
