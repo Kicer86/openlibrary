@@ -174,6 +174,6 @@ function(exportSymbols target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
     else() #Visual Studio
-        add_definitions(OPENLIBRARY_DO_EXPORT)
+        add_definitions(/DOPENLIBRARY_DO_EXPORT)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(exportSymbols)
