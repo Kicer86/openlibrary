@@ -44,9 +44,8 @@ add_library(htmlParser SHARED
 
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES})
-
-set_target_properties(htmlParser PROPERTIES COMPILE_FLAGS "--std=c++11 ${LIB_CXXFLAGS}"
-                                            COMPILE_FLAGS_DEBUG "-Weffc++")
+add_definitions(/DOPENLIBRARY_DO_EXPORT)
+turnOnCpp11(htmlParser)
 
 
 #install files
