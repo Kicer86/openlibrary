@@ -9,6 +9,9 @@
 %{         
   #define YYSTYPE std::string 
   
+  //define this macro to satisfy VisualStudio
+  #define YY_NO_UNISTD_H 
+  
   #include <iostream>
   #include <string>
   #include <vector>
