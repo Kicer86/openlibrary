@@ -1,5 +1,7 @@
 
-project(math)
+set(LIB_NAME math)
+
+project(${LIB_NAME})
 
 cmake_minimum_required( VERSION 2.6 )
 
@@ -14,7 +16,7 @@ set(MATH_HEADERS
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
-register_library(math SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
+register_library(${LIB_NAME} SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
 
 ############################### tests ###############################
 
