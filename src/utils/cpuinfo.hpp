@@ -28,6 +28,7 @@ namespace OpenLibrary
 {
     namespace Utils
     {
+        
         struct __attribute__ ((visibility ("default"))) Cpu
         {
             const std::string m_manufacturer;
@@ -37,11 +38,11 @@ namespace OpenLibrary
             bool sse() const;
             bool sse2() const;
 
-
             Cpu();
             virtual ~Cpu();
         };
 
+        
         class __attribute__ ((visibility ("default"))) CpuInfo
         {
             public:
@@ -54,6 +55,7 @@ namespace OpenLibrary
                 CpuInfo();
                 Cpu m_cpu;
         };
+        
     }
 }
 

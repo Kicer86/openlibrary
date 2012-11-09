@@ -1,6 +1,6 @@
 
-#ifndef UTILS_COPY_PTR
-#define UTILS_COPY_PTR
+#ifndef OPENLIBRARY_UTILS_COPY_PTR
+#define OPENLIBRARY_UTILS_COPY_PTR
 
 template<class T>
 class copy_ptr
@@ -14,9 +14,7 @@ class copy_ptr
         copy_ptr(const T &other)
         {
             delete value;
-            value = new T();
-
-            *value = *other;
+            value = new T(other);
         }
 
         virtual ~copy_ptr()
