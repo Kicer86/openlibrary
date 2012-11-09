@@ -37,8 +37,25 @@ namespace OpenLibrary
 
             void cpuid(Regs32 *regs)
             {
+#ifdef __GNUC__
                 asm("cpuid\n\t"
                     :"+a"(regs->eax), "=b"(regs->ebx), "=c"(regs->ecx), "=d"(regs->edx));
+#else
+				uint32_t &eax_r = regs->eax;
+				uint32_t &ebx_r = regs->ebx;
+				uint32_t &ecx_r = regs->ecx;
+				uint32_t &edx_r = regs->edx;
+				__asm 
+				{
+					mov eax, eax_r
+					cpuid
+					mov eax_r, eax
+					mov ebx_r, ebx
+					mov ecx_r, ecx
+					mov edx_r, edx
+
+				}
+#endif
             }
 
             std::string reg32_to_str(uint32_t reg)
