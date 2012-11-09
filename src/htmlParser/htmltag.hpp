@@ -24,12 +24,13 @@
 #include <vector>
 #include <ostream>
 
-#include <OpenLibraryExports.hpp>
+#include "OpenLibraryExports.hpp"
+#include "utils/copy_ptr.hpp"
 
 class OL_EXPORTS HtmlTag
 {
   public:
-    HtmlTag(bool type=false);
+    HtmlTag(bool type = false);
     virtual ~HtmlTag();
 
     operator std::string() const;
@@ -42,12 +43,12 @@ class OL_EXPORTS HtmlTag
 
     struct Attr
     {
-      Attr(): name(), value()
-      {}
+		Attr(): name(), value()
+		{}
 
-      std::string name;
-      std::string value;
-      bool operator==(const std::string &cmp) const;
+		std::string name;
+		std::string value;
+		bool operator==(const std::string &cmp) const;
     };
 
     void setLevel(int l);
@@ -67,7 +68,7 @@ class OL_EXPORTS HtmlTag
 
   private:
 	struct Data;
-	std::unique_ptr<Data> m_data;
+	copy_ptr<Data> m_data;
 };
 
 #endif // HTMLTAG_HPP
