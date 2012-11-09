@@ -27,10 +27,10 @@ struct HtmlTag::Data
     std::vector<Attr> attributes;
     std::string plainText;
 
-	Data(bool type): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
+	Data(bool type = false): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
 };
 
-HtmlTag::HtmlTag ( bool type ) : m_data(new Data)
+HtmlTag::HtmlTag ( bool type ) : m_data(new HtmlTag::Data)
 {}
 
 
