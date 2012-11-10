@@ -6,11 +6,6 @@ find_package(BISON REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  add_definitions(-DYYDEBUG=1)
-  message("building htmlParser with debug support")
-endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-
 set(HTMLPARSER_SRC
   searchlist.cpp
   htmltaglist.cpp
@@ -45,6 +40,7 @@ add_library(htmlParser SHARED
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES})
 add_definitions(/DOPENLIBRARY_DO_EXPORT)
+set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 turnOnCpp11(htmlParser)
 
 
