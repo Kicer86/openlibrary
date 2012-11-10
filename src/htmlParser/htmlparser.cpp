@@ -40,7 +40,7 @@ extern int css_debug;
 
 HtmlParser::HtmlParser(const std::string &html): htmlCode(0)
 {
-  htmlCode=new HtmlTagList;
+  htmlCode = new HtmlTagList;
   parse(html);
 }
 
