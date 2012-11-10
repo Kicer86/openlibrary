@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 
 find_package(Qt4 4.6 REQUIRED QtGui QtCore)
 
-include_directories(${QT_INCLUDES} ${CMAKE_SOURCE_DIR})
+include_directories(${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/src)
 
 set(LIB_SRC
   qtext_choosefile.cpp
