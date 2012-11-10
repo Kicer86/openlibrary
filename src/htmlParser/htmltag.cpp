@@ -24,7 +24,7 @@ struct HtmlTag::Data
 	int level;         //depth level
     bool closing;      //false: <tag>, true: </tag>
     std::string id;
-    std::vector<Attr> attributes;
+    std::vector<HtmlTag::Attr> attributes;
     std::string plainText;
 
 	Data(bool type = false): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
