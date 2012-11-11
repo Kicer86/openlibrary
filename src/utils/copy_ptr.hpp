@@ -2,16 +2,31 @@
 #ifndef OPENLIBRARY_UTILS_COPY_PTR
 #define OPENLIBRARY_UTILS_COPY_PTR
 
+
+//deleter
+namespace
+{
+    template<class T>
+    void deleter(T *ptr)
+    {
+        delete ptr;
+    }
+}
+
+
+//copy pointer
 template<class T>
 class copy_ptr
 {
     public:
-        copy_ptr(T *v = nullptr): value(v)
+        typedef void (*Deleter)(T *);
+        
+        copy_ptr(T *v = nullptr, Deleter d = &deleter): value(v), m_deleter(d)
         {
 
         }
 
-        copy_ptr(const T &other)
+        copy_ptr(const T &other) 
         {
             delete value;
             value = new T(other);
@@ -19,7 +34,7 @@ class copy_ptr
 
         virtual ~copy_ptr()
         {
-            delete value;
+            getDeleter()(value);
         }
 
         copy_ptr& operator=(const T &other)
@@ -49,6 +64,12 @@ class copy_ptr
 
     private:
         T *value;
+        Deleter m_deleter;
+        
+        Deleter getDeleter() const
+        {
+            return m_deleter;
+        }
 };
 
 #endif
