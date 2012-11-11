@@ -10,7 +10,7 @@
   #include "html.tab.hh"         //include bison's definitions
 %}
 
-
+%option nounistd
 %option never-interactive  
 %option reentrant
 %option bison-bridge

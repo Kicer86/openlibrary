@@ -22,14 +22,15 @@
 #define OPENLIBRARY_CPUINFO_HPP
 
 #include <string>
+
+#include "OpenLibraryExports.hpp"
 #include "integers.hpp"
 
 namespace OpenLibrary
 {
     namespace Utils
     {
-        
-        struct __attribute__ ((visibility ("default"))) Cpu
+        struct OL_EXPORTS Cpu
         {
             const std::string m_manufacturer;
             const uint64_t m_features;
@@ -37,13 +38,12 @@ namespace OpenLibrary
             bool mmx() const;
             bool sse() const;
             bool sse2() const;
-
+			
             Cpu();
             virtual ~Cpu();
         };
 
-        
-        class __attribute__ ((visibility ("default"))) CpuInfo
+        class OL_EXPORTS CpuInfo
         {
             public:
                 virtual ~CpuInfo();
