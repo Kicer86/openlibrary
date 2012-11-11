@@ -1,1 +1,1 @@
-set ( UTILS_LIBRARIES OL_utils ) 
+set ( UTILS_LIBRARIES utils ) 
