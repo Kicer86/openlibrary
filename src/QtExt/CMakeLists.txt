@@ -3,7 +3,7 @@ set(LIB_NAME QtExt)
 project( ${LIB_NAME} )
 cmake_minimum_required(VERSION 2.8)
 
-find_package(Qt4 4.6 REQUIRED QtGui QtCore)
+find_package(Qt4 4.6 REQUIRED QtGui QtCore REQUIRED)
 
 include_directories(${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/src)
 
