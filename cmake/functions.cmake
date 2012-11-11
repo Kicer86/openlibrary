@@ -5,32 +5,17 @@
 #a library target with given name will be created
 function(register_library name)
 
-    set(var "")
-
-    foreach(arg ${ARGN})
-
-        if ("${arg}" MATCHES "(HEADERS)|(SOURCES)" )
-            set(var ${arg})
-        elseif (NOT "${var}" EQUAL "")
-            set(${var} ${${var}} ${arg})
-        else()
-            message(ERROR "unknown argument for register_library: ${arg}" )
-        endif ("${arg}" MATCHES "(HEADERS)|(SOURCES)")
-
-    endforeach(arg ${args})
+    parseArguments(HEADERS SOURCES ARGUMENTS ${ARGN})
 
     #c/c++ part
     if(SOURCES)
         #set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}_${name})
 		set(LIBRARY_NAME ${name})
-
+		
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
         exportSymbols(${LIBRARY_NAME})
         turnOnAllWarnings(${LIBRARY_NAME})
-
-        #set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "${LIB_CXXFLAGS}"
-        #                                      COMPILE_FLAGS_DEBUG "-Weffc++")
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
@@ -209,3 +194,56 @@ endfunction(exportSymbols)
 function(getHeadersPath path)
     set(${path} ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME} PARENT_SCOPE)
 endfunction(getHeadersPath)
+
+#usage:
+#parseArguments( list of keywords_pattern ARGUMENTS list of arguments to be parsed )
+#function parses list of arguments to be parsed and sets a proper keyword variables.
+#
+#Example: parseArguments(AAA BBB ARGUMENTS AAA a b c d e BBB f g h i j)
+#will set variable AAA to a b c d e 
+#     and variable BBB to f g h i j
+function(parseArguments)
+                
+    set(arguments 0)
+    set(keywords_pattern "")
+    set(keywords "")
+    set(var "")
+    
+    foreach(arg ${ARGN})
+    
+        if(arg STREQUAL "ARGUMENTS")
+            set(arguments 1)
+        else()
+            
+            if(arguments EQUAL 0)
+                
+                if(keywords_pattern STREQUAL "")
+                    set(keywords_pattern "(${arg})")
+                else()
+                    set(keywords_pattern "${keywords_pattern}|(${arg})")
+                endif(keywords_pattern STREQUAL "")
+                
+                set(keywords "${keywords};${arg}")
+                
+            else()  #arguments == 1
+                
+                if("${arg}" MATCHES "${keywords_pattern}" )
+                    set(var ${arg})
+                elseif (NOT "${var}" EQUAL "")
+                    set(${var} "${${var}};${arg}")
+                else()
+                    message(ERROR "unknown argument for register_library: ${arg}" )
+                endif ("${arg}" MATCHES "${keywords_pattern}")
+                
+            endif(arguments EQUAL 0)
+            
+        endif(arg STREQUAL "ARGUMENTS")
+        
+    endforeach()
+    
+    #export keywords
+    foreach(keyword ${keywords})    
+        set(${keyword} ${${keyword}} PARENT_SCOPE)    
+    endforeach(keyword ${keywords})
+        
+endfunction(parseArguments)
