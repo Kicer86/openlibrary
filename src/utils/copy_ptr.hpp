@@ -21,49 +21,49 @@ class copy_ptr
     public:
         typedef void (*Deleter)(T *);
         
-        copy_ptr(T *v = nullptr, Deleter d = &deleter): value(v), m_deleter(d)
+        copy_ptr(T *v = nullptr, Deleter d = &deleter): m_ptr(v), m_deleter(d)
         {
 
         }
 
         copy_ptr(const T &other) 
         {
-            delete value;
-            value = new T(other);
+            delete m_ptr;
+            m_ptr = new T(other);
         }
 
         virtual ~copy_ptr()
         {
-            getDeleter()(value);
+            getDeleter()(m_ptr);
         }
 
         copy_ptr& operator=(const T &other)
         {
-            *value = *other;
+            *m_ptr = *other;
         }
 
         T* operator->()
         {
-            return value;
+            return m_ptr;
         }
 
         const T* operator->() const
         {
-            return value;
+            return m_ptr;
         }
 
         T& operator *()
         {
-            return *value;
+            return *m_ptr;
         }
 
         const T& operator *() const
         {
-            return *value;
+            return *m_ptr;
         }
 
     private:
-        T *value;
+        T *m_ptr;
         Deleter m_deleter;
         
         Deleter getDeleter() const
