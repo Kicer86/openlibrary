@@ -82,6 +82,7 @@ class copy_ptr
         Deleter m_deleter;
         Copier m_copier;
                 
+        //getting operators
         Deleter getDeleter() const
         {
             return m_deleter;
@@ -95,7 +96,10 @@ class copy_ptr
         //copy another copy_ptr
         void copy(const copy_ptr<T> &other)
         {
+            //copy data
             copy(other.m_ptr);
+            
+            //copy operators
             m_deleter = other.m_deleter;
             m_copier = other.m_copier;
         }
