@@ -29,26 +29,14 @@ bison_target(cssBison css.y ${CMAKE_CURRENT_BINARY_DIR}/css.tab.cc)
 add_flex_bison_dependency(htmlFlex htmlBison)
 add_flex_bison_dependency(cssFlex cssBison)
 
-add_library(htmlParser SHARED
-  ${HTMLPARSER_SRC}
-  ${FLEX_htmlFlex_OUTPUTS}
-  ${FLEX_cssFlex_OUTPUTS}
-  ${BISON_htmlBison_OUTPUTS}
-  ${BISON_cssBison_OUTPUTS}
-)
+register_library(htmlParser SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_cssFlex_OUTPUTS} ${BISON_htmlBison_OUTPUTS} ${BISON_cssBison_OUTPUTS}
+                            HEADERS ${HTMLPARSER_HEADERS})
 
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES})
-add_definitions(/DOPENLIBRARY_DO_EXPORT)
+
+#enable debug info when building debug
 set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
+
+#c++11 is needed here, turn it on
 turnOnCpp11(htmlParser)
-
-
-#install files
-if(WIN32)  # for windows (dll = runtime)
-  install(TARGETS htmlParser RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
-else(WIN32)
-  install(TARGETS htmlParser LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
-endif(WIN32)
-
-install(FILES ${HTMLPARSER_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
