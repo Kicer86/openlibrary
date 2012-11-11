@@ -5,8 +5,8 @@ echo "Staring CMake's rules check"
 
 libraries_cmake=$1
 
-retpath=`pwd`
-cd ../build
+top=`pwd`
+pushd ../build
 
 #before performing tests, make sure all targets exist
 make libraries.cmake
@@ -84,4 +84,16 @@ echo "making sure that libraries.cmake will not be regenerated without a reason"
         exit 1;
     fi;
 
-cd $retpath
+    
+echo "performing #5 test"
+echo "validating FindOpenLibrary.cmake module"
+    mkdir -p testing
+    pushd testing
+    echo "project(test)"                         >  CMakeLists.txt
+    echo "cmake_minimum_required(VERSION 2.8)"   >> CMakeLists.txt
+    echo "set(CMAKE_MODULE_PATH $top)"           >> CMakeLists.txt
+    echo "find_package(OpenLibrary REQUIRED)"    >> CMakeLists.txt
+    
+    cmake . > /dev/null
+    popd
+popd
