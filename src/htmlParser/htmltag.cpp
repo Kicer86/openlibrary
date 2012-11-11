@@ -30,7 +30,7 @@ struct HtmlTag::Data
 	Data(bool type = false): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
 };
 
-HtmlTag::HtmlTag ( bool type ) : m_data(new HtmlTag::Data)
+HtmlTag::HtmlTag ( bool type ) : m_data(new HtmlTag::Data(type))
 {}
 
 

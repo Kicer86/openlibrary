@@ -27,8 +27,12 @@
 
 #include "html.tab.hh"
 #include "html.yy.hh"
+//undef macro which will be redefined below
+#undef YY_EXTRA_TYPE
+
 #include "css.tab.hh"
 #include "css.yy.hh"
+#undef YY_EXTRA_TYPE
 
 int html_parse(HtmlTagList*, yyscan_t);
 int css_parse(HtmlParser::CssSPData*, yyscan_t);
