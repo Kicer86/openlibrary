@@ -2,6 +2,7 @@
 #some functions for generation useful stuff (internal use)
 
 #register library
+#a library target with given name will be created
 function(register_library name)
 
     set(var "")
@@ -26,6 +27,7 @@ function(register_library name)
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
         exportSymbols(${LIBRARY_NAME})
+        turnOnAllWarnings(${LIBRARY_NAME})
 
         #set_target_properties(${LIBRARY_NAME} PROPERTIES COMPILE_FLAGS "${LIB_CXXFLAGS}"
         #                                      COMPILE_FLAGS_DEBUG "-Weffc++")
@@ -66,7 +68,7 @@ function(register_library name)
     if(HEADERS)
         message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
     endif(HEADERS)
-	
+
 endfunction(register_library)
 
 
@@ -170,6 +172,15 @@ function(turnOnIntelSyntax target)
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnIntelSyntax)
+
+
+function(turnOnAllWarnings target)
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
+    else() #Visual Studio
+
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+endfunction(turnOnAllWarnings)
 
 
 function(exportSymbols target)
