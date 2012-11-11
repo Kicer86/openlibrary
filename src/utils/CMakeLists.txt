@@ -15,4 +15,6 @@ set(LIB_HEADERS
     cpuinfo.hpp
 )
 
+include_directories(${CMAKE_SOURCE_DIR}/src)
+
 register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})

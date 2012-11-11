@@ -1,6 +1,7 @@
 
 #some functions for generation useful stuff (internal use)
 
+#register library
 function(register_library name)
 
     set(var "")
@@ -10,7 +11,7 @@ function(register_library name)
         if ("${arg}" MATCHES "(HEADERS)|(SOURCES)" )
             set(var ${arg})
         elseif (NOT "${var}" EQUAL "")
-            set(${var}  ${${var}} ${arg})
+            set(${var} ${${var}} ${arg})
         else()
             message(ERROR "unknown argument for register_library: ${arg}" )
         endif ("${arg}" MATCHES "(HEADERS)|(SOURCES)")
@@ -19,7 +20,8 @@ function(register_library name)
 
     #c/c++ part
     if(SOURCES)
-        set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}_${name})
+        #set(LIBRARY_NAME ${OPENLIBRARY_SHORT_NAME}_${name})
+		set(LIBRARY_NAME ${name})
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
@@ -31,10 +33,10 @@ function(register_library name)
         #install files
         if(WIN32)  # for windows (dll = runtime)
             set(RUNTIME_TYPE RUNTIME)
-            set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX})
+            set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
         else(WIN32)
             set(RUNTIME_TYPE LIBRARY)
-            set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
+            set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
         endif(WIN32)
 
         install (TARGETS ${LIBRARY_NAME} ${RUNTIME_TYPE} DESTINATION ${LIB_DESTINATION})
@@ -64,7 +66,7 @@ function(register_library name)
     if(HEADERS)
         message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
     endif(HEADERS)
-
+	
 endfunction(register_library)
 
 
@@ -174,6 +176,6 @@ function(exportSymbols target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
     else() #Visual Studio
-        add_definitions(OPENLIBRARY_DO_EXPORT)
+        add_definitions(/DOPENLIBRARY_DO_EXPORT)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(exportSymbols)

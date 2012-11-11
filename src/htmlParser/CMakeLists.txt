@@ -4,12 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-  add_definitions(-DYYDEBUG=1)
-  message("building htmlParser with debug support")
-endif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 set(HTMLPARSER_SRC
   searchlist.cpp
@@ -44,9 +39,9 @@ add_library(htmlParser SHARED
 
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES})
-
-set_target_properties(htmlParser PROPERTIES COMPILE_FLAGS "--std=c++11 ${LIB_CXXFLAGS}"
-                                            COMPILE_FLAGS_DEBUG "-Weffc++")
+add_definitions(/DOPENLIBRARY_DO_EXPORT)
+set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
+turnOnCpp11(htmlParser)
 
 
 #install files

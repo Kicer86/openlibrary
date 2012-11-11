@@ -17,7 +17,7 @@ generate_variables_file()
 unset(OPENLIBRARY_REGISTERED_LIBRARIES CACHE)
 
 #generate file with export/import stuff for sublibraries
-prepareExportFile(${PROJECT_SOURCE_DIR}/OpenLibraryExports.hpp)
+prepareExportFile(${CMAKE_SOURCE_DIR}/src/OpenLibraryExports.hpp)
 
 add_subdirectory(src/htmlParser htmlParser)
 #add_subdirectory(qextserialport qextserialport)

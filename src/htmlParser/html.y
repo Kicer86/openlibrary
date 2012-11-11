@@ -14,6 +14,9 @@
   #define TAG htmlStruct->back()
   #define TAGS htmlStruct
   
+  //define this macro to satisfy VisualStudio
+  #define YY_NO_UNISTD_H 
+  
   #include <iostream>
   #include <string>
   #include <vector>
