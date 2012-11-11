@@ -20,7 +20,7 @@ set(LIB_HEADERS
 qt4_automoc(${LIB_SRC})
 qt4_wrap_cpp(LIB_MOCFILES ${LIB_HEADERS})
 
-register_library(${LIB_NAME} SOURCES ${LIB_SRC} ${LIB_MOCFILES} )
+register_library(${LIB_NAME} SOURCES ${LIB_SRC} ${LIB_MOCFILES} HEADERS ${LIB_HEADERS})
 turnOnCpp11(${LIB_NAME})
 
 target_link_libraries(${LIB_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
