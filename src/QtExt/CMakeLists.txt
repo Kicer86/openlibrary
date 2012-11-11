@@ -24,12 +24,3 @@ register_library(${LIB_NAME} SOURCES ${LIB_SRC} ${LIB_MOCFILES} )
 turnOnCpp11(${LIB_NAME})
 
 target_link_libraries(${LIB_NAME} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
-
-#install files
-if(WIN32)  # for windows (dll = runtime)
-  install(TARGETS ${LIB_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
-else(WIN32)
-  install(TARGETS ${LIB_NAME} LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX})
-endif(WIN32)
-
-install(FILES ${LIB_HEADERS} DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
