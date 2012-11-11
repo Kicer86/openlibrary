@@ -41,17 +41,18 @@ function(register_library name)
             set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
         endif(WIN32)
 
-        install (TARGETS ${LIBRARY_NAME} ${RUNTIME_TYPE} DESTINATION ${LIB_DESTINATION})
+        install(TARGETS ${LIBRARY_NAME} ${RUNTIME_TYPE} DESTINATION ${LIB_DESTINATION})
 
     endif(SOURCES)
 
     source_group(${LIBRARY_NAME}\\sources FILES ${SOURCES})
     source_group(${LIBRARY_NAME}\\headers FILES ${HEADERS})
 
-    set(HEADERS_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME}/${name})
+    getHeadersPath(HEADERS_INSTALL_PATH)
+    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${name})
 
     install(FILES ${HEADERS}
-            DESTINATION ${HEADERS_INSTALL_PREFIX}
+            DESTINATION ${HEADERS_INSTALL_PATH}
             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
     #some debug
@@ -66,7 +67,7 @@ function(register_library name)
     endif(SOURCES)
 
     if(HEADERS)
-        message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PREFIX}")
+        message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PATH}")
     endif(HEADERS)
 
 endfunction(register_library)
@@ -159,6 +160,13 @@ function(prepareExportFile filePath)
             #endif
             ")
     endif(CMAKE_COMPILER_IS_GNUCXX)
+    
+    #install file
+    getHeadersPath(HEADERS_INSTALL_PATH)
+    install(FILES ${filePath}
+            DESTINATION ${HEADERS_INSTALL_PATH}
+            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+    
 endfunction(prepareExportFile)
 
 #functions providing platform independed compiler switches
@@ -196,3 +204,8 @@ function(exportSymbols target)
         add_definitions(/DOPENLIBRARY_DO_EXPORT)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(exportSymbols)
+
+
+function(getHeadersPath path)
+    set(${path} ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME} PARENT_SCOPE)
+endfunction(getHeadersPath)
