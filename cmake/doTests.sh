@@ -3,16 +3,17 @@
 
 echo "Staring CMake's rules check"
 
-libraries_cmake=$1
+FindOpenLibrary_cmake=$1
 
 top=`pwd`
 pushd ../build
 
 #before performing tests, make sure all targets exist
-make libraries.cmake
+make FindOpenLibrary.cmake
 
 #1 test: cmake should generate rules for cmake variables for each of registered libraries
 registerd_libs=`grep OPENLIBRARY_REGISTERED_LIBRARIES CMakeCache.txt | sed -e "s/OPENLIBRARY_REGISTERED_LIBRARIES:INTERNAL=//" -e "s/;/ /g"`
+
 
 echo "performing #1 test"
 for lib in $registerd_libs; do
@@ -39,16 +40,16 @@ for lib in $registerd_libs; do
     echo "touching $lib file"
     touch $lib
 
-    echo "making sure that libraries.cmake will be regenerated:"
-    filemodtime=`stat -c %Y $libraries_cmake`
+    echo "making sure that FindOpenLibrary.cmake will be regenerated:"
+    filemodtime=`stat -c %Y $FindOpenLibrary_cmake`
     sleep 1                                            #make sure we will wait at least 1 second
-    make libraries.cmake
-    filemodtime2=`stat -c %Y $libraries_cmake`
+    make FindOpenLibrary.cmake
+    filemodtime2=`stat -c %Y $FindOpenLibrary_cmake`
 
     if [ $filemodtime -ne $filemodtime2 ]; then
         echo "ok!"
     else
-        echo "file libraries.cmake has not regenerated"
+        echo "file FindOpenLibrary.cmake has not regenerated"
         exit 1;
     fi;
 done
@@ -71,11 +72,12 @@ for lib in $registerd_libs; do
     fi;
 done
 
+
 echo "performing #4 test"
 echo "making sure that libraries.cmake will not be regenerated without a reason"
-    filemodtime=`stat -c %Y $libraries_cmake`
-    make libraries.cmake
-    filemodtime2=`stat -c %Y $libraries_cmake`
+    filemodtime=`stat -c %Y $FindOpenLibrary_cmake`
+    make FindOpenLibrary.cmake
+    filemodtime2=`stat -c %Y $FindOpenLibrary_cmake`
 
     if [ $filemodtime -eq $filemodtime2 ]; then
         echo "ok!"
@@ -95,5 +97,20 @@ echo "validating FindOpenLibrary.cmake module"
     echo "find_package(OpenLibrary REQUIRED)"    >> CMakeLists.txt
     
     cmake . > /dev/null
+    if [ $? != 0 ]; then
+        echo "calling cmake failed"
+        exit 1
+    fi
+    
+    echo "performing #5a test"
+    echo "validating if all modules can be found"
+    
+    for module in $registerd_libs; do
+        module_name=`basename $module`        
+        echo "find_package(OpenLibrary REQUIRED $module_name REQUIRED)"    >> CMakeLists.txt
+    done
+    
+    cmake . > /dev/null
+    
     popd
 popd
