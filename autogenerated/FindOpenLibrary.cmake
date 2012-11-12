@@ -14,3 +14,8 @@ if(OpenLibrary_FIND_COMPONENTS)
     endforeach(component ${OpenLibrary_FIND_COMPONENTS})
 
 endif(OpenLibrary_FIND_COMPONENTS)
+
+set ( HTMLPARSER_LIBRARIES htmlParser ) 
+set ( MATH_LIBRARIES math ) 
+set ( QTEXT_LIBRARIES QtExt ) 
+set ( UTILS_LIBRARIES utils ) 
