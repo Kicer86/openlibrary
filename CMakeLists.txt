@@ -14,7 +14,9 @@ add_custom_target(test)                    #all internal test targets should att
 #prepare target for cration of cmake variables for each sub-library of OpenLibrary
 generate_variables_file()
 
+#clean some internal variables
 unset(OPENLIBRARY_REGISTERED_LIBRARIES CACHE)
+unset(OPENLIBRARY_REGISTERED_LIBRARY_TARGETS CACHE)
 
 #generate file with export/import stuff for sublibraries
 prepareExportFile(${CMAKE_SOURCE_DIR}/src/OpenLibraryExports.hpp)
