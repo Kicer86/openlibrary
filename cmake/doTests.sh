@@ -115,7 +115,6 @@ echo "validating FindOpenLibrary.cmake module"
     
     mkdir -p build
     pushd build
-    echo "Search path = $OpenLibraryPath"
     cmake .. > /dev/null
     
     if [ $? != 0 ]; then
@@ -128,7 +127,7 @@ echo "validating FindOpenLibrary.cmake module"
     
     for module in $registerd_libs; do
         module_name=`basename $module`        
-        echo "find_package(OpenLibrary REQUIRED $module_name REQUIRED)"    >> CMakeLists.txt
+        echo "find_package(OpenLibrary REQUIRED $module_name REQUIRED)"    >> ../CMakeLists.txt
     done
     
     cmake . > /dev/null
