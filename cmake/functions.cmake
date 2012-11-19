@@ -75,17 +75,23 @@ function(generate_variables name)
 
         #generate file with cmake variables
         add_custom_command(OUTPUT ${output}
-                        COMMAND echo ARGS 'set(${UP_NAME}_LIBRARIES ${ARGN})' > ${output}
-                        DEPENDS ${CMAKE_SOURCE_DIR}/cmake/functions.cmake)   #depends on this file
+                           COMMAND sh ARGS ${CMAKE_SOURCE_DIR}/cmake/generate_cmake_rule.sh ${UP_NAME} oko.h oko.so> ${output}
+                           DEPENDS ${CMAKE_SOURCE_DIR}/cmake/functions.cmake)   #depends on this file
 
         add_custom_target(${UP_NAME}_variables DEPENDS ${output})
 
         add_dependencies(FindOpenLibrary.cmake ${name}_variables)
     endif(UNIX)
 
+    #list used by tests
     set(OPENLIBRARY_REGISTERED_LIBRARIES
         ${output} ${OPENLIBRARY_REGISTERED_LIBRARIES}
-        CACHE INTERNAL "List of registered sublibraries")
+        CACHE INTERNAL "List of CMake rule files")
+        
+    #list for internal use
+    set(OPENLIBRARY_REGISTERED_LIBRARY_TARGETS
+        ${UP_NAME}_variables ${OPENLIBRARY_REGISTERED_LIBRARY_TARGETS}
+        CACHE INTERNAL "List of CMake targets used for generating CMake rule files")
 
 endfunction(generate_variables)
 
