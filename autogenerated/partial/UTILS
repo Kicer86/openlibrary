@@ -1,1 +1,17 @@
-set ( UTILS_LIBRARIES utils ) 
+
+
+if(OPENLIBRARY_FOUND AND OL_ENABLE_COMPONENT_UTILS)
+
+    find_path(OPEN_LIBRARY_UTILS_INCLUDE_DIRS NAMES copy_ptr.hpp cpuinfo.hpp
+              HINTS ${OPENLIBRARY_INCLUDE_DIRS})
+    
+    find_library(OPEN_LIBRARY_UTILS_LIBRARIES NAMES utils
+                 HINTS ${OPENLIBRARY_INCLUDE_DIRS}/.. )
+    
+    find_package_handle_standard_args(OpenLibrary_UTILS DEFAULT_MSG
+                                      OPEN_LIBRARY_UTILS_INCLUDE_DIRS OPEN_LIBRARY_UTILS_LIBRARIES)
+
+    mark_as_advanced(OPEN_LIBRARY_UTILS_INCLUDE_DIRS OPEN_LIBRARY_UTILS_LIBRARIES)
+
+endif(OPENLIBRARY_FOUND AND OL_ENABLE_COMPONENT_UTILS)
+
