@@ -104,7 +104,7 @@ echo "validating FindOpenLibrary.cmake module"
     cmake_install_dir=`grep "CMAKE_INSTALL_PREFIX:" CMakeCache.txt | cut -d "=" -f2`     #read where exactly files will go
     popd               #quit top - back in testing
     
-    #full path to installen OpenLibrary
+    #full path to installed OpenLibrary
     OpenLibraryPath="$install_dir/$cmake_install_dir"
     
     echo "project(test)"                                >  CMakeLists.txt
