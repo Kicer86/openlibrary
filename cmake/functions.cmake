@@ -204,9 +204,9 @@ endfunction(getHeadersPath)
 #parseArguments( list of keywords_pattern ARGUMENTS list of arguments to be parsed )
 #function parses list of arguments to be parsed and sets a proper keyword variables.
 #
-#Example: parseArguments(AAA BBB ARGUMENTS AAA a b c d e BBB f g h i j)
-#will set variable AAA to a b c d e 
-#     and variable BBB to f g h i j
+#Example: parseArguments(AAA BBB ARGUMENTS AAA a b c d e BBB f g h i j CCC)
+#will set variable AAA to "a b c d e"
+#     and variable BBB to "f g h i j CCC"
 function(parseArguments)
                 
     set(arguments 0)
