@@ -125,12 +125,23 @@ echo "validating FindOpenLibrary.cmake module"
     echo "performing #5a test"
     echo "validating if all modules can be found"
     
+    modules=""
     for module in $registerd_libs; do
-        module_name=`basename $module`        
-        echo "find_package(OpenLibrary REQUIRED $module_name REQUIRED)"    >> ../CMakeLists.txt
+        module_name=`basename $module`
+        modules="$modules $module_name"
+    done
+    
+    echo "find_package(OpenLibrary REQUIRED $modules REQUIRED)"    >> ../CMakeLists.txt
+    for module in $modules; do
+        echo -e "if(NOT OPENLIBRARY_${module}_FOUND)\n\tmessage(FATAL_ERROR \"Module $module NOT found\")\nendif(NOT OPENLIBRARY_${module}_FOUND)" >> ../CMakeLists.txt
     done
     
     cmake . > /dev/null
+    
+    if [ $? != 0 ]; then
+        echo "calling cmake failed"
+        exit 1
+    fi
     
     popd   #exit build
     popd   #exit testing
