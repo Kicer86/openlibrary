@@ -30,7 +30,7 @@ add_subdirectory(src/math math)
 
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
-register_library(common HEADERS ${LIBRARY_HEADERS})
+register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
 
 #create cmake tests
 runTests()
