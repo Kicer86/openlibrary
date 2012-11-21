@@ -22,5 +22,6 @@ endif(OpenLibrary_FIND_COMPONENTS)
 
 #find common stuff
 find_path(OPENLIBRARY_INCLUDE_DIRS OpenLibrary/common/debug.hpp)
+find_library(OPENLIBRARY_LIBRARIES OpenLibrary/libcommon.so)
 
 find_package_handle_standard_args(OpenLibrary DEFAULT_MSG OPENLIBRARY_INCLUDE_DIRS)
