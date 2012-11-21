@@ -34,3 +34,10 @@ register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
 
 #create cmake tests
 runTests()
+
+#degug code
+# get_cmake_property(vars VARIABLES)
+# 
+# foreach(var ${vars})
+#     message("${var} = ${${var}} ")
+# endforeach()
