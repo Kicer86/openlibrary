@@ -4,3 +4,5 @@ parser kdevelopa:
 analiza poprawności (zbyteczny, źle wstawiony etc) includów
 sprawdzanie zasad z ksiązki od Pawła (krzyzowe dependencje etc), analiza struktury plików i klas (drzewiasta, plaska, poionowa, wykrywanie cykli etc)
 rysowanie grafów z ksiązki - co odczego zalezy, dziedziczenie etc
+
+analizować funkcje prywatne - jesli nie uzywają memberów klasy - sugerować private impl lub wywalanie do implementacji
