@@ -4,10 +4,12 @@
 
 #include <string>
 
+#include "OpenLibraryExports.hpp"
+
 namespace Strings
 {
-    std::string *stripQuotas(std::string *s);
-    std::string stripBlanks(const std::string &s);
+    OL_EXPORTS std::string *stripQuotas(std::string *s);
+    OL_EXPORTS std::string stripBlanks(const std::string &s);
 }
 
 #endif

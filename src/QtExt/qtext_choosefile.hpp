@@ -4,7 +4,7 @@
 
 #include <QObject>
 
-#include "OpenLibraryExports.hpp"
+#include "../OpenLibraryExports.hpp"
 
 class QAbstractButton;
 class QLineEdit;

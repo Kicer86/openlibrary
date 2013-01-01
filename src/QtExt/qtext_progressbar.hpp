@@ -7,7 +7,7 @@
 
 #include <QProgressBar>
 
-#include "OpenLibraryExports.hpp"
+#include "../OpenLibraryExports.hpp"
 
 class QProgressBar;
 

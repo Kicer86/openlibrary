@@ -25,7 +25,7 @@
 
 #include "searchlist.hpp"
 
-#include "OpenLibraryExports.hpp"
+#include "../OpenLibraryExports.hpp"
 
 class HtmlTagList;
 class HtmlTag;
