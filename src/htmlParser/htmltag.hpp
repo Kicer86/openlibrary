@@ -24,8 +24,8 @@
 #include <vector>
 #include <ostream>
 
-#include "OpenLibraryExports.hpp"
-#include "utils/copy_ptr.hpp"
+#include "../OpenLibraryExports.hpp"
+#include "../utils/copy_ptr.hpp"
 
 class OL_EXPORTS HtmlTag
 {
