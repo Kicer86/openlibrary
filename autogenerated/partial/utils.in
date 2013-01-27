@@ -1,0 +1,2 @@
+set(OPENLIBRARY_UTILS_HEADERS OpenLibrary/utils/copy_ptr.hpp OpenLibrary/utils/cpuinfo.hpp 
+set(OPENLIBRARY_UTILS_LIBRARIES /home/michal/projects/root/usr/lib/OpenLibrary/libutils.so)
