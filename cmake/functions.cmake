@@ -64,21 +64,17 @@ endfunction(register_library)
 #syntax: reguster_library_bin library_name bin1 bin2 bin3 ...
 function(generate_variables name library libraryBinary)
 
-    #as some unix commands are being used here - do not add anything on non unix systems
-    if(UNIX AND NOT name STREQUAL "common")   #common is just the main OpenLibrary's package - don't create extra rules in FindOpenLibrary.cmake
-        #convert to uppercase
-        string(TOUPPER ${name} UP_NAME)
+    #convert to uppercase
+    string(TOUPPER ${name} UP_NAME)
 
-        set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${name}Config.cmake")
+    set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${name}Config.cmake")
 
-        #add path to library
-        file(WRITE  ${output} "\n")
-        file(WRITE  ${output} "set(OPENLIBRARY_${UP_NAME}_LIBRARIES ${libraryBinary})\n")
-        file(APPEND ${output} "set(OPENLIBRARY_LIBRARIES \${OPENLIBRARY_LIBRARIES} \${OPENLIBRARY_${UP_NAME}_LIBRARIES})\n")
+    #add path to library
+    file(WRITE  ${output} "\n")
+    file(WRITE  ${output} "set(OPENLIBRARY_${UP_NAME}_LIBRARIES ${libraryBinary})\n")
+    file(APPEND ${output} "set(OPENLIBRARY_LIBRARIES \${OPENLIBRARY_LIBRARIES} \${OPENLIBRARY_${UP_NAME}_LIBRARIES})\n")
 
-        install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
-
-    endif(UNIX AND NOT name STREQUAL "common")
+    install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
 endfunction(generate_variables)
 
