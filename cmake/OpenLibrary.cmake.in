@@ -1,0 +1,11 @@
+
+set(OPENLIBRARY_INCLUDES  @HEADERS_INSTALL_PATH@)
+set(OPENLIBRARY_LIBRARIES @LIB_DESTINATION@)
+
+if(OpenLibrary_FIND_COMPONENTS)
+
+    foreach(component ${OpenLibrary_FIND_COMPONENTS})
+        find_package(OpenLibrary_${component})
+    endforeach(component ${OpenLibrary_FIND_COMPONENTS})
+
+endif(OpenLibrary_FIND_COMPONENTS)

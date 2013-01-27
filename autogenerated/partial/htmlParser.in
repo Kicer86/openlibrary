@@ -1,0 +1,2 @@
+set(OPENLIBRARY_HTMLPARSER_HEADERS OpenLibrary/htmlParser/searchlist.hpp OpenLibrary/htmlParser/htmltaglist.hpp OpenLibrary/htmlParser/htmltag.hpp OpenLibrary/htmlParser/htmlparser.hpp 
+set(OPENLIBRARY_HTMLPARSER_LIBRARIES /home/michal/projects/root/usr/lib/OpenLibrary/libhtmlParser.so)

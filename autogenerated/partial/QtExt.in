@@ -1,0 +1,2 @@
+set(OPENLIBRARY_QTEXT_HEADERS OpenLibrary/QtExt/qtext_choosefile.hpp OpenLibrary/QtExt/qtext_progressbar.hpp 
+set(OPENLIBRARY_QTEXT_LIBRARIES /home/michal/projects/root/usr/lib/OpenLibrary/libQtExt.so)
