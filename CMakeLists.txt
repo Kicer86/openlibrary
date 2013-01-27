@@ -27,6 +27,7 @@ register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 configure_file(cmake/OpenLibrary.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake" @ONLY)
+install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
 #create cmake tests
 runTests()
