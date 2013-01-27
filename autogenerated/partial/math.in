@@ -1,2 +1,0 @@
-set(OPENLIBRARY_MATH_HEADERS OpenLibrary/math/crc32.hpp OpenLibrary/math/math.hpp 
-set(OPENLIBRARY_MATH_LIBRARIES /home/michal/projects/root/usr/lib/OpenLibrary/libmath.so)
