@@ -24,7 +24,8 @@ set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
 register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
 
-getHeadersBasePath(HEADERS_INSTALL_PATH)
+getHeadersPath(HEADERS_INSTALL_PATH)
+getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)
 configure_file(cmake/OpenLibrary.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake" @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
