@@ -69,17 +69,12 @@ function(generate_variables name library libraryBinary)
         #convert to uppercase
         string(TOUPPER ${name} UP_NAME)
 
-        set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${name}.cmake")
-
-        #add path to header files
-        file(WRITE ${output} "set(OPENLIBRARY_${UP_NAME}_HEADERS ")
-        foreach(header ${ARGN})
-            file(APPEND ${output} "${OPENLIBRARY_DIR_NAME}/${library}/${header} ")
-        endforeach(header ${ARGN})
-        file(APPEND ${output} ")")
+        set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${name}Config.cmake")
 
         #add path to library
-        file(APPEND ${output} "\nset(OPENLIBRARY_${UP_NAME}_LIBRARIES ${libraryBinary})")
+        file(WRITE  ${output} "\n")
+        file(WRITE  ${output} "set(OPENLIBRARY_${UP_NAME}_LIBRARIES ${libraryBinary})\n")
+        file(APPEND ${output} "set(OPENLIBRARY_LIBRARIES \"\${OPENLIBRARY_LIBRARIES} \${OPENLIBRARY_${UP_NAME}_LIBRARIES}\")\n")
 
         install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
@@ -164,8 +159,13 @@ function(exportSymbols target)
 endfunction(exportSymbols)
 
 
+function(getHeadersBasePath path)
+    set(${path} ${CMAKE_INSTALL_PREFIX}/include/ PARENT_SCOPE)
+endfunction(getHeadersBasePath)
+
 function(getHeadersPath path)
-    set(${path} ${CMAKE_INSTALL_PREFIX}/include/${OPENLIBRARY_DIR_NAME} PARENT_SCOPE)
+    getHeadersBasePath(basePath)
+    set(${path} ${basePath}/${OPENLIBRARY_DIR_NAME} PARENT_SCOPE)
 endfunction(getHeadersPath)
 
 
