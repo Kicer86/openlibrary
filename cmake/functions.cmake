@@ -74,7 +74,7 @@ function(generate_variables name library libraryBinary)
         #add path to library
         file(WRITE  ${output} "\n")
         file(WRITE  ${output} "set(OPENLIBRARY_${UP_NAME}_LIBRARIES ${libraryBinary})\n")
-        file(APPEND ${output} "set(OPENLIBRARY_LIBRARIES \"\${OPENLIBRARY_LIBRARIES} \${OPENLIBRARY_${UP_NAME}_LIBRARIES}\")\n")
+        file(APPEND ${output} "set(OPENLIBRARY_LIBRARIES \${OPENLIBRARY_LIBRARIES} \${OPENLIBRARY_${UP_NAME}_LIBRARIES})\n")
 
         install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
