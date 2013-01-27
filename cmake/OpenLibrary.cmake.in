@@ -5,7 +5,7 @@ set(OPENLIBRARY_LIBRARIES @LIB_DESTINATION@)
 if(OpenLibrary_FIND_COMPONENTS)
 
     foreach(component ${OpenLibrary_FIND_COMPONENTS})
-        find_package(OpenLibrary_${component})
+        include(@OPENLIBRARY_CMAKE_DIR@/OpenLibrary_${component}Config.cmake)
     endforeach(component ${OpenLibrary_FIND_COMPONENTS})
 
 endif(OpenLibrary_FIND_COMPONENTS)
