@@ -2,9 +2,7 @@
 project(library)
 cmake_minimum_required(VERSION 2.8)
 
-include( ${PROJECT_SOURCE_DIR}/OpenLibrary.cmake )
 include( ${PROJECT_SOURCE_DIR}/cmake/functions.cmake )
-include( ${PROJECT_SOURCE_DIR}/cmake/cmake_tests.cmake )
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 #prepare target for running tests
@@ -29,9 +27,6 @@ getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)
 set(OPENLIBRARY_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 configure_file(cmake/OpenLibrary.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake" @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
-
-#create cmake tests
-runTests()
 
 #degug code
 # get_cmake_property(vars VARIABLES)
