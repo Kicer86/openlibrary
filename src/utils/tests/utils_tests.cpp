@@ -156,3 +156,45 @@ TEST(DataPtrTest, ShouldBehaveProperlyForManyAssignOperators)
     CHECK_EQUAL(14, ptr4->m_data);
     CHECK_EQUAL(15, ptr5->m_data);
 }
+
+
+TEST(DataPtrTest, ShouldHandleAssigningItself)
+{
+    struct Test
+    {
+        Test(): m_data(1) {}
+
+        int m_data;
+    };
+
+    Test *test = new Test;
+
+    data_ptr<Test> ptr1(test);
+
+    ptr1 = ptr1;
+
+    ptr1->m_data = 2;
+
+    CHECK_EQUAL(2, test->m_data);
+}
+
+
+TEST(DataPtrTest, ShouldHandleAssigningTheSamePtrManyTimes)
+{
+    struct Test
+    {
+        Test(): m_data(1) {}
+
+        int m_data;
+    };
+
+    Test *test = new Test;
+
+    data_ptr<Test> ptr1(test);
+    ptr1 = test;
+    ptr1 = test;
+
+    ptr1->m_data = 2;
+
+    CHECK_EQUAL(2, test->m_data);
+}
