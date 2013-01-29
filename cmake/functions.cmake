@@ -217,3 +217,33 @@ function(parseArguments)
     endforeach(keyword ${keywords})
 
 endfunction(parseArguments)
+
+
+#register test program. provide library name and sources as parameters
+function(registerTest libraryName)
+
+    find_package(CppUTest)
+
+    if(CPPUTEST_FOUND)
+
+        set(sources ${ARGN})
+        set(targetName ${libraryName}Tests)
+
+        message("${libraryName}: adding tests - CppUTest package found")
+        include_directories(${CPPUTEST_INCLUDE_DIRS})
+        add_executable(${targetName} ${sources})
+
+        target_link_libraries(${targetName} ${CPPUTEST_LIBRARIES})
+
+        add_custom_target(perform${targetName}
+                          COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
+                          DEPENDS ${targetName})
+
+        turnOnCpp11(${targetName})
+
+        #attach perform${targetName} to 'test' target
+        add_dependencies(test perform${targetName})
+
+    endif(CPPUTEST_FOUND)
+
+endfunction(registerTest)
