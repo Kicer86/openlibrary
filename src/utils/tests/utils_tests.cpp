@@ -172,7 +172,6 @@ TEST(DataPtrTest, ShouldHandleAssigningItself)
     data_ptr<Test> ptr1(test);
 
     ptr1 = ptr1;
-
     ptr1->m_data = 2;
 
     CHECK_EQUAL(2, test->m_data);

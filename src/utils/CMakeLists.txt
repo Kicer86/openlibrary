@@ -21,23 +21,4 @@ register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})
 
 ############################### tests ###############################
 
-find_package(CppUTest)
-
-if(CPPUTEST_FOUND)
-    message("utils: adding tests - CppUTest package found")
-    include_directories(${CPPUTEST_INCLUDE_DIRS})
-    add_executable(utilsTests
-                   tests/RunAllTests.cpp tests/utils_tests.cpp)
-
-    target_link_libraries(utilsTests ${CPPUTEST_LIBRARIES})
-
-    add_custom_target(performUtilsCppUTests
-                      COMMAND ${CMAKE_CURRENT_BINARY_DIR}/utilsTests
-                      DEPENDS utilsTests)
-
-    turnOnCpp11(utilsTests)
-
-    #attach performUtilsCppUTests to 'test' target
-    add_dependencies(test performUtilsCppUTests)
-
-endif(CPPUTEST_FOUND)
+registerTest(utils tests/RunAllTests.cpp tests/utils_tests.cpp)

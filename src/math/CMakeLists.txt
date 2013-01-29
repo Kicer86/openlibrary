@@ -20,21 +20,4 @@ register_library(${LIB_NAME} SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
 
 ############################### tests ###############################
 
-find_package(CppUTest)
-
-if(CPPUTEST_FOUND)
-    message("math: adding tests - CppUTest package found")
-    include_directories(${CPPUTEST_INCLUDE_DIRS})
-    add_executable(mathTests
-                   tests/RunAllTests.cpp tests/math_tests.cpp)
-
-    target_link_libraries(mathTests ${CPPUTEST_LIBRARIES})
-
-    add_custom_target(performMathCppUTests
-                      COMMAND ${CMAKE_CURRENT_BINARY_DIR}/mathTests
-                      DEPENDS mathTests)
-
-    #attach performMathCppUTests to 'test' target
-    add_dependencies(test performMathCppUTests)
-
-endif(CPPUTEST_FOUND)
+registerTest(math tests/RunAllTests.cpp tests/math_tests.cpp)
