@@ -235,14 +235,31 @@ function(registerTest libraryName)
 
         target_link_libraries(${targetName} ${CPPUTEST_LIBRARIES})
 
-        add_custom_target(perform${targetName}
+        add_custom_target(perform_${targetName}
                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
                           DEPENDS ${targetName})
 
         turnOnCpp11(${targetName})
 
         #attach perform${targetName} to 'test' target
-        add_dependencies(test perform${targetName})
+        add_dependencies(test perform_${targetName})
+
+        #create valgrind tests
+        if(UNIX)
+            find_program(valgrindPath valgrind)
+
+            if(valgrindPath)
+
+                add_custom_target(valgrind_${targetName}
+                                  COMMAND ${valgrindPath} --error-exitcode=255 ${CMAKE_CURRENT_BINARY_DIR}/${targetName} &> /dev/null\; if [ $$? -eq 255 ]\; then echo "valgrind problems when running ${CMAKE_CURRENT_BINARY_DIR}/${targetName}" \; exit 1\; else echo "Ok" \; exit 0\; fi
+                                  DEPENDS ${targetName}
+
+                                  )
+                add_dependencies(test valgrind_${targetName})
+
+            endif(valgrindPath)
+
+        endif(UNIX)
 
     endif(CPPUTEST_FOUND)
 
