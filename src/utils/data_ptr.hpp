@@ -48,15 +48,19 @@ class data_ptr
         //takes ownership over data
         data_ptr& operator=(T *ptr)
         {
-            del();
-            m_ptr = ptr;
+            if (m_ptr != ptr)
+            {
+                del();
+                m_ptr = ptr;
+            }
 
             return *this;
         }
 
         data_ptr& operator=(const data_ptr<T> &other)
         {
-            copy(other);
+            if ( &other != this )
+                copy(other);
 
             return *this;
         }
