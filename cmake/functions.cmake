@@ -118,10 +118,20 @@ function(prepareExportFile filePath)
 
 endfunction(prepareExportFile)
 
+function(addFlags target propertyName flags)
+    get_target_property(current_properties ${target} ${propertyName})
+
+    if(NOT current_properties)
+        set(current_properties "")
+    endif(NOT current_properties)
+
+    set_target_properties(${target} PROPERTIES ${propertyName} "${current_properties} ${flags}")
+endfunction(addFlags)
+
 #functions providing platform independed compiler switches
 function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "--std=c++11")
+        addFlags(${target} COMPILE_FLAGS "--std=c++11")
     else() #Visual Studio
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -130,7 +140,7 @@ endfunction(turnOnCpp11)
 
 function(turnOnIntelSyntax target)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-masm=intel")
+        addFlags(${target} COMPILE_FLAGS "-masm=intel")
     else() #Visual Studio
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -139,7 +149,7 @@ endfunction(turnOnIntelSyntax)
 
 function(turnOnAllWarnings target)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
+        addFlags(${target} COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
     else() #Visual Studio
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -148,7 +158,7 @@ endfunction(turnOnAllWarnings)
 
 function(exportSymbols target)
     if(CMAKE_COMPILER_IS_GNUCXX)
-        set_target_properties(${target} PROPERTIES COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
+        addFlags(${target} COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
     else() #Visual Studio
         add_definitions(/DOPENLIBRARY_DO_EXPORT)
     endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -240,6 +250,8 @@ function(registerTest libraryName)
                           DEPENDS ${targetName})
 
         turnOnCpp11(${targetName})
+        addFlags(${targetName} COMPILE_FLAGS "--coverage")
+        addFlags(${targetName} LINK_FLAGS "--coverage")
 
         #attach perform${targetName} to 'test' target
         add_dependencies(test perform_${targetName})
@@ -255,7 +267,7 @@ function(registerTest libraryName)
                                   DEPENDS ${targetName}
 
                                   )
-                add_dependencies(test valgrind_${targetName})
+                add_dependencies(valgrind_test valgrind_${targetName})
 
             endif(valgrindPath)
 
