@@ -11,7 +11,7 @@ set(LIB_SOURCES
     )
 
 set(LIB_HEADERS
-    copy_ptr.hpp
+    data_ptr.hpp
     cpuinfo.hpp
 )
 
