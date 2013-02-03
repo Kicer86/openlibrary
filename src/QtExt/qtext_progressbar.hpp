@@ -65,7 +65,11 @@ class OL_EXPORTS QExProgressBarView: public QProgressBar
 
     public:
         explicit QExProgressBarView(QWidget *p = 0);
+        QExProgressBarView(const QExProgressBarView &) = delete;
+
         void setModel(const QExProgressBarModel *);
+
+        QExProgressBarView& operator=(const QExProgressBarView &) = delete;
 };
 
 

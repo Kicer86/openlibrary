@@ -28,16 +28,23 @@ class HtmlTagList;
 
 typedef std::vector<HtmlTag>::const_iterator SearchListElement;
 
-class SearchList: public std::vector<SearchListElement>
+class SearchList
 {
-    void setResults(const SearchList& list);
+    public:
+        typedef std::vector<SearchListElement> SearchElements;
 
-  public:
-    SearchList();
-    void init(const HtmlTagList* tagList, const std::string& id); //init list with tagList. keep only tags that have given id   (css selector: E)
-    void findDescendant(const std::string& id);                   //find descendants of tags being keep, which have proper name (css selector: E F - E is current tag list, F - descentant name)
-    void withAttr(const std::string& name);                       //leave only tags with given attr name (css selector E[foo])
-    void withAttr(const std::string& name, const std::string& val); //leave only tag with given attr and it's value (css selector E[foo="warning"]
+        SearchList();
+        void init(const HtmlTagList* tagList, const std::string& id); //init list with tagList. keep only tags that have given id   (css selector: E)
+        void findDescendant(const std::string& id);                   //find descendants of tags being keep, which have proper name (css selector: E F - E is current tag list, F - descentant name)
+        void withAttr(const std::string& name);                       //leave only tags with given attr name (css selector E[foo])
+        void withAttr(const std::string& name, const std::string& val); //leave only tag with given attr and it's value (css selector E[foo="warning"]
+        void addElement(const SearchListElement &);
+
+        const SearchElements& getList() const;
+
+    private:
+        void setResults(const SearchList& list);
+        SearchElements m_elements;
 };
 
 #endif // SEARCHLIST_HPP

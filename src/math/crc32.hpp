@@ -35,9 +35,12 @@ namespace OpenLibrary
 
             public:
                 Crc32();
+                Crc32(const Crc32 &) = delete;
                 virtual ~Crc32();
 
                 uint32_t calculate(void *, int len) const;
+
+                Crc32& operator=(const Crc32 &) = delete;
 
             private:
                 Crc32Impl *m_impl;

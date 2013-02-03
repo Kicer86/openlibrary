@@ -74,9 +74,9 @@ void HtmlParser::parse(const std::string& html)
   html__delete_buffer(bp, scanner);
   html_lex_destroy(scanner);
 
-  //wyświetl dane
-  for (unsigned int i=0; i<htmlCode->size(); i++)
-    std::cout << htmlCode->at(i) << std::endl;
+  //display data
+  for ( const HtmlTag &i: htmlCode->getHtmlTags())
+    std::cout << i << std::endl;
 }
 
 
@@ -104,8 +104,8 @@ std::vector< HtmlTag* > HtmlParser::findAll(const std::string& query)
   css_lex_destroy(scanner);
 
   std::vector<HtmlTag *> ret;   //convert list of iterators to pointers
-  for (unsigned int i=0; i<cssSPData.results.size(); i++)
-    ret.push_back(const_cast<HtmlTag*>( &(*cssSPData.results[i])) ); //take of constness
+  for (const SearchListElement &i: cssSPData.results.getList())
+    ret.push_back(const_cast<HtmlTag*>(&(*i)) ); //take of constness
 
   return ret;
 }

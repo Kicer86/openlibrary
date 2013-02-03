@@ -25,16 +25,21 @@
 #include "htmltag.hpp"
 #include "searchlist.hpp"
 
-class HtmlTagList:public std::vector<HtmlTag>
+class HtmlTagList
 {
-    friend class SearchList;
-    
-    SearchList findAll(const std::string& id) const;
-    
-  public:    
-    HtmlTagList();
-    void push_back(const HtmlTag& x);
-    
+    public:
+        typedef std::vector<HtmlTag> HtmlTags;
+        HtmlTagList();
+        void addElement(const HtmlTag& x);
+        const HtmlTags& getHtmlTags() const;
+        HtmlTags& getHtmlTags();
+
+    private:
+        friend class SearchList;
+
+        HtmlTags m_htmlTags;
+
+        SearchList findAll(const std::string& id) const;
 };
 
 #endif // HTMLTAGLIST_HPP

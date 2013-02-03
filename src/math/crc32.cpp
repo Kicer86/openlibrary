@@ -34,7 +34,7 @@ namespace OpenLibrary
 
         };
 
-        Crc32::Crc32()
+        Crc32::Crc32(): m_impl()
         {
             //detect cpu's features and choose proper algoritm
 
