@@ -185,6 +185,7 @@ function(turnOnAllWarnings)
 
 endfunction(turnOnAllWarnings)
 
+##### end of usefull switches #####
 
 function(exportSymbols target)
     if(CMAKE_COMPILER_IS_GNUCXX)
