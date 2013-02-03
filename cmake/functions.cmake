@@ -16,7 +16,7 @@ function(register_library name)
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
         exportSymbols(${LIBRARY_NAME})
-        turnOnAllWarnings(${LIBRARY_NAME})
+        turnOnAllWarnings(${SOURCES})
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
@@ -134,6 +134,17 @@ function(addFlags target propertyName flags)
     set_target_properties(${target} PROPERTIES ${propertyName} "${current_properties} ${flags}")
 endfunction(addFlags)
 
+
+function(addSourceFlags source propertyName flags)
+    get_source_file_property(current_properties ${source} ${propertyName})
+
+    if(NOT current_properties)
+        set(current_properties "")
+    endif(NOT current_properties)
+
+    set_source_files_properties(${source} PROPERTIES ${propertyName} "${current_properties} ${flags}")
+endfunction(addSourceFlags)
+
 #functions providing platform independed compiler switches
 function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
@@ -153,12 +164,25 @@ function(turnOnIntelSyntax target)
 endfunction(turnOnIntelSyntax)
 
 
-function(turnOnAllWarnings target)
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        addFlags(${target} COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
-    else() #Visual Studio
+#add source files which should be checked for warnings
+function(turnOnAllWarnings)
 
-    endif(CMAKE_COMPILER_IS_GNUCXX)
+    foreach(source ${ARGN})
+
+        get_source_file_property(isGenerated ${source} GENERATED)
+
+        if (NOT isGenerated)
+
+            if(CMAKE_COMPILER_IS_GNUCXX)
+                addSourceFlags(${source} COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
+                addSourceFlags(${source} COMPILE_FLAGS "-Werror")
+            else() #Visual Studio
+
+            endif(CMAKE_COMPILER_IS_GNUCXX)
+        endif(NOT isGenerated)
+
+    endforeach(source ${ARGN})
+
 endfunction(turnOnAllWarnings)
 
 
