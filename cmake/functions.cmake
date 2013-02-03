@@ -1,6 +1,8 @@
 
 #some functions for generation useful stuff (internal use)
 
+set(OPENLIBRARY_DIR_NAME OpenLibrary)
+
 #register library
 #a library target with given name will be created
 function(register_library name)
