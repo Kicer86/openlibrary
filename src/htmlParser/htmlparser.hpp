@@ -36,26 +36,29 @@ class HtmlTag;
  **/
 class OL_EXPORTS HtmlParser
 {
-    HtmlTagList *htmlCode;
+        HtmlTagList *htmlCode;
 
-  public:
-    HtmlParser(const std::string &html);
-    virtual ~HtmlParser();
+    public:
+        HtmlParser(const std::string &html);
+        HtmlParser(const HtmlParser &) = delete;
+        virtual ~HtmlParser();
 
-    void parse(const std::string &html);
-    std::vector<HtmlTag*> findAll(const std::string &query);  //use http://www.w3.org/TR/CSS2/selector.html
+        void parse(const std::string &html);
+        std::vector<HtmlTag*> findAll(const std::string &query);  //use http://www.w3.org/TR/CSS2/selector.html
 
-    struct CssSPData  //CssSelectorParserData
-    {
-      CssSPData(): htmlCode(0), results()
-      {}
-      const HtmlTagList * htmlCode;   //pointer to list of tags
-      SearchList results;             //list of search results
+        struct CssSPData  //CssSelectorParserData
+        {
+                CssSPData(): htmlCode(0), results() {}
 
-    private:
-      CssSPData(const CssSPData &css);
-      void operator=(const CssSPData &css);
-    };
+                const HtmlTagList *htmlCode;    //pointer to list of tags
+                SearchList results;             //list of search results
+
+            private:
+                CssSPData(const CssSPData &css);
+                void operator=(const CssSPData &css);
+        };
+
+        HtmlParser& operator=(const HtmlParser &) = delete;
 };
 
 #endif // HTMLPARSER_HPP

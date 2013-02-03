@@ -17,6 +17,7 @@ set(MATH_HEADERS
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 register_library(${LIB_NAME} SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
+turnOnCpp11(${LIB_NAME})
 
 ############################### tests ###############################
 

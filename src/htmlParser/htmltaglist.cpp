@@ -20,18 +20,18 @@
 #include "htmltaglist.hpp"
 #include "searchlist.hpp"
 
-HtmlTagList::HtmlTagList(): std::vector<HtmlTag>()
+HtmlTagList::HtmlTagList(): m_htmlTags()
 {
 
 }
 
 
-void HtmlTagList::push_back(const HtmlTag &x)
+void HtmlTagList::addElement(const HtmlTag &x)
 {
     HtmlTag newTag = x; //make a copy
-    if (size() > 0)     //there are already some elements?
+    if (m_htmlTags.empty() > 0)     //there are already some elements?
     {
-        HtmlTag &last = back(); //last element
+        const HtmlTag &last = m_htmlTags.back(); //last element
         if (last.isClosing())   //last one is closing one? (</tag>)
         {
             if (newTag.isClosing()) //new one is also closing one? - decrease it's depth-level
@@ -47,7 +47,19 @@ void HtmlTagList::push_back(const HtmlTag &x)
                 newTag.setLevel(last.getLevel());
         }
     }
-    std::vector<HtmlTag>::push_back(newTag);
+    m_htmlTags.push_back(newTag);
+}
+
+
+const HtmlTagList::HtmlTags& HtmlTagList::getHtmlTags() const
+{
+    return m_htmlTags;
+}
+
+
+HtmlTagList::HtmlTags& HtmlTagList::getHtmlTags()
+{
+    return m_htmlTags;
 }
 
 
@@ -55,9 +67,10 @@ SearchList HtmlTagList::findAll(const std::string &id) const
 {
     SearchList ret;
 
-    for (SearchListElement it = begin(); it < end(); it++ )
+    for (SearchListElement it = m_htmlTags.begin(); it < m_htmlTags.end(); it++ )
         if (it->getId() == id && it->isOpening())
-            ret.push_back(it);
+            ret.addElement(it);
 
     return ret;
 }
+

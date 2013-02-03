@@ -1,7 +1,7 @@
 
 %pure_parser
 %error-verbose
-%parse-param { HtmlTagList* htmlStruct } 
+%parse-param { HtmlTagList* htmlStruct }
 %parse-param {void *scanner}
 %lex-param {yyscan_t *scanner}
 %name-prefix="html_"
@@ -9,21 +9,21 @@
 %{
 /*   #define YYPARSE_PARAM scanner  */
 /*   #define YYLEX_PARAM   scanner  */
-         
-  #define YYSTYPE std::string 
-  #define TAG htmlStruct->back()
+
+  #define YYSTYPE std::string
+  #define TAG htmlStruct->getHtmlTags().back()
   #define TAGS htmlStruct
-  
+
   //define this macro to satisfy VisualStudio
-  #define YY_NO_UNISTD_H 
-  
+  #define YY_NO_UNISTD_H
+
   #include <iostream>
   #include <string>
   #include <vector>
-  
-  #include "htmltaglist.hpp"  
-  #include "html.yy.hh"  
-  
+
+  #include "htmltaglist.hpp"
+  #include "html.yy.hh"
+
   int html_error(HtmlTagList* htmlStruct, yyscan_t scanner, char const* s)
   {
     std::cout << "error: " << s << std::endl;
@@ -45,20 +45,20 @@ html_element:  tag      {  };                  // element is <tag>
 html_element:  tag text { TAG.setText($2); };  // <tag> some text
 
 
-tag:      '<'           { HtmlTag newTag(false); TAGS->push_back(newTag); } //add new tag to list
+tag:      '<'           { HtmlTag newTag(false); TAGS->addElement(newTag); } //add new tag to list
           tag_body '>'  {
-                          if (TAG.getId()=="br" || TAG.getId()=="embeded" || TAG.getId()=="hr" || 
+                          if (TAG.getId()=="br" || TAG.getId()=="embeded" || TAG.getId()=="hr" ||
                               TAG.getId()=="img" || TAG.getId()=="input" || TAG.getId()=="link" ||
                               TAG.getId()=="li" || TAG.getId()=="meta" || TAG.getId()=="option" ||
                               TAG.getId()=="p" /* ? */)
                               {  //for this tags automatically add closing tag
                                 HtmlTag newClosingTag(true);
                                 newClosingTag.setId(TAG.getId());
-                                TAGS->push_back(newClosingTag); 
+                                TAGS->addElement(newClosingTag);
                               }
                         };
-                        
-tag:      '<' '/'       { HtmlTag newTag(true); TAGS->push_back(newTag); } //add new tag to list
+
+tag:      '<' '/'       { HtmlTag newTag(true); TAGS->addElement(newTag); } //add new tag to list
           tag_body '>'  {};  //html /tag
 
 tag_body: TEXT          { TAG.setId($1); };   //html tag is <tag>
@@ -67,12 +67,12 @@ tag_body: tag_body '/'  {
                           // add closing tag
                           HtmlTag newClosingTag(true);
                           newClosingTag.setId(TAG.getId());
-                          TAGS->push_back(newClosingTag); 
-                        }       
+                          TAGS->addElement(newClosingTag);
+                        }
 
 //html's tag attributes
 
-attr:     attr_opt;       //<tag attr>    
+attr:     attr_opt;       //<tag attr>
 attr:     attr attr_opt;  //or <tag attr attr>
 
 //attribute variants

@@ -21,22 +21,20 @@
 #include "htmltaglist.hpp"
 #include "searchlist.hpp"
 
-SearchList::SearchList():
-    std::vector<SearchListElement>()
+SearchList::SearchList(): m_elements()
 {}
 
 void SearchList::setResults(const SearchList& list)
 {
-    clear(); //remove current elements
+    m_elements.clear(); //remove current elements
 
     debug(DebugLevel::Debug) << "after filtration:";
 
-    for (size_t i = 0; i < list.size(); i++)
+    for (auto &item: list.getList())
     {
-        push_back(list[i]);                       //copy all values
+        m_elements.push_back(item);                       //copy all values
 
-        SearchListElement &item = (*this)[i];
-	debug(DebugLevel::Debug) << *( item );
+        debug(DebugLevel::Debug) << *( item );
     }
 }
 
@@ -54,10 +52,9 @@ void SearchList::findDescendant(const std::string& id)
     debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
     SearchList newResuls;                //new list of valid tags after filtration below
 
-    for (iterator main = begin(); main != end(); ++main)
+    for (SearchListElement element: m_elements)      //element is now copy of iterator on HtmlTagList (for accessing descentants etc)
     {
-        int level = (*main)->getLevel();
-        SearchListElement element = *main; //element is now iterator on HtmlTagList (for accessing descentants etc)
+        int level = element->getLevel();
         element++;                         //go to next tag
         while (true)
         {
@@ -65,8 +62,8 @@ void SearchList::findDescendant(const std::string& id)
             {
                 if (element->getId() == id)    //matches pattern?
                 {
-                    newResuls.push_back(element); //save it as result
-                    break;                        //go to next
+                    newResuls.addElement(element); //save it as result
+                    break;                         //go to next
                 }
             }
             else if (element->getLevel() <= level) //are we outside main element ?
@@ -88,12 +85,10 @@ void SearchList::withAttr(const std::string& name)
 
     SearchList newResuls;                //new list of valid tags after filtration below
 
-    for (iterator main = begin(); main != end(); main++)
+    for (SearchListElement element: m_elements)
     {
-        SearchListElement element = *main; //el is now iterator on HtmlTagList
-
         if (element->hasAttr(name))      //does this tag have proper attribute?
-            newResuls.push_back(element); //save it as result
+            newResuls.addElement(element); //save it as result
     }
 
     //override current valid tags list with found tags
@@ -109,18 +104,29 @@ void SearchList::withAttr(const std::string& name, const std::string& val)
     debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << "\" equal to \"" << value << '"';
     SearchList newResuls;                //new list of valid tags after filtration below
 
-    for (iterator main = begin(); main != end(); main++)
+    for (SearchListElement element: m_elements)
     {
-        SearchListElement element = *main; //el is now iterator on HtmlTagList
-
         if (element->hasAttr(name))      //does this tag have proper attribute?
         {
             HtmlTag::Attr attr = element->getAttr(name);
             if (attr.value == value)
-                newResuls.push_back(element); //save it as result
+                newResuls.addElement(element); //save it as result
         }
     }
 
     //override current valid tags list with found tags
     setResults(newResuls);
+}
+
+
+void SearchList::addElement(const SearchListElement &element)
+{
+    m_elements.push_back(element);
+}
+
+
+
+const SearchList::SearchElements& SearchList::getList() const
+{
+    return m_elements;
 }

@@ -35,7 +35,7 @@ class data_ptr
 
         }
 
-        data_ptr(const data_ptr<T> &other): m_ptr(0)
+        data_ptr(const data_ptr<T> &other): m_ptr(0), m_deleter(nullptr), m_copier(nullptr)
         {
             copy(other);
         }

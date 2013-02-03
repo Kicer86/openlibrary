@@ -38,8 +38,11 @@ class OL_EXPORTS QtExtChooseFile: public QObject
     public:
         QtExtChooseFile(QAbstractButton *, QLineEdit *, QFileDialog *);     //object takes ownership over dialog (will delete it)
         QtExtChooseFile(QAbstractButton *, QLineEdit *, QtExtChooseFileDialog *);
+        QtExtChooseFile(const QtExtChooseFile &) = delete;
 
         virtual ~QtExtChooseFile();
+
+        QtExtChooseFile& operator=(const QtExtChooseFile &) = delete;
 
     signals:
         void valueChanged() const;
