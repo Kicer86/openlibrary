@@ -93,7 +93,11 @@ function(prepareExportFile filePath)
             #ifndef OPENLIBRARY_INTERNAL_HPP
             #define OPENLIBRARY_INTERNAL_HPP
 
-            #define OL_EXPORTS __attribute__ ((visibility (\"default\")))
+            #ifdef OPENLIBRARY_DO_EXPORT
+                #define OL_EXPORTS __attribute__ ((visibility (\"default\")))
+            #else
+                #define OL_EXPORTS
+            #endif
 
             #endif
             ")
