@@ -188,11 +188,15 @@ endfunction(turnOnAllWarnings)
 ##### end of usefull switches #####
 
 function(exportSymbols target)
+
+    add_definitions(-DOPENLIBRARY_DO_EXPORT)
+
     if(CMAKE_COMPILER_IS_GNUCXX)
         addFlags(${target} COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
     else() #Visual Studio
-        add_definitions(/DOPENLIBRARY_DO_EXPORT)
+
     endif(CMAKE_COMPILER_IS_GNUCXX)
+
 endfunction(exportSymbols)
 
 
