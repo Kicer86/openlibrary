@@ -30,7 +30,7 @@
 class OL_EXPORTS HtmlTag
 {
   public:
-    HtmlTag(bool type = false);
+    HtmlTag(bool closingTag = false);
     virtual ~HtmlTag();
 
     operator std::string() const;
@@ -43,8 +43,8 @@ class OL_EXPORTS HtmlTag
 
     struct Attr
     {
-        Attr(): name(), value()
-        {}
+        Attr(): name(), value() {}
+        Attr(const std::string &n, const std::string &v): name(n), value(v) {}
 
         std::string name;
         std::string value;
@@ -64,6 +64,7 @@ class OL_EXPORTS HtmlTag
     bool hasAttr(const std::string &attr) const;
     Attr getAttr(const std::string &attr) const;
     std::vector<Attr> getAttrs(const std::string &attr) const;
+    const std::vector< Attr >& getAttrs() const;
     std::string toString() const;
 
   private:

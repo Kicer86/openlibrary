@@ -30,7 +30,7 @@ struct HtmlTag::Data
 	Data(bool type = false): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
 };
 
-HtmlTag::HtmlTag ( bool type ) : m_data(new HtmlTag::Data(type))
+HtmlTag::HtmlTag ( bool closingTag ) : m_data(new HtmlTag::Data(closingTag))
 {}
 
 
@@ -102,6 +102,12 @@ std::vector<HtmlTag::Attr> HtmlTag::getAttrs ( const std::string& attr ) const
       ret.push_back ( m_data->attributes[i] );
 
   return ret;
+}
+
+
+const std::vector< HtmlTag::Attr >& HtmlTag::getAttrs() const
+{
+    return m_data->attributes;
 }
 
 

@@ -33,10 +33,16 @@ register_library(htmlParser SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} $
                             HEADERS ${HTMLPARSER_HEADERS})
 
 #link htmlParser staticaly with flex
-target_link_libraries(htmlParser ${FLEX_LIBRARIES})
+target_link_libraries(htmlParser ${FLEX_LIBRARIES} common)
 
 #enable debug info when building debug
 set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 
 #c++11 is needed here, turn it on
 turnOnCpp11(htmlParser)
+
+
+############################### tests ###############################
+
+registerTest(htmlParser tests/RunAllTests.cpp tests/htmlParser_tests.cpp)
+target_link_libraries(htmlParserTests htmlParser)
