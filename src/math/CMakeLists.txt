@@ -21,4 +21,4 @@ turnOnCpp11(${LIB_NAME})
 
 ############################### tests ###############################
 
-registerTest(math tests/RunAllTests.cpp tests/math_tests.cpp)
+registerTest(${LIB_NAME} tests/RunAllTests.cpp tests/math_tests.cpp)
