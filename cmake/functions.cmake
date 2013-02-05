@@ -2,6 +2,7 @@
 #some functions for generation useful stuff (internal use)
 
 set(OPENLIBRARY_DIR_NAME OpenLibrary)
+set(TESTS_PERFORM_CODE_COVERAGE FALSE CACHE BOOL "If set to TRUE - additional flags are passed to all targets to allow code coverage. Also special make target is added")
 
 #register library
 #a library target with given name will be created
@@ -11,12 +12,13 @@ function(register_library name)
 
     #c/c++ part
     if(SOURCES)
-		set(LIBRARY_NAME ${name})
+        set(LIBRARY_NAME ${name})
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
         exportSymbols(${LIBRARY_NAME})
         turnOnAllWarnings(${SOURCES})
+        enableCodeCoverage(${LIBRARY_NAME})
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
@@ -185,6 +187,15 @@ function(turnOnAllWarnings)
 
 endfunction(turnOnAllWarnings)
 
+function(enableCodeCoverage target)
+
+    if(TESTS_PERFORM_CODE_COVERAGE)
+        addFlags(${target} COMPILE_FLAGS "--coverage")
+        addFlags(${target} LINK_FLAGS "--coverage")
+    endif(TESTS_PERFORM_CODE_COVERAGE)
+
+endfunction(enableCodeCoverage)
+
 ##### end of usefull switches #####
 
 function(exportSymbols target)
@@ -285,14 +296,15 @@ function(registerTest libraryName)
                           DEPENDS ${targetName})
 
         turnOnCpp11(${targetName})
-        addFlags(${targetName} COMPILE_FLAGS "--coverage")
-        addFlags(${targetName} LINK_FLAGS "--coverage")
+        enableCodeCoverage(${targetName})
 
         #attach perform${targetName} to 'test' target
         add_dependencies(test perform_${targetName})
 
-        #create valgrind tests
+        #extra tools
         if(UNIX)
+
+            #create valgrind tests
             find_program(valgrindPath valgrind)
 
             if(valgrindPath)
@@ -300,11 +312,42 @@ function(registerTest libraryName)
                 add_custom_target(valgrind_${targetName}
                                   COMMAND ${valgrindPath} --error-exitcode=255 ${CMAKE_CURRENT_BINARY_DIR}/${targetName} &> /dev/null\; if [ $$? -eq 255 ]\; then echo "valgrind problems when running ${CMAKE_CURRENT_BINARY_DIR}/${targetName}" \; exit 1\; else echo "running valgrind for ${targetName}: OK" \; exit 0\; fi
                                   DEPENDS ${targetName}
-
-                                  )
+                                 )
                 add_dependencies(valgrind_test valgrind_${targetName})
 
             endif(valgrindPath)
+
+            if(TESTS_PERFORM_CODE_COVERAGE)
+                #code coverage info
+                find_program(sedPath     sed)
+                find_program(egrepPath   egrep)
+                find_program(stringsPath strings)
+                find_program(gcovPath    gcov)
+                find_program(dirnamePath dirname)
+
+                if(sedPath AND egrepPath AND stringsPath AND gcovPath AND dirnamePath)
+
+                    set(gcda_path ${CMAKE_CURRENT_BINARY_DIR}/${targetName}.gcda_path)
+
+                    add_custom_command(OUTPUT ${gcda_path}
+                                       COMMAND ${stringsPath} ${CMAKE_CURRENT_BINARY_DIR}/${targetName} > ${gcda_path}
+                                       COMMAND ${sedPath} -n -i -e '/\\.gcda$$/p' ${gcda_path}
+                                       COMMAND ${sedPath} -i -e '1!d' ${gcda_path}
+                                       COMMAND ${dirnamePath} `cat ${gcda_path}` > ${gcda_path}
+                                      )
+                    #run code coverage tool
+                    add_custom_target(gcov_${targetName}
+                                      COMMAND ${gcovPath} -o `cat ${gcda_path}` tests/htmlParser_tests.cpp.o
+                                      DEPENDS ${gcda_path})
+
+                    add_dependencies(test gcov_${targetName})
+
+                else()
+
+                    message("Code coverage will not be tested. Some necessary programs are missing: ${sedPath} ${egrepPath} ${stringsPath} ${gcovPath} ${dirnamePath}")
+
+                endif(sedPath AND egrepPath AND stringsPath AND gcovPath AND dirnamePath)
+            endif(TESTS_PERFORM_CODE_COVERAGE)
 
         endif(UNIX)
 
