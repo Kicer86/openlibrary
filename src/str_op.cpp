@@ -7,7 +7,7 @@ namespace Strings
     std::string *stripQuotas(std::string *s)
     {
         std::string &str=*s;         //str and s are now the same
-        
+
         if (str.empty()==false &&
             str[0]==str[str.length()-1] &&
             (str[0]=='"' || str[0]=='\'')
@@ -16,7 +16,7 @@ namespace Strings
             str.erase(0, 1);               //remove 1st " or '
             str.erase(str.length()-1, 1);  //remove last one
         }
-        
+
         return &str;
     }
 
