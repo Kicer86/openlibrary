@@ -1,4 +1,6 @@
 
+#include <sstream>
+
 #include <CppUTest/TestHarness.h>
 
 #include "htmlParser/htmltag.hpp"
@@ -128,4 +130,111 @@ TEST(HtmlTag, ShouldAllowToSearchForSingleAttributes)
     CHECK_EQUAL(true, hasNewAttribute);
     CHECK_EQUAL(foundAttrib.name, new_attr.name);
     CHECK_EQUAL(foundAttrib.value, new_attr.value);
+}
+
+
+TEST(HtmlTag, ShouldAllowToSearchForManyAttributes)
+{
+    HtmlTag tag;
+    HtmlTag::Attr attr("attribute", "value");
+    tag.addAttr(attr);
+
+    HtmlTag::Attr attr2("attribute", "value2");
+    tag.addAttr(attr2);
+
+    std::vector<HtmlTag::Attr> attributes = tag.getAttrs("attribute");
+
+
+    CHECK_EQUAL(2, static_cast<int>(attributes.size()));
+    CHECK_EQUAL("value", attributes[0].value);
+    CHECK_EQUAL("value2", attributes[1].value);
+    CHECK_EQUAL("attribute", attributes[0].name);
+    CHECK_EQUAL("attribute", attributes[0].name);
+}
+
+
+TEST(HtmlTag, ShouldAllowToCastItToString)
+{
+    HtmlTag::Attr attr("attribute", "value");
+
+    HtmlTag tag(false);
+    tag.setLevel(0);
+    tag.setId("tagName");
+    tag.setText("free text");
+    tag.addAttr(attr);
+
+    const std::string str = tag;
+
+    CHECK_EQUAL("<tagName attribute=\"value\">free text", str);
+}
+
+
+TEST(HtmlTag, ShouldAllowToCastItToStringWithIndentation)
+{
+    HtmlTag::Attr attr("attribute", "value");
+
+    HtmlTag tag(false);
+    tag.setLevel(1);
+    tag.setId("tagName");
+    tag.setText("free text");
+    tag.addAttr(attr);
+
+    const std::string str = tag;
+
+    CHECK_EQUAL(" <tagName attribute=\"value\">free text", str);
+}
+
+
+TEST(HtmlTag, ShouldAllowToCastItToStringWhenManyAttributesUsed)
+{
+    HtmlTag::Attr attr("attribute", "value");
+    HtmlTag::Attr attr2("attribute2", "value2");
+
+    HtmlTag tag(false);
+    tag.setLevel(0);
+    tag.setId("tagName");
+    tag.setText("free text");
+    tag.addAttr(attr);
+    tag.addAttr(attr2);
+
+    const std::string str = tag;
+
+    CHECK_EQUAL("<tagName attribute=\"value\" attribute2=\"value2\">free text", str);
+}
+
+
+TEST(HtmlTag, ShouldAllowToCastItToStream)
+{
+    HtmlTag tag(false);
+    tag.setLevel(0);
+    tag.setId("tagName");
+    tag.setText("free text");
+
+    std::ostringstream str;
+    str << tag;
+
+    CHECK_EQUAL("<tagName>free text", str.str());
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+TEST_GROUP(HtmlTagAttr)
+{
+};
+
+
+TEST(HtmlTagAttr, ShouldAllowToCompareItsNameWithString)
+{
+    HtmlTag::Attr tag("name", "value");
+
+    CHECK_EQUAL(true, tag == "name");
+}
+
+
+TEST(HtmlTagAttr, EqualOperatorShouldCompareOnlyName)
+{
+    HtmlTag::Attr tag("name", "value");
+
+    CHECK_EQUAL(false, tag == "value");
 }
