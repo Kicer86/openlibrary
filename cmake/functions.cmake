@@ -318,35 +318,20 @@ function(registerTest libraryName)
             endif(valgrindPath)
 
             if(TESTS_PERFORM_CODE_COVERAGE)
-                #code coverage info
-                find_program(sedPath     sed)
-                find_program(egrepPath   egrep)
-                find_program(stringsPath strings)
-                find_program(gcovPath    gcov)
-                find_program(dirnamePath dirname)
 
-                if(sedPath AND egrepPath AND stringsPath AND gcovPath AND dirnamePath)
+                get_target_property(projSources ${libraryName} SOURCES)
+                get_target_property(libraryFile ${libraryName} LOCATION)
 
-                    set(gcda_path ${CMAKE_CURRENT_BINARY_DIR}/${targetName}.gcda_path)
+                #run code coverage tool
+                add_custom_target(gcov_${targetName}
+                                  COMMAND sh ${CMAKE_SOURCE_DIR}/code_cov.sh
+                                          ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
+                                          ${libraryFile}
+                                          ${projSources} ${sources}
+                                 )
 
-                    add_custom_command(OUTPUT ${gcda_path}
-                                       COMMAND ${stringsPath} ${CMAKE_CURRENT_BINARY_DIR}/${targetName} > ${gcda_path}
-                                       COMMAND ${sedPath} -n -i -e '/\\.gcda$$/p' ${gcda_path}
-                                       COMMAND ${sedPath} -i -e '1!d' ${gcda_path}
-                                       COMMAND ${dirnamePath} `cat ${gcda_path}` > ${gcda_path}
-                                      )
-                    #run code coverage tool
-                    add_custom_target(gcov_${targetName}
-                                      COMMAND ${gcovPath} -o `cat ${gcda_path}` tests/htmlParser_tests.cpp.o
-                                      DEPENDS ${gcda_path})
+                add_dependencies(test_code_coverage gcov_${targetName})
 
-                    add_dependencies(test gcov_${targetName})
-
-                else()
-
-                    message("Code coverage will not be tested. Some necessary programs are missing: ${sedPath} ${egrepPath} ${stringsPath} ${gcovPath} ${dirnamePath}")
-
-                endif(sedPath AND egrepPath AND stringsPath AND gcovPath AND dirnamePath)
             endif(TESTS_PERFORM_CODE_COVERAGE)
 
         endif(UNIX)
