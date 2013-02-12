@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 #prepare target for running tests
 add_custom_target(test)                    #all internal test targets should attach here
 add_custom_target(valgrind_test)           #all valgrind tests should attach here
+add_custom_target(test_code_coverage       #all code coeverage tests should attach here
+                  DEPENDS test)
 
 #generate file with export/import stuff for sublibraries
 prepareExportFile(${CMAKE_SOURCE_DIR}/src/OpenLibraryExports.hpp)
