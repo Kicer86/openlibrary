@@ -21,13 +21,13 @@
 
 struct HtmlTag::Data
 {
-	int level;         //depth level
+    int level;         //depth level
     bool closing;      //false: <tag>, true: </tag>
     std::string id;
     std::vector<HtmlTag::Attr> attributes;
     std::string plainText;
 
-	Data(bool type = false): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
+    Data(bool type = false): level ( 0 ), closing ( type ), id(), attributes(), plainText() {}
 };
 
 HtmlTag::HtmlTag ( bool closingTag ) : m_data(new HtmlTag::Data(closingTag))
@@ -40,68 +40,76 @@ HtmlTag::~HtmlTag()
 
 HtmlTag::operator std::string() const
 {
-  return toString();
+    return toString();
 }
 
 
 std::string HtmlTag::toString() const
 {
-  std::string ret;
-  for ( int i=0; i<getLevel(); i++ )
-    ret += ' ';
-  ret += ( m_data->closing? "</": "<" ) + m_data->id;
+    std::string ret;
 
-  if ( m_data->attributes.size() >0 )
-    ret += ' ';
+    for ( int i = 0; i < getLevel(); i++ )
+        ret += ' ';
 
-  for ( unsigned int i=0; i < m_data->attributes.size(); i++ )
-  {
-    ret += m_data->attributes[i].name + "=\"" + m_data->attributes[i].value + '"';
-    if ( i+1 < m_data->attributes.size() )
-      ret += ' ';                 //put space between attributes
-  }
+    ret += ( m_data->closing ? "</" : "<" ) + m_data->id;
 
-  ret += '>';
+    if ( m_data->attributes.size() > 0 )
+        ret += ' ';
 
-  ret += m_data->plainText;
-  return ret;
+    for ( unsigned int i = 0; i < m_data->attributes.size(); i++ )
+    {
+        ret += m_data->attributes[i].name + "=\"" + m_data->attributes[i].value + '"';
+
+        if ( i + 1 < m_data->attributes.size() )
+            ret += ' ';                 //put space between attributes
+    }
+
+    ret += '>';
+
+    ret += m_data->plainText;
+    return ret;
 }
 
 
 bool HtmlTag::hasAttr ( const std::string& attr ) const
 {
-  bool ret = false;
-  for (unsigned int i=0; i < m_data->attributes.size(); i++)
-    if ( m_data->attributes[i].name==attr )
-    {
-      ret = true;
-      break;
-    }
-  return ret;
+    bool ret = false;
+
+    for (unsigned int i = 0; i < m_data->attributes.size(); i++)
+        if ( m_data->attributes[i].name == attr )
+        {
+            ret = true;
+            break;
+        }
+
+    return ret;
 }
 
 
 HtmlTag::Attr HtmlTag::getAttr ( const std::string& attr ) const
 {
-  Attr ret;
-  for (size_t i=0; i < m_data->attributes.size(); i++)
-    if ( m_data->attributes[i].name==attr )
-    {
-      ret = m_data->attributes[i];
-      break;
-    }
-  return ret;
+    Attr ret;
+
+    for (size_t i = 0; i < m_data->attributes.size(); i++)
+        if ( m_data->attributes[i].name == attr )
+        {
+            ret = m_data->attributes[i];
+            break;
+        }
+
+    return ret;
 }
 
 
 std::vector<HtmlTag::Attr> HtmlTag::getAttrs ( const std::string& attr ) const
 {
-  std::vector<Attr> ret;
-  for (unsigned int i=0; i < m_data->attributes.size(); i++)
-    if ( m_data->attributes[i].name==attr )
-      ret.push_back ( m_data->attributes[i] );
+    std::vector<Attr> ret;
 
-  return ret;
+    for (unsigned int i = 0; i < m_data->attributes.size(); i++)
+        if ( m_data->attributes[i].name == attr )
+            ret.push_back ( m_data->attributes[i] );
+
+    return ret;
 }
 
 
@@ -113,68 +121,68 @@ const std::vector< HtmlTag::Attr >& HtmlTag::getAttrs() const
 
 bool HtmlTag::Attr::operator== ( const std::string& cmp ) const
 {
-  return name == cmp;
+    return name == cmp;
 }
 
 
 void HtmlTag::setLevel ( int l )
 {
-  m_data->level = l;
+    m_data->level = l;
 }
 
 
 int HtmlTag::getLevel() const
 {
-  return m_data->level;
+    return m_data->level;
 }
 
 
 void HtmlTag::setType ( bool c )
 {
-  m_data->closing = c;
+    m_data->closing = c;
 }
 
 
 bool HtmlTag::isClosing() const
 {
-  return m_data->closing == true;
+    return m_data->closing == true;
 }
 
 
 bool HtmlTag::isOpening() const
 {
-  return m_data->closing == false;
+    return m_data->closing == false;
 }
 
 
 void HtmlTag::addAttr(const HtmlTag::Attr& attr)
 {
-  //drop quotas
-  HtmlTag::Attr attribute = attr;        //make a writable copy
-  Strings::stripQuotas(&attribute.value);
-  m_data->attributes.push_back(attribute);
+    //drop quotas
+    HtmlTag::Attr attribute = attr;        //make a writable copy
+    Strings::stripQuotas(&attribute.value);
+    m_data->attributes.push_back(attribute);
 }
 
 
 void HtmlTag::setId ( const std::string& i )
 {
-  m_data->id=i;
+    m_data->id = i;
 }
 
 
 std::string HtmlTag::getId() const
 {
-  return m_data->id;
+    return m_data->id;
 }
 
 
 void HtmlTag::setText ( const std::string& s )
 {
-  m_data->plainText = s;
+    m_data->plainText = s;
 }
 
 
 std::string HtmlTag::getText() const
 {
-  return m_data->plainText;
+    return m_data->plainText;
 }
