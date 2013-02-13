@@ -25,7 +25,7 @@
 #include "htmltag.hpp"
 #include "searchlist.hpp"
 
-class HtmlTagList
+class OL_EXPORTS HtmlTagList
 {
     public:
         typedef std::vector<HtmlTag> HtmlTags;
