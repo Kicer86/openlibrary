@@ -216,6 +216,28 @@ TEST(HtmlTag, ShouldAllowToCastItToStream)
 }
 
 
+TEST(HtmlTag, ShouldBeClearable)
+{
+    HtmlTag::Attr attr("attribute", "value");
+    HtmlTag::Attr attr2("attribute2", "value2");
+
+    HtmlTag tag(true);
+    tag.setLevel(100);
+    tag.setId("tagName");
+    tag.setText("free text");
+    tag.addAttr(attr);
+    tag.addAttr(attr2);
+
+    tag.clear();
+
+    CHECK_EQUAL(0, tag.getLevel());
+    CHECK_EQUAL(true, tag.isOpening());
+    CHECK_EQUAL("", tag.getId());
+    CHECK_EQUAL("", tag.getText());
+    CHECK_EQUAL( 0, static_cast<int>(tag.getAttrs().size()) );
+
+}
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 TEST_GROUP(HtmlTagAttr)
