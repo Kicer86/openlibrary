@@ -4,7 +4,6 @@
 #include <CppUTest/TestHarness.h>
 
 #include "htmlParser/htmltag.hpp"
-#include "htmlParser/htmlparser.hpp"
 
 
 TEST_GROUP(HtmlTag)
