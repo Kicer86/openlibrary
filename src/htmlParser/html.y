@@ -11,7 +11,7 @@
 /*   #define YYLEX_PARAM   scanner  */
 
   #define YYSTYPE std::string
-  #define TAG htmlStruct->getHtmlTags().back()
+  #define TAG htmlTag
   #define TAGS htmlStruct
 
   //define this macro to satisfy VisualStudio
@@ -29,6 +29,8 @@
     std::cout << "error: " << s << std::endl;
     return 1;
   }
+
+  HtmlTag htmlTag;
 %}
 
 %token TEXT
@@ -45,8 +47,9 @@ html_element:  tag      {  };                  // element is <tag>
 html_element:  tag text { TAG.setText($2); };  // <tag> some text
 
 
-tag:      '<'           { HtmlTag newTag(false); TAGS->addElement(newTag); } //add new tag to list
+tag:      '<'           { TAG.clear(); TAG.setType(false); } //add new tag to list
           tag_body '>'  {
+                          TAGS->addElement(htmlTag);
                           if (TAG.getId()=="br" || TAG.getId()=="embeded" || TAG.getId()=="hr" ||
                               TAG.getId()=="img" || TAG.getId()=="input" || TAG.getId()=="link" ||
                               TAG.getId()=="li" || TAG.getId()=="meta" || TAG.getId()=="option" ||
@@ -58,8 +61,8 @@ tag:      '<'           { HtmlTag newTag(false); TAGS->addElement(newTag); } //a
                               }
                         };
 
-tag:      '<' '/'       { HtmlTag newTag(true); TAGS->addElement(newTag); } //add new tag to list
-          tag_body '>'  {};  //html /tag
+tag:      '<' '/'       { TAG.clear(); TAG.setType(true); } //add new tag to list
+          tag_body '>'  { TAGS->addElement(htmlTag); };  //html /tag
 
 tag_body: TEXT          { TAG.setId($1); };   //html tag is <tag>
 tag_body: TEXT attr     { TAG.setId($1); };   //or <tag attr>
