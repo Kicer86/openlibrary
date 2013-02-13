@@ -29,7 +29,7 @@ HtmlTagList::HtmlTagList(): m_htmlTags()
 void HtmlTagList::addElement(const HtmlTag &x)
 {
     HtmlTag newTag = x; //make a copy
-    if (m_htmlTags.empty() > 0)     //there are already some elements?
+    if (m_htmlTags.empty() == false)     //there are already some elements?
     {
         const HtmlTag &last = m_htmlTags.back(); //last element
         if (last.isClosing())   //last one is closing one? (</tag>)
