@@ -44,5 +44,5 @@ turnOnCpp11(htmlParser)
 
 ############################### tests ###############################
 
-registerTest(htmlParser tests/RunAllTests.cpp tests/htmlTag_tests.cpp)
+registerTest(htmlParser tests/RunAllTests.cpp tests/htmlTag_tests.cpp tests/htmlTagList_tests.cpp)
 target_link_libraries(htmlParserTests htmlParser)
