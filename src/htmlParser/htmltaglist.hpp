@@ -32,7 +32,6 @@ class OL_EXPORTS HtmlTagList
         HtmlTagList();
         void addElement(const HtmlTag& x);
         const HtmlTags& getHtmlTags() const;
-        HtmlTags& getHtmlTags();
 
     private:
         friend class SearchList;
