@@ -33,6 +33,8 @@ class OL_EXPORTS HtmlTag
     HtmlTag(bool closingTag = false);
     virtual ~HtmlTag();
 
+    void clear();
+
     operator std::string() const;
     friend std::ostream& operator << (std::ostream &out, const HtmlTag &htamlTag)
     {
