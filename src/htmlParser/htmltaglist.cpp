@@ -57,12 +57,6 @@ const HtmlTagList::HtmlTags& HtmlTagList::getHtmlTags() const
 }
 
 
-HtmlTagList::HtmlTags& HtmlTagList::getHtmlTags()
-{
-    return m_htmlTags;
-}
-
-
 SearchList HtmlTagList::findAll(const std::string &id) const
 {
     SearchList ret;
