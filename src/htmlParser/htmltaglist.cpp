@@ -55,16 +55,3 @@ const HtmlTagList::HtmlTags& HtmlTagList::getHtmlTags() const
 {
     return m_htmlTags;
 }
-
-
-SearchList HtmlTagList::findAll(const std::string &id) const
-{
-    SearchList ret;
-
-    for (SearchListElement it = m_htmlTags.begin(); it < m_htmlTags.end(); it++ )
-        if (it->getId() == id && it->isOpening())
-            ret.addElement(it);
-
-    return ret;
-}
-
