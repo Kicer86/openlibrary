@@ -43,7 +43,15 @@ void SearchList::init(const HtmlTagList* tagList, const std::string& id)
 {
     //get search results
     debug(DebugLevel::Debug) << "creating SearchList with \"" << id << "\" as primary filter";
-    setResults(tagList->findAll(id));
+
+    SearchList ret;
+    const HtmlTagList::HtmlTags &listOfTags = tagList->getHtmlTags();
+
+    for (SearchListElement it = listOfTags.begin(); it < listOfTags.end(); it++ )
+        if (it->getId() == id && it->isOpening())
+            ret.addElement(it);
+
+    setResults(ret);
 }
 
 

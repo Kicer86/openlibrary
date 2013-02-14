@@ -34,11 +34,7 @@ class OL_EXPORTS HtmlTagList
         const HtmlTags& getHtmlTags() const;
 
     private:
-        friend class SearchList;
-
         HtmlTags m_htmlTags;
-
-        SearchList findAll(const std::string& id) const;
 };
 
 #endif // HTMLTAGLIST_HPP
