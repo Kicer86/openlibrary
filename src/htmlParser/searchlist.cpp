@@ -52,15 +52,15 @@ void SearchList::findDescendant(const std::string& id)
     debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
     SearchList newResuls;                //new list of valid tags after filtration below
 
-    for (SearchListElement element: m_elements)      //element is now copy of iterator on HtmlTagList (for accessing descentants etc)
+    for (SearchListElement element: m_elements)    //element is now copy of iterator on HtmlTagList (for accessing descentants etc)
     {
         int level = element->getLevel();
-        element++;                         //go to next tag
+        element++;                                 //go to next tag
         while (true)
         {
-            if (element->getLevel() == level + 1) //this element is a child of main one ?
+            if (element->getLevel() == level + 1)  //this element is a child of main one ?
             {
-                if (element->getId() == id)    //matches pattern?
+                if (element->getId() == id)        //matches pattern?
                 {
                     newResuls.addElement(element); //save it as result
                     break;                         //go to next

@@ -34,9 +34,9 @@ class SearchList
         typedef std::vector<SearchListElement> SearchElements;
 
         SearchList();
-        void init(const HtmlTagList* tagList, const std::string& id); //init list with tagList. keep only tags that have given id   (css selector: E)
-        void findDescendant(const std::string& id);                   //find descendants of tags being keep, which have proper name (css selector: E F - E is current tag list, F - descentant name)
-        void withAttr(const std::string& name);                       //leave only tags with given attr name (css selector E[foo])
+        void init(const HtmlTagList* tagList, const std::string& id);   //Init list with tagList. Keeps only tags that have given id   (css selector: E)
+        void findDescendant(const std::string& id);                     //Find descendants of tags being kept, which have proper name (css selector: E F - E is current tag list, F - descentant name)
+        void withAttr(const std::string& name);                         //leave only tags with given attr name (css selector E[foo])
         void withAttr(const std::string& name, const std::string& val); //leave only tag with given attr and it's value (css selector E[foo="warning"]
         void addElement(const SearchListElement &);
 
