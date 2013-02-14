@@ -177,7 +177,7 @@ function(turnOnAllWarnings)
 
             if(CMAKE_COMPILER_IS_GNUCXX)
                 addSourceFlags(${source} COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
-                addSourceFlags(${source} COMPILE_FLAGS "-Werror")
+                #addSourceFlags(${source} COMPILE_FLAGS "-Werror")
             else() #Visual Studio
 
             endif(CMAKE_COMPILER_IS_GNUCXX)
