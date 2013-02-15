@@ -22,6 +22,7 @@
 
 #include "htmlparser.hpp"
 #include "htmltaglist.hpp"
+#include "private/cssspdata.hpp"
 
 #define YY_NO_UNISTD_H
 
@@ -35,7 +36,7 @@
 #undef YY_EXTRA_TYPE
 
 int html_parse(HtmlTagList*, yyscan_t);
-int css_parse(HtmlParser::CssSPData*, yyscan_t);
+int css_parse(CssSPData*, yyscan_t);
 
 #ifndef NDEBUG
 extern int html_debug;

@@ -21,7 +21,7 @@
   #include <string>
   #include <vector>
 
-  #include "htmltaglist.hpp"
+  #include "private/htmltaglist.hpp"
   #include "html.yy.hh"
 
   int html_error(HtmlTagList* htmlStruct, yyscan_t scanner, char const* s)

@@ -8,6 +8,9 @@ set(OPENLIBRARY_DIR_NAME OpenLibrary)
 function(register_library name)
 
     parseArguments(HEADERS SOURCES TEST_SOURCES ARGUMENTS ${ARGN})
+    #SOURCES: list of all cpp files
+    #HEADERS: list of headers which are meant to be published
+    #TEST_SOURCES: source files of unit tests
 
     #c/c++ part
     if(SOURCES)

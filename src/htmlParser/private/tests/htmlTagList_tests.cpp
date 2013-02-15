@@ -2,7 +2,7 @@
 
 #include <CppUTest/TestHarness.h>
 
-#include "htmlParser/htmltaglist.hpp"
+#include "private/htmltaglist.hpp"
 
 
 TEST_GROUP(HtmlTagList)
