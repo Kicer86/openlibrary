@@ -23,7 +23,7 @@
 #include <vector>
 #include <string>
 
-#include "../OpenLibraryExports.hpp"
+#include "htmlParser_exports.hpp"
 
 class HtmlTagList;
 class HtmlTag;
@@ -32,7 +32,7 @@ class HtmlTag;
  * @brief Main HtmlParser class
  *
  **/
-class OL_EXPORTS HtmlParser
+class HTMLPARSER_EXPORTS HtmlParser
 {
         HtmlTagList *htmlCode;
 

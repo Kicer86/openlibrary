@@ -11,9 +11,6 @@ add_custom_target(valgrind_test)           #all valgrind tests should attach her
 add_custom_target(test_code_coverage       #all code coeverage tests should attach here
                   DEPENDS test)
 
-#generate file with export/import stuff for sublibraries
-prepareExportFile(${CMAKE_SOURCE_DIR}/src/OpenLibraryExports.hpp)
-
 add_subdirectory(src/htmlParser htmlParser)
 #add_subdirectory(qextserialport qextserialport)
 add_subdirectory(src/router router)
@@ -24,6 +21,7 @@ add_subdirectory(src/palgorithms)
 
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
