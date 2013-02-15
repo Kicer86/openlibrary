@@ -15,11 +15,11 @@ set(LIB_HEADERS
     cpuinfo.hpp
 )
 
-set(TEST_SOURCES
+set(TEST_SRC
     tests/RunAllTests.cpp
     tests/utils_tests.cpp
     )
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SOURCES})
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
