@@ -119,12 +119,6 @@ function(prepareExportFile filePath libraryName)
             ")
     endif(CMAKE_COMPILER_IS_GNUCXX)
 
-    #install file
-    getHeadersPath(HEADERS_INSTALL_PATH)
-    install(FILES ${filePath}
-            DESTINATION ${HEADERS_INSTALL_PATH}
-            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-
 endfunction(prepareExportFile)
 
 function(addFlags target propertyName flags)
