@@ -7,31 +7,29 @@ find_package(BISON REQUIRED)
 include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 set(HTMLPARSER_SRC
-  searchlist.cpp
-  htmltaglist.cpp
-  htmltag.cpp
-  htmlparser.cpp
+  private/searchlist.cpp
+  private/htmltaglist.cpp
+  private/htmltag.cpp
+  private/htmlparser.cpp
 )
 
 set(HTMLPARSER_HEADERS
-  searchlist.hpp
-  htmltaglist.hpp
   htmltag.hpp
   htmlparser.hpp
 )
 
 set(TEST_SRS
-    tests/RunAllTests.cpp
-    tests/htmlTag_tests.cpp
-    tests/htmlTagList_tests.cpp
+    private/tests/RunAllTests.cpp
+    private/tests/htmlTag_tests.cpp
+    private/tests/htmlTagList_tests.cpp
 )
 
-flex_target(htmlFlex html.l ${CMAKE_CURRENT_BINARY_DIR}/html.yy.cc
+flex_target(htmlFlex private/html.l ${CMAKE_CURRENT_BINARY_DIR}/html.yy.cc
     COMPILE_FLAGS "-CF --header-file=${CMAKE_CURRENT_BINARY_DIR}/html.yy.hh")
-flex_target(cssFlex css.l ${CMAKE_CURRENT_BINARY_DIR}/css.yy.cc
+flex_target(cssFlex private/css.l ${CMAKE_CURRENT_BINARY_DIR}/css.yy.cc
     COMPILE_FLAGS "-CF --header-file=${CMAKE_CURRENT_BINARY_DIR}/css.yy.hh")
-bison_target(htmlBison html.y ${CMAKE_CURRENT_BINARY_DIR}/html.tab.cc)
-bison_target(cssBison css.y ${CMAKE_CURRENT_BINARY_DIR}/css.tab.cc)
+bison_target(htmlBison private/html.y ${CMAKE_CURRENT_BINARY_DIR}/html.tab.cc)
+bison_target(cssBison private/css.y ${CMAKE_CURRENT_BINARY_DIR}/css.tab.cc)
 add_flex_bison_dependency(htmlFlex htmlBison)
 add_flex_bison_dependency(cssFlex cssBison)
 

@@ -5,19 +5,19 @@
   #endif
   #include <string>
   #include <vector>
-  
-  #include "htmltaglist.hpp" 
+
+  #include "private/htmltaglist.hpp"
   #include "html.tab.hh"         //include bison's definitions
 %}
 
 %option nounistd
-%option never-interactive  
+%option never-interactive
 %option reentrant
 %option bison-bridge
 %option noyywrap
 %option extra-type="HtmlTagList*"
 %option prefix="html_"
- 
+
 %x PARAM
 %x PARAM2
 %x COMMENT
@@ -25,21 +25,21 @@
 
 %%
 
-"<!--"        { //comment  
+"<!--"        { //comment
                 #ifdef YYDEBUG
                   std::clog << "HL: entering COMMENT" << std::endl;
                 #endif
                 BEGIN(COMMENT);
               }
 
-"<!"          { //parameter 
+"<!"          { //parameter
                 #ifdef YYDEBUG
                   std::clog << "HL: entering <!" << std::endl;
                 #endif
                 BEGIN(PARAM);
               }
 
-"<%"          { //parameter 
+"<%"          { //parameter
                 #ifdef YYDEBUG
                   std::clog << "HL: entering <%" << std::endl;
                 #endif
@@ -61,11 +61,11 @@
                 *yylval=yytext;
                 return TEXT;
               }
-      
+
 <*>\n         {}  //eat endl (useless in html)
 <INITIAL,TAG>\"(\\.|[^"])*\"  { //string
                                 #ifdef YYDEBUG
-                                  std::clog << "HL: got \"string: " << yytext << " while in INITIAL or TAG" << std::endl; 
+                                  std::clog << "HL: got \"string: " << yytext << " while in INITIAL or TAG" << std::endl;
                                 #endif
                                 *yylval=yytext;
                                 return STRING;
@@ -73,7 +73,7 @@
 
 <INITIAL,TAG>\'(\\.|[^'])*\'  { //string
                                 #ifdef YYDEBUG
-                                  std::clog << "HL: got 'string: " << yytext << " while in INITIAL or TAG" << std::endl; 
+                                  std::clog << "HL: got 'string: " << yytext << " while in INITIAL or TAG" << std::endl;
                                 #endif
                                 *yylval=yytext;
                                 return STRING;
@@ -84,7 +84,7 @@
           #ifdef YYDEBUG
             std::clog << "HL: leaving COMMENT" << std::endl;
           #endif
-          BEGIN(INITIAL); 
+          BEGIN(INITIAL);
         }
 .       {} //drop all characters
 }
@@ -94,17 +94,17 @@
             #ifdef YYDEBUG
               std::clog << "HL: leaving <!" << std::endl;
             #endif
-            BEGIN(INITIAL); 
+            BEGIN(INITIAL);
           }
 .         {} //drop all characters
 }
 
 <PARAM2>{
-"%>"          {            
+"%>"          {
                 #ifdef YYDEBUG
                   std::clog << "HL: leaving <%" << std::endl;
                 #endif
-                BEGIN(INITIAL); 
+                BEGIN(INITIAL);
               }
 .             {} //drop all characters
 }
@@ -117,7 +117,7 @@
                   *yylval=yytext;
                   return TEXT;
                 }
- 
+
 [[:blank:]$]+ {} //remove blanks
 
 ">"           { //tag end - return to main state
@@ -128,7 +128,7 @@
                 return yytext[0];
               }
 
-.             { //some character        
+.             { //some character
                 #ifdef YYDEBUG
                   std::clog << "HL: got character: " << yytext[0] << " while in TAG" << std::endl;
                 #endif

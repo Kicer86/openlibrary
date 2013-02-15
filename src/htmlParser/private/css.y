@@ -1,26 +1,26 @@
 
 %pure_parser
 %error-verbose
-%parse-param { HtmlParser::CssSPData* cssSPData } 
+%parse-param { CssSPData* cssSPData }
 %parse-param {void *scanner}
 %lex-param {yyscan_t *scanner}
 %name-prefix="css_"
 
-%{         
-  #define YYSTYPE std::string 
-  
+%{
+  #define YYSTYPE std::string
+
   //define this macro to satisfy VisualStudio
-  #define YY_NO_UNISTD_H 
-  
+  #define YY_NO_UNISTD_H
+
   #include <iostream>
   #include <string>
   #include <vector>
-  
-  #include "htmlparser.hpp"  
-  #include "htmltaglist.hpp"  
-  #include "css.yy.hh"  
-  
-  int css_error(HtmlParser::CssSPData* cssSPData, yyscan_t scanner, char const* s)
+
+  #include "private/cssspdata.hpp"
+  #include "private/htmltaglist.hpp"
+  #include "css.yy.hh"
+
+  int css_error(CssSPData* cssSPData, yyscan_t scanner, char const* s)
   {
     std::cout << "error: " << s << std::endl;
     return 1;
@@ -36,42 +36,42 @@ query: exp         {};
 query: query exp   {};
 
 exp:  tag         { //just tag name
-                    $$=$1; 
+                    $$=$1;
                     std::cout << '(' << $$ << ')' << std::endl;
-                    
+
                     //filtrate all tags matching this ($1) id
                     cssSPData->results.init(cssSPData->htmlCode, $1);
-                  }; 
+                  };
 exp:  exp tag     { //descendant of some tag
-                    $$='(' + $1 + ' ' + $2 + ')'; 
-                    std::cout << $$ << std::endl; 
-                    
+                    $$='(' + $1 + ' ' + $2 + ')';
+                    std::cout << $$ << std::endl;
+
                     //filtrate all tags that have such descendant
                     cssSPData->results.findDescendant($2);
-                  }; 
-exp:  exp '>' tag { 
-                    $$='(' + $1 + '>' + $3 + ')'; 
-                    std::cout << $$ << std::endl; 
-                    
+                  };
+exp:  exp '>' tag {
+                    $$='(' + $1 + '>' + $3 + ')';
+                    std::cout << $$ << std::endl;
+
                     //
                   }; //child
 
-exp:  exp '[' condition ']'  { 
-                                $$ = $1 + '[' + $3 + ']'; 
-                                
+exp:  exp '[' condition ']'  {
+                                $$ = $1 + '[' + $3 + ']';
+
                                 //remove all tags which doesn't have proper attribute
                              };
 //some more rulez to be here
 
-tag:  TEXT                    {}; 
+tag:  TEXT                    {};
 
-condition: TEXT                 { 
-                                  $$ = $1; 
+condition: TEXT                 {
+                                  $$ = $1;
                                   //remove all tags which doesn't have proper attribute
                                   cssSPData->results.withAttr($1);
                                 };
-condition: TEXT '=' value       { 
-                                  $$ = $1 + '=' + $3; 
+condition: TEXT '=' value       {
+                                  $$ = $1 + '=' + $3;
                                   //remove all tags which doesn't have proper attribute
                                   cssSPData->results.withAttr($1, $3);
                                 };

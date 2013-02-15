@@ -23,8 +23,6 @@
 #include <vector>
 #include <string>
 
-#include "searchlist.hpp"
-
 #include "../OpenLibraryExports.hpp"
 
 class HtmlTagList;
@@ -45,18 +43,6 @@ class OL_EXPORTS HtmlParser
 
         void parse(const std::string &html);
         std::vector<HtmlTag*> findAll(const std::string &query);  //use http://www.w3.org/TR/CSS2/selector.html
-
-        struct CssSPData  //CssSelectorParserData
-        {
-                CssSPData(): htmlCode(0), results() {}
-
-                const HtmlTagList *htmlCode;    //pointer to list of tags
-                SearchList results;             //list of search results
-
-            private:
-                CssSPData(const CssSPData &css);
-                void operator=(const CssSPData &css);
-        };
 
         HtmlParser& operator=(const HtmlParser &) = delete;
 };
