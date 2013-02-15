@@ -15,10 +15,12 @@ set(MATH_HEADERS
   math.hpp
 )
 
+set(TEST_SRC
+    tests/RunAllTests.cpp
+    tests/math_tests.cpp
+    )
+
+
 include_directories(${CMAKE_SOURCE_DIR}/src)
-register_library(${LIB_NAME} SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
+register_library(${LIB_NAME} SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS} TEST_SOURCES ${TEST_SOURCES})
 turnOnCpp11(${LIB_NAME})
-
-############################### tests ###############################
-
-registerTest(${LIB_NAME} tests/RunAllTests.cpp tests/math_tests.cpp)
