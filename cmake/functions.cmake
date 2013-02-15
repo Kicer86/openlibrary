@@ -53,7 +53,7 @@ function(register_library name)
 
         #create variables for sub-library
         list(GET ${HEADERS} 1 header)
-        generate_variables(${name} ${LIBRARY_NAME} ${LIB_DESTINATION}/${library_file_name} ${HEADERS})
+        generate_cmakeConfig(${name} ${LIBRARY_NAME} ${LIB_DESTINATION}/${library_file_name} ${HEADERS})
     endif(SOURCES)
 
     if(HEADERS)
@@ -72,7 +72,7 @@ endfunction(register_library)
 #Function generates file with library specific cmake variables
 #A variable ${name}_LIBRARIES will be created.
 #syntax: reguster_library_bin library_name bin1 bin2 bin3 ...
-function(generate_variables name library libraryBinary)
+function(generate_cmakeConfig name library libraryBinary)
 
     #convert to uppercase
     string(TOUPPER ${name} UP_NAME)
