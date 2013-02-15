@@ -12,9 +12,10 @@ function(register_library name)
     #HEADERS: list of headers which are meant to be published
     #TEST_SOURCES: source files of unit tests
 
+    set(LIBRARY_NAME ${name})
+
     #c/c++ part
     if(SOURCES)
-        set(LIBRARY_NAME ${name})
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
@@ -38,14 +39,14 @@ function(register_library name)
     source_group(${LIBRARY_NAME}\\headers FILES ${HEADERS})
 
     getHeadersPath(HEADERS_INSTALL_PATH)
-    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${name})
+    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
 
     install(FILES ${HEADERS}
             DESTINATION ${HEADERS_INSTALL_PATH}
             PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
 
     #some debug
-    message("registering ${name} library")
+    message("registering ${LIBRARY_NAME} library")
     if(SOURCES)
         get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)
         get_filename_component(library_file_name ${library_location} NAME)
@@ -53,7 +54,7 @@ function(register_library name)
 
         #create variables for sub-library
         list(GET ${HEADERS} 1 header)
-        generate_cmakeConfig(${name} ${LIBRARY_NAME} ${LIB_DESTINATION}/${library_file_name} ${HEADERS})
+        generate_cmakeConfig(${LIBRARY_NAME} ${LIB_DESTINATION}/${library_file_name} ${HEADERS})
     endif(SOURCES)
 
     if(HEADERS)
@@ -65,19 +66,22 @@ function(register_library name)
         registerTest(${LIBRARY_NAME} ${SOURCES} ${TEST_SOURCES})
     endif(TEST_SOURCES)
 
+    #generate export rules
+    generateExportFile(${LIBRARY_NAME})
+
 endfunction(register_library)
 
 
 #generate cmake variables for library
 #Function generates file with library specific cmake variables
-#A variable ${name}_LIBRARIES will be created.
+#A variable ${library}_LIBRARIES will be created.
 #syntax: reguster_library_bin library_name bin1 bin2 bin3 ...
-function(generate_cmakeConfig name library libraryBinary)
+function(generate_cmakeConfig library libraryBinary)
 
     #convert to uppercase
-    string(TOUPPER ${name} UP_NAME)
+    string(TOUPPER ${library} UP_NAME)
 
-    set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${name}Config.cmake")
+    set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${library}Config.cmake")
 
     #add path to library
     file(WRITE  ${output} "\n")
@@ -86,40 +90,31 @@ function(generate_cmakeConfig name library libraryBinary)
 
     install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
-endfunction(generate_variables)
+endfunction(generate_cmakeConfig)
 
 
 #function which creates file to by used by sublibraries to export theirs classes and functions
-function(prepareExportFile filePath)
+function(prepareExportFile filePath libraryName)
 
     file (WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
+    string(TOUPPER ${libraryName} LIBRARY_NAME)
 
     #message(flag test "${MSVC}, ${MSVC_IDE}, ${MSVC60}, ${MSVC70}, ${MSVC71}, ${MSVC80}, ${CMAKE_COMPILER_2005}, ${MSVC90}, ${MSVC10} , ${CMAKE_GENERATOR}, ${WIN32}  ")
 
     if(CMAKE_COMPILER_IS_GNUCXX)
         file(APPEND ${filePath} "
-            #ifndef OPENLIBRARY_INTERNAL_HPP
-            #define OPENLIBRARY_INTERNAL_HPP
-
-            #ifdef OPENLIBRARY_DO_EXPORT
-                #define OL_EXPORTS __attribute__ ((visibility (\"default\")))
+            #ifdef ${libraryName}_EXPORTS
+                #define ${LIBRARY_NAME}_EXPORTS __attribute__ ((visibility (\"default\")))
             #else
-                #define OL_EXPORTS
-            #endif
-
+                #define ${LIBRARY_NAME}_EXPORTS
             #endif
             ")
     else() #Visual Studio
         file(APPEND ${filePath} "
-            #ifndef OPENLIBRARY_INTERNAL_HPP
-            #define OPENLIBRARY_INTERNAL_HPP
-
-            #ifdef OPENLIBRARY_DO_EXPORT
-                #define OL_EXPORTS __declspec( dllexport )
+            #ifdef ${libraryName}
+                #define ${LIBRARY_NAME}_EXPORTS __declspec( dllexport )
             #else
-                #define OL_EXPORTS __declspec( dllimport )
-            #endif
-
+                #define ${LIBRARY_NAME}_EXPORTS __declspec( dllimport )
             #endif
             ")
     endif(CMAKE_COMPILER_IS_GNUCXX)
@@ -204,9 +199,22 @@ endfunction(enableCodeCoverage)
 
 ##### end of usefull switches #####
 
-function(exportSymbols target)
+function(generateExportFile libraryName)
 
-    add_definitions(-DOPENLIBRARY_DO_EXPORT)
+    set(generatedFile ${CMAKE_CURRENT_BINARY_DIR}/${libraryName}_exports.hpp)
+    prepareExportFile(${generatedFile} ${libraryName})
+
+    getHeadersPath(HEADERS_INSTALL_PATH)
+    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
+
+    install(FILES ${generatedFile}
+            DESTINATION ${HEADERS_INSTALL_PATH}
+            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+
+endfunction(generateExportFile libraryName)
+
+
+function(exportSymbols target)
 
     if(CMAKE_COMPILER_IS_GNUCXX)
         addFlags(${target} COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")

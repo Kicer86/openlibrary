@@ -24,10 +24,10 @@
 #include <vector>
 #include <ostream>
 
-#include "../OpenLibraryExports.hpp"
+#include "htmlParser_exports.hpp"
 #include "../utils/data_ptr.hpp"
 
-class OL_EXPORTS HtmlTag
+class HTMLPARSER_EXPORTS HtmlTag
 {
   public:
     HtmlTag(bool closingTag = false);

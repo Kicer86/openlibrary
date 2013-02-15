@@ -4,7 +4,7 @@
 
 #include <QObject>
 
-#include "../OpenLibraryExports.hpp"
+#include "QtExt_exports.hpp"
 
 class QAbstractButton;
 class QLineEdit;
@@ -18,7 +18,7 @@ class QtExtChooseFileDialog: public QObject
 };
 
 
-class OL_EXPORTS QtExtChooseFile: public QObject
+class QTEXT_EXPORTS QtExtChooseFile: public QObject
 {
         Q_OBJECT
 
