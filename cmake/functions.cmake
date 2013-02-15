@@ -2,13 +2,12 @@
 #some functions for generation useful stuff (internal use)
 
 set(OPENLIBRARY_DIR_NAME OpenLibrary)
-set(TESTS_PERFORM_CODE_COVERAGE FALSE CACHE BOOL "If set to TRUE - additional flags are passed to all targets to allow code coverage. Also special make target is added")
 
 #register library
 #a library target with given name will be created
 function(register_library name)
 
-    parseArguments(HEADERS SOURCES ARGUMENTS ${ARGN})
+    parseArguments(HEADERS SOURCES TEST_SOURCES ARGUMENTS ${ARGN})
 
     #c/c++ part
     if(SOURCES)
@@ -18,7 +17,6 @@ function(register_library name)
 
         exportSymbols(${LIBRARY_NAME})
         turnOnAllWarnings(${SOURCES})
-        enableCodeCoverage(${LIBRARY_NAME})
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
@@ -58,6 +56,11 @@ function(register_library name)
     if(HEADERS)
         message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PATH}")
     endif(HEADERS)
+
+    #test
+    if(TEST_SOURCES)
+        registerTest(${LIBRARY_NAME} ${SOURCES} ${TEST_SOURCES})
+    endif(TEST_SOURCES)
 
 endfunction(register_library)
 
@@ -317,22 +320,20 @@ function(registerTest libraryName)
 
             endif(valgrindPath)
 
-            if(TESTS_PERFORM_CODE_COVERAGE)
+            #code coverage
+            get_target_property(projSources ${libraryName} SOURCES)
+            get_target_property(libraryFile ${libraryName} LOCATION)
 
-                get_target_property(projSources ${libraryName} SOURCES)
-                get_target_property(libraryFile ${libraryName} LOCATION)
+            #run code coverage tool
+            add_custom_target(gcov_${targetName}
+                                COMMAND sh ${CMAKE_SOURCE_DIR}/code_cov.sh
+                                        ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
+                                        ${libraryFile}
+                                        ${projSources} ${sources}
+                                )
 
-                #run code coverage tool
-                add_custom_target(gcov_${targetName}
-                                  COMMAND sh ${CMAKE_SOURCE_DIR}/code_cov.sh
-                                          ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
-                                          ${libraryFile}
-                                          ${projSources} ${sources}
-                                 )
+            add_dependencies(test_code_coverage gcov_${targetName})
 
-                add_dependencies(test_code_coverage gcov_${targetName})
-
-            endif(TESTS_PERFORM_CODE_COVERAGE)
 
         endif(UNIX)
 

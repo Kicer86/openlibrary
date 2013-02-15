@@ -20,6 +20,12 @@ set(HTMLPARSER_HEADERS
   htmlparser.hpp
 )
 
+set(TEST_SRS
+    tests/RunAllTests.cpp
+    tests/htmlTag_tests.cpp
+    tests/htmlTagList_tests.cpp
+)
+
 flex_target(htmlFlex html.l ${CMAKE_CURRENT_BINARY_DIR}/html.yy.cc
     COMPILE_FLAGS "-CF --header-file=${CMAKE_CURRENT_BINARY_DIR}/html.yy.hh")
 flex_target(cssFlex css.l ${CMAKE_CURRENT_BINARY_DIR}/css.yy.cc
@@ -30,19 +36,16 @@ add_flex_bison_dependency(htmlFlex htmlBison)
 add_flex_bison_dependency(cssFlex cssBison)
 
 register_library(htmlParser SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_cssFlex_OUTPUTS} ${BISON_htmlBison_OUTPUTS} ${BISON_cssBison_OUTPUTS}
-                            HEADERS ${HTMLPARSER_HEADERS})
+                            HEADERS ${HTMLPARSER_HEADERS}
+                            TEST_SOURCES ${TEST_SRS})
 
 #link htmlParser staticaly with flex
 target_link_libraries(htmlParser ${FLEX_LIBRARIES} common)
+target_link_libraries(htmlParserTests ${FLEX_LIBRARIES} common)
 
 #enable debug info when building debug
 set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
+set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 
 #c++11 is needed here, turn it on
 turnOnCpp11(htmlParser)
-
-
-############################### tests ###############################
-
-registerTest(htmlParser tests/RunAllTests.cpp tests/htmlTag_tests.cpp tests/htmlTagList_tests.cpp)
-target_link_libraries(htmlParserTests htmlParser)
