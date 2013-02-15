@@ -20,6 +20,7 @@ add_subdirectory(src/router router)
 add_subdirectory(src/QtExt QtExt)
 add_subdirectory(src/utils utils)
 add_subdirectory(src/math math)
+add_subdirectory(src/palgorithms)
 
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
