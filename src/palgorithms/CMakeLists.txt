@@ -16,7 +16,7 @@ set(LIB_HEADERS
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES qsort.cpp)
 
 ############################### tests ###############################
 
