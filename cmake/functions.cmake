@@ -20,7 +20,7 @@ function(register_library name)
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
 
-        exportSymbols(${LIBRARY_NAME})
+        hideSymbols(${LIBRARY_NAME})
         turnOnAllWarnings(${SOURCES})
 
         #install files
@@ -92,50 +92,6 @@ function(generate_cmakeConfig library libraryBinary)
     install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 
 endfunction(generate_cmakeConfig)
-
-
-#function which creates file to by used by sublibraries to export theirs classes and functions
-function(prepareExportFile filePath libraryName)
-
-    file (WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
-    string(TOUPPER ${libraryName} LIBRARY_NAME)
-
-    #message(flag test "${MSVC}, ${MSVC_IDE}, ${MSVC60}, ${MSVC70}, ${MSVC71}, ${MSVC80}, ${CMAKE_COMPILER_2005}, ${MSVC90}, ${MSVC10} , ${CMAKE_GENERATOR}, ${WIN32}  ")
-
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        file(APPEND ${filePath} "
-            #ifdef ${libraryName}_EXPORTS
-                #define ${LIBRARY_NAME}_EXPORTS __attribute__ ((visibility (\"default\")))
-            #else
-                #define ${LIBRARY_NAME}_EXPORTS
-            #endif
-            ")
-    else() #Visual Studio
-        file(APPEND ${filePath} "
-            #ifdef ${libraryName}
-                #define ${LIBRARY_NAME}_EXPORTS __declspec( dllexport )
-            #else
-                #define ${LIBRARY_NAME}_EXPORTS __declspec( dllimport )
-            #endif
-            ")
-    endif(CMAKE_COMPILER_IS_GNUCXX)
-
-endfunction(prepareExportFile)
-
-
-function(generateExportFile libraryName)
-
-    set(generatedFile ${CMAKE_CURRENT_BINARY_DIR}/${libraryName}_exports.hpp)
-    prepareExportFile(${generatedFile} ${libraryName})
-
-    getHeadersPath(HEADERS_INSTALL_PATH)
-    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
-
-    install(FILES ${generatedFile}
-            DESTINATION ${HEADERS_INSTALL_PATH}
-            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-
-endfunction(generateExportFile libraryName)
 
 
 function(getHeadersBasePath path)
