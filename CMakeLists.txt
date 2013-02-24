@@ -29,6 +29,7 @@ getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)
 set(OPENLIBRARY_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
 configure_file(cmake/OpenLibrary.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake" @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
 
 #degug code
 # get_cmake_property(vars VARIABLES)
