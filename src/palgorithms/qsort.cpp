@@ -1,7 +1,7 @@
 
 #include <algorithm>
 #include <iostream>
-#include <omp.h>
+//#include <omp.h>
 
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
@@ -28,28 +28,21 @@ void quick_sort1(int *array, size_t size)
 {
     if (size > 1)
     {
-//         std::cout << "partitioning array of size " << size << std::endl;
+        std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = size / 2;
         size_t div = partition(array, 0, size - 1, pivot);
 
+        if (div > 1)
+        {
+//            std::cout << "analyzing sub array of size " << div << " by thread #" << omp_get_thread_num() << std::endl;
+            quick_sort1(array, div);
+        }
 
-            {
-                if (div > 1)
-                {
-//                     std::cout << "analyzing sub array of size " << div << " by thread #" << omp_get_thread_num() << std::endl;
-                    quick_sort1(array, div);
-                }
-            }
-
-
-            {
-                if (div < (size - 2) )
-                {
-//                     std::cout << "analyzing sub array of size " << size - div << " by thread #" << omp_get_thread_num() << std::endl;
-                    quick_sort1(&array[div + 1], size - div - 1);
-                }
-            }
-
+        if (div < (size - 2) )
+        {
+//             std::cout << "analyzing sub array of size " << size - div << " by thread #" << omp_get_thread_num() << std::endl;
+            quick_sort1(&array[div + 1], size - div - 1);
+        }
     }
 }
 
@@ -58,7 +51,7 @@ void quick_sort(int *array, size_t size)
 {
     if (size > 1)
     {
-//         std::cout << "partitioning array of size " << size << std::endl;
+        std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = size / 2;
         size_t div = partition(array, 0, size - 1, pivot);
 
