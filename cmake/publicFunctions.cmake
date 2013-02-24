@@ -170,16 +170,9 @@ function(prepareExportFile filePath libraryName)
 endfunction(prepareExportFile)
 
 
-function(generateExportFile libraryName)
+function(exportSymbols target)
 
-    set(generatedFile ${CMAKE_CURRENT_BINARY_DIR}/${libraryName}_exports.hpp)
-    prepareExportFile(${generatedFile} ${libraryName})
+    set(generatedFile ${CMAKE_CURRENT_BINARY_DIR}/${target}_exports.hpp)
+    prepareExportFile(${generatedFile} ${target})
 
-    getHeadersPath(HEADERS_INSTALL_PATH)
-    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
-
-    install(FILES ${generatedFile}
-            DESTINATION ${HEADERS_INSTALL_PATH}
-            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-
-endfunction(generateExportFile libraryName)
+endfunction(exportSymbols)
