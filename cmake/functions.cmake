@@ -94,6 +94,20 @@ function(generate_cmakeConfig library libraryBinary)
 endfunction(generate_cmakeConfig)
 
 
+function(generateExportFile libraryName)
+
+    exportSymbols(${libraryName})
+
+    getHeadersPath(HEADERS_INSTALL_PATH)
+    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
+
+    install(FILES ${generatedFile}
+            DESTINATION ${HEADERS_INSTALL_PATH}
+            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+
+endfunction(generateExportFile libraryName)
+
+
 function(getHeadersBasePath path)
     set(${path} ${CMAKE_INSTALL_PREFIX}/include/ PARENT_SCOPE)
 endfunction(getHeadersBasePath)
