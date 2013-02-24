@@ -96,10 +96,11 @@ endfunction(generate_cmakeConfig)
 
 function(generateExportFile libraryName)
 
+    getExportFile(${libraryName} generatedFile)
     exportSymbols(${libraryName})
 
     getHeadersPath(HEADERS_INSTALL_PATH)
-    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
+    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${libraryName})
 
     install(FILES ${generatedFile}
             DESTINATION ${HEADERS_INSTALL_PATH}

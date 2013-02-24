@@ -170,9 +170,16 @@ function(prepareExportFile filePath libraryName)
 endfunction(prepareExportFile)
 
 
+function(getExportFile target filePath)
+
+    set(${filePath} ${CMAKE_CURRENT_BINARY_DIR}/${target}_exports.hpp PARENT_SCOPE)
+
+endfunction(getExportFile)
+
+
 function(exportSymbols target)
 
-    set(generatedFile ${CMAKE_CURRENT_BINARY_DIR}/${target}_exports.hpp)
+    getExportFile(${target} generatedFile)
     prepareExportFile(${generatedFile} ${target})
 
 endfunction(exportSymbols)
