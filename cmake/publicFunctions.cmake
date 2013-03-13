@@ -111,6 +111,7 @@ function(parseArguments)
 
                 if(keywords_pattern STREQUAL "")
                     set(keywords_pattern "(${arg})")
+                    set(${arg} "")                           #clean variable
                 else()
                     set(keywords_pattern "${keywords_pattern}|(${arg})")
                 endif(keywords_pattern STREQUAL "")
@@ -119,13 +120,13 @@ function(parseArguments)
 
             else()  #arguments == 1
 
-                if("${arg}" MATCHES "${keywords_pattern}" )
+                if(arg MATCHES "${keywords_pattern}" )
                     set(var ${arg})
                 elseif (NOT "${var}" EQUAL "")
                     set(${var} "${${var}};${arg}")
                 else()
                     message(ERROR "unknown argument: ${arg}" )
-                endif ("${arg}" MATCHES "${keywords_pattern}")
+                endif (arg MATCHES "${keywords_pattern}")
 
             endif(arguments EQUAL 0)
 
