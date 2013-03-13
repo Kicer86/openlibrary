@@ -8,9 +8,11 @@ include(${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake)
 #a library target with given name will be created
 function(register_library name)
 
-    parseArguments(HEADERS SOURCES TEST_SOURCES ARGUMENTS ${ARGN})
+    parseArguments(HEADERS SOURCES LIBRARIES TEST_SOURCES ARGUMENTS ${ARGN})
+    
     #SOURCES: list of all cpp files
     #HEADERS: list of headers which are meant to be published
+    #LIBRARIES: list of libraries to be linked
     #TEST_SOURCES: source files of unit tests
 
     set(LIBRARY_NAME ${name})
@@ -64,7 +66,7 @@ function(register_library name)
 
     #test
     if(TEST_SOURCES)
-        registerTest(${LIBRARY_NAME} ${SOURCES} ${TEST_SOURCES})
+        registerTest(${LIBRARY_NAME} SOURCES ${TEST_SOURCES} ${SOURCES} LIBRARIES ${LIBRARIES})
     endif(TEST_SOURCES)
 
     #generate export rules
@@ -126,18 +128,21 @@ function(registerTest libraryName)
 
     if(CPPUTEST_FOUND)
 
-        set(sources ${ARGN})
+        parseArguments(SOURCES LIBRARIES ARGUMENTS ${ARGN})
+        
         set(targetName ${libraryName}Tests)
 
         message("${libraryName}: adding tests - CppUTest package found")
         include_directories(${CPPUTEST_INCLUDE_DIRS})
-        add_executable(${targetName} ${sources})
+        add_executable(${targetName} ${SOURCES})
 
         target_link_libraries(${targetName} ${CPPUTEST_LIBRARIES})
 
         add_custom_target(perform_${targetName}
                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
                           DEPENDS ${targetName})
+                          
+        target_link_libraries(perform_${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
         enableCodeCoverage(${targetName})
@@ -158,7 +163,7 @@ function(registerTest libraryName)
                                   DEPENDS ${targetName}
                                  )
                 add_dependencies(valgrind_test valgrind_${targetName})
-
+                
             endif(valgrindPath)
 
             #code coverage
@@ -170,7 +175,7 @@ function(registerTest libraryName)
                                 COMMAND sh ${CMAKE_SOURCE_DIR}/code_cov.sh
                                         ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
                                         ${libraryFile}
-                                        ${projSources} ${sources}
+                                        ${projSources} ${SOURCES}
                                 )
 
             add_dependencies(test_code_coverage gcov_${targetName})
