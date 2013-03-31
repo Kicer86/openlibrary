@@ -21,6 +21,7 @@ function(register_library name)
     if(SOURCES)
 
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
+        target_link_libraries(${LIBRARY_NAME} ${LIBRARIES})
 
         hideSymbols(${LIBRARY_NAME})
         turnOnAllWarnings(${SOURCES})
@@ -34,7 +35,11 @@ function(register_library name)
             set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
         endif(WIN32)
 
-        install(TARGETS ${LIBRARY_NAME} ${RUNTIME_TYPE} DESTINATION ${LIB_DESTINATION})
+        install(TARGETS ${LIBRARY_NAME}
+                EXPORT OpenLibrary_${LIBRARY_NAME}Config
+                DESTINATION ${LIB_DESTINATION})
+
+        install(EXPORT OpenLibrary_${LIBRARY_NAME}Config DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary/private)
 
     endif(SOURCES)
 
@@ -51,13 +56,17 @@ function(register_library name)
     #some debug
     message("registering ${LIBRARY_NAME} library")
     if(SOURCES)
-        get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)
+        if(WIN32)
+            get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)   #get .dll.a file
+        else()
+            get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)              #get .so file
+        endif(WIN32)
+
         get_filename_component(library_file_name ${library_location} NAME)
         message("       Sources: ${SOURCES} -> ${library_file_name} -> installation path: ${LIB_DESTINATION}")
 
         #create variables for sub-library
         list(GET ${HEADERS} 1 header)
-        generate_cmakeConfig(${LIBRARY_NAME} ${LIB_DESTINATION}/${library_file_name} ${HEADERS})
     endif(SOURCES)
 
     if(HEADERS)
@@ -73,27 +82,6 @@ function(register_library name)
     generateExportFile(${LIBRARY_NAME})
 
 endfunction(register_library)
-
-
-#generate cmake variables for library
-#Function generates file with library specific cmake variables
-#A variable ${library}_LIBRARIES will be created.
-#syntax: reguster_library_bin library_name bin1 bin2 bin3 ...
-function(generate_cmakeConfig library libraryBinary)
-
-    #convert to uppercase
-    string(TOUPPER ${library} UP_NAME)
-
-    set(output "${PROJECT_BINARY_DIR}/OpenLibrary_${library}Config.cmake")
-
-    #add path to library
-    file(WRITE  ${output} "\n")
-    file(WRITE  ${output} "set(OPENLIBRARY_${UP_NAME}_LIBRARIES ${libraryBinary})\n")
-    file(APPEND ${output} "set(OPENLIBRARY_LIBRARIES \${OPENLIBRARY_LIBRARIES} \${OPENLIBRARY_${UP_NAME}_LIBRARIES})\n")
-
-    install(FILES ${output} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary)
-
-endfunction(generate_cmakeConfig)
 
 
 function(generateExportFile libraryName)
