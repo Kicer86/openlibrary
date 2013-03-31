@@ -6,7 +6,7 @@ set(OPENLIBRARY_CMAKE_INCLUDES @OPENLIBRARY_CMAKE_DIR@/publicFunctions.cmake)
 if(OpenLibrary_FIND_COMPONENTS)
 
     foreach(component ${OpenLibrary_FIND_COMPONENTS})
-        include(@OPENLIBRARY_CMAKE_DIR@/OpenLibrary_${component}Config.cmake)
+        include(@OPENLIBRARY_CMAKE_DIR@/private/OpenLibrary_${component}Config.cmake)
     endforeach(component ${OpenLibrary_FIND_COMPONENTS})
 
 endif(OpenLibrary_FIND_COMPONENTS)
