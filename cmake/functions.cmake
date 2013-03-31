@@ -56,12 +56,8 @@ function(register_library name)
     #some debug
     message("registering ${LIBRARY_NAME} library")
     if(SOURCES)
-        if(WIN32)
-            get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)   #get .dll.a file
-        else()
-            get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)              #get .so file
-        endif(WIN32)
 
+        get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)              #get library file
         get_filename_component(library_file_name ${library_location} NAME)
         message("       Sources: ${SOURCES} -> ${library_file_name} -> installation path: ${LIB_DESTINATION}")
 

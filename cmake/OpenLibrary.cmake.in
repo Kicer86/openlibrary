@@ -1,12 +1,16 @@
 
 set(OPENLIBRARY_INCLUDES  @HEADERS_INSTALL_BASE_PATH@ @HEADERS_INSTALL_PATH@)
-set(OPENLIBRARY_LIBRARIES "")
 set(OPENLIBRARY_CMAKE_INCLUDES @OPENLIBRARY_CMAKE_DIR@/publicFunctions.cmake)
 
 if(OpenLibrary_FIND_COMPONENTS)
 
     foreach(component ${OpenLibrary_FIND_COMPONENTS})
+
         include(@OPENLIBRARY_CMAKE_DIR@/private/OpenLibrary_${component}Config.cmake)
+
+        string(TOUPPER ${component} COMPONENT)
+        set(OPENLIBRARY_${COMPONENT}_LIBRARIES ${component})
+
     endforeach(component ${OpenLibrary_FIND_COMPONENTS})
 
 endif(OpenLibrary_FIND_COMPONENTS)
