@@ -87,6 +87,16 @@ function(hideSymbols target)
 endfunction(hideSymbols)
 
 
+function(addFirstIncludeDir sourceFile includeDir)
+
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        addSourceFlags(${sourceFile} COMPILE_FLAGS "-isystem '${includeDir}'")
+    else() #Visual Studio
+
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+
+endfunction(addFirstIncludeDir)
+
 #usage:
 #parseArguments( list of keywords_pattern 'ARGUMENTS' list of arguments to be parsed )
 #function parses list of arguments to be parsed and sets a proper keyword variables.
