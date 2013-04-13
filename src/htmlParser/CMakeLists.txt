@@ -7,15 +7,15 @@ find_package(BISON REQUIRED)
 include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 set(HTMLPARSER_SRC
-  private/searchlist.cpp
-  private/htmltaglist.cpp
-  private/htmltag.cpp
-  private/htmlparser.cpp
+    private/searchlist.cpp
+    private/htmltaglist.cpp
+    private/htmltag.cpp
+    private/htmlparser.cpp
 )
 
 set(HTMLPARSER_HEADERS
-  htmltag.hpp
-  htmlparser.hpp
+    htmltag.hpp
+    htmlparser.hpp
 )
 
 set(TEST_SRS
@@ -44,7 +44,7 @@ set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 #temporary workaround. Definitions should be passed exactly to 'register_library'
 if(TARGET htmlParserTests)
     set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
-endif(CPPUTEST_FOUND)
+endif(TARGET htmlParserTests)
 
 #c++11 is needed here, turn it on
 turnOnCpp11(htmlParser)
