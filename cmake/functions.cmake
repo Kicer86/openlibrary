@@ -128,8 +128,7 @@ function(registerTest libraryName)
         add_custom_target(perform_${targetName}
                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
                           DEPENDS ${targetName})
-                          
-        message ( "dupa ${LIBRARIES}")
+
         target_link_libraries(${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
