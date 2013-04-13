@@ -111,6 +111,9 @@ function(registerTest libraryName)
     find_package(CppUTest)
 
     if(CPPUTEST_FOUND)
+    
+        unset(SOURCES)
+        unset(LIBRARIES)        
 
         parseArguments(SOURCES LIBRARIES ARGUMENTS ${ARGN})
         
@@ -126,7 +129,8 @@ function(registerTest libraryName)
                           COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
                           DEPENDS ${targetName})
                           
-        target_link_libraries(perform_${targetName} ${LIBRARIES})
+        message ( "dupa ${LIBRARIES}")
+        target_link_libraries(${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
         enableCodeCoverage(${targetName})
