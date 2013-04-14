@@ -155,7 +155,7 @@ endfunction(parseArguments)
 #function which creates file to by used by sublibraries to export theirs classes and functions
 function(prepareExportFile filePath libraryName)
 
-    file (WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
+    file(WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
     string(TOUPPER ${libraryName} LIBRARY_NAME)
 
     #message(flag test "${MSVC}, ${MSVC_IDE}, ${MSVC60}, ${MSVC70}, ${MSVC71}, ${MSVC80}, ${CMAKE_COMPILER_2005}, ${MSVC90}, ${MSVC10} , ${CMAKE_GENERATOR}, ${WIN32}  ")
@@ -183,7 +183,7 @@ endfunction(prepareExportFile)
 
 function(getExportFile target filePath)
 
-    set(${filePath} ${CMAKE_CURRENT_BINARY_DIR}/${target}_exports.hpp PARENT_SCOPE)
+    set(${filePath} ${CMAKE_BINARY_DIR}/${target}_exports.hpp PARENT_SCOPE)  #create all export files ontop of binary dir to make them easy accessible
 
 endfunction(getExportFile)
 
