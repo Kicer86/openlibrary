@@ -81,7 +81,7 @@ void quick_sort(int *array, size_t size)
 
 int main()
 {
-    const int n = 200000000;
+    const int n = 512/*200000000*/;
     int *array = new int[n];
 
     for (int i = 0; i < n; i++)

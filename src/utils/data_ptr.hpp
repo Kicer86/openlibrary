@@ -21,8 +21,8 @@ namespace
 
 
 //data pointer
-//data_ptr can be used for storing class' private data which on class copy should also be copied
-//operator= of data_ptr and copy constructor of data_ptr are calling copy constructor on encapsulated pointer
+//data_ptr can be used for storing class' private data which on class copy should also be copied.
+//operator= of data_ptr and copy constructor of data_ptr are calling copy constructor on encapsulated pointer.
 template<class T>
 class data_ptr
 {
