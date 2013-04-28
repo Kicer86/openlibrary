@@ -131,6 +131,7 @@ function(registerTest libraryName)
 
         target_link_libraries(${targetName} ${LIBRARIES})
 
+        turnOnAllWarnings(${SOURCES})
         turnOnCpp11(${targetName})
         enableCodeCoverage(${targetName})
 
