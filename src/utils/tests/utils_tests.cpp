@@ -3,6 +3,10 @@
 
 #include "../data_ptr.hpp"
 
+//access to private data... ugly but works ;)
+#define private public
+#include "../anonymous_ptr.hpp"
+
 TEST_GROUP(DataPtrTest)
 {
 };
@@ -196,4 +200,165 @@ TEST(DataPtrTest, ShouldHandleAssigningTheSamePtrManyTimes)
     ptr1->m_data = 2;
 
     CHECK_EQUAL(2, test->m_data);
+}
+
+
+/******************************************************************************/
+
+
+TEST_GROUP(AnonymousPtrTest)
+{
+    
+};
+
+TEST(AnonymousPtrTest, ShouldCallDeleterWhenDeleted)
+{
+    bool done = false;
+    
+    struct Deleter
+    {
+        Deleter(bool *done): m_done(done) {}
+        
+        void deinit()
+        {
+            *m_done = true;
+        }
+        
+        bool *m_done;
+    } deleter(&done);
+
+    int d;
+    anonymous_ptr<int, Deleter> *ptr = new anonymous_ptr<int, Deleter>(&d, &deleter);
+    
+    delete ptr;
+
+    CHECK_EQUAL(true, done);
+}
+
+
+TEST(AnonymousPtrTest, ShouldHasRefCountEqualToOneWhenConstructed)
+{    
+    struct Deleter
+    {
+        Deleter() {}        
+        void deinit() {}
+        
+    } deleter;
+
+    int d;
+    anonymous_ptr<int, Deleter> *ptr = new anonymous_ptr<int, Deleter>(&d, &deleter);
+    
+    CHECK_EQUAL(1, ptr->m_data->m_ref_count);
+    
+    delete ptr;
+}
+
+
+TEST(AnonymousPtrTest, ShouldIncreaseRefCountWhenCopied)
+{    
+    struct Deleter
+    {
+        Deleter() {}        
+        void deinit() {}
+        
+    } deleter;
+
+    int d;
+    anonymous_ptr<int, Deleter> ptr1 (&d, &deleter);
+    
+    CHECK_EQUAL(1, ptr1.m_data->m_ref_count);
+    
+    anonymous_ptr<int, Deleter> ptr2(ptr1);
+        
+    CHECK_EQUAL(2, ptr1.m_data->m_ref_count);
+    CHECK_EQUAL(2, ptr2.m_data->m_ref_count);
+    
+    anonymous_ptr<int, Deleter> ptr3(ptr2);
+    
+    CHECK_EQUAL(3, ptr1.m_data->m_ref_count);
+    CHECK_EQUAL(3, ptr2.m_data->m_ref_count);
+    CHECK_EQUAL(3, ptr3.m_data->m_ref_count);
+    
+    anonymous_ptr<int, Deleter> ptr4(ptr1);
+    
+    CHECK_EQUAL(4, ptr1.m_data->m_ref_count);
+    CHECK_EQUAL(4, ptr2.m_data->m_ref_count);
+    CHECK_EQUAL(4, ptr3.m_data->m_ref_count);
+    CHECK_EQUAL(4, ptr4.m_data->m_ref_count);
+}
+
+
+TEST(AnonymousPtrTest, ShouldSharePrivateData)
+{    
+    struct Deleter
+    {
+        Deleter() {}        
+        void deinit() {}
+        
+    } deleter;
+
+    int d;
+    anonymous_ptr<int, Deleter> ptr (&d, &deleter);
+    anonymous_ptr<int, Deleter> ptr2(ptr);
+    anonymous_ptr<int, Deleter> ptr3(ptr2);
+    anonymous_ptr<int, Deleter> ptr4(ptr);
+    
+    CHECK_EQUAL(ptr.m_data, ptr2.m_data);
+    CHECK_EQUAL(ptr.m_data, ptr3.m_data);
+    CHECK_EQUAL(ptr.m_data, ptr4.m_data);
+    
+    CHECK_EQUAL(ptr2.m_data, ptr3.m_data);
+    CHECK_EQUAL(ptr.m_data, ptr4.m_data);
+    
+    CHECK_EQUAL(ptr3.m_data, ptr4.m_data);    
+}
+
+
+TEST(AnonymousPtrTest, ShouldDecreaseRefCountWhenDestroyed)
+{    
+    struct Deleter
+    {
+        Deleter() {}        
+        void deinit() {}
+        
+    } deleter;
+
+    int d;
+    anonymous_ptr<int, Deleter> ptr (&d, &deleter);
+    anonymous_ptr<int, Deleter> *ptr2 = new anonymous_ptr<int, Deleter>(ptr);
+    
+    CHECK_EQUAL(2, ptr.m_data->m_ref_count);
+    
+    delete ptr2;
+    
+    CHECK_EQUAL(1, ptr.m_data->m_ref_count);
+}
+
+
+TEST(AnonymousPtrTest, ShouldDropPreviousDataWhenReseted)
+{    
+    struct Deleter
+    {
+        Deleter(): m_d(false) {}        
+        void deinit() {m_d = true; }
+        
+        bool m_d;
+        
+    } deleter;
+
+    int d;
+    anonymous_ptr<int, Deleter> ptr (&d, &deleter);
+    
+    CHECK_EQUAL(false, deleter.m_d);
+    
+    int e;
+    ptr.reset(&e);
+    
+    CHECK_EQUAL(true, deleter.m_d);
+    
+    deleter.m_d = false;
+    
+    ptr.reset(nullptr);
+    
+    CHECK_EQUAL(true, deleter.m_d);    
 }
