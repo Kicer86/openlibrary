@@ -4,7 +4,7 @@
 
 
 //deleter
-namespace
+namespace OpenLibrary_CopyPtr
 {
     template<class T>
     void deleter(T *ptr)
@@ -30,7 +30,7 @@ class data_ptr
         typedef void (*Deleter)(T *);
         typedef void (*Copier)(T* &, const T *);
 
-        data_ptr(T *ptr = nullptr, Deleter d = &deleter, Copier c = &copier): m_ptr(ptr), m_deleter(d), m_copier(c)
+        data_ptr(T *ptr = nullptr, Deleter d = &OpenLibrary_CopyPtr::deleter, Copier c = &OpenLibrary_CopyPtr::copier): m_ptr(ptr), m_deleter(d), m_copier(c)
         {
 
         }
