@@ -33,6 +33,8 @@ class anonymous_ptr
             m_deleter = other.m_deleter;
             
             m_data->m_ref_count++;
+            
+            return *this;
         }
         
         void reset(T* d)
