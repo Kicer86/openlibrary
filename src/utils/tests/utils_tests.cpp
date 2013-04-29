@@ -220,7 +220,7 @@ TEST(AnonymousPtrTest, ShouldCallDeleterWhenDeleted)
     {
         Deleter(bool *done): m_done(done) {}
         
-        void deinit()
+        void operator()(int *)
         {
             *m_done = true;
         }
@@ -242,7 +242,7 @@ TEST(AnonymousPtrTest, ShouldHasRefCountEqualToOneWhenConstructed)
     struct Deleter
     {
         Deleter() {}        
-        void deinit() {}
+        void operator()(int *) {}
         
     } deleter;
 
@@ -260,7 +260,7 @@ TEST(AnonymousPtrTest, ShouldIncreaseRefCountWhenCopied)
     struct Deleter
     {
         Deleter() {}        
-        void deinit() {}
+        void operator()(int *) {}
         
     } deleter;
 
@@ -294,7 +294,7 @@ TEST(AnonymousPtrTest, ShouldSharePrivateData)
     struct Deleter
     {
         Deleter() {}        
-        void deinit() {}
+        void operator()(int *) {}
         
     } deleter;
 
@@ -320,7 +320,7 @@ TEST(AnonymousPtrTest, ShouldDecreaseRefCountWhenDestroyed)
     struct Deleter
     {
         Deleter() {}        
-        void deinit() {}
+        void operator()(int *) {}
         
     } deleter;
 
@@ -341,7 +341,7 @@ TEST(AnonymousPtrTest, ShouldDropPreviousDataWhenReseted)
     struct Deleter
     {
         Deleter(): m_d(false) {}        
-        void deinit() {m_d = true; }
+        void operator()(int *) {m_d = true; }
         
         bool m_d;
         
@@ -382,7 +382,7 @@ TEST(AnonymousUniqPtrTest, ShouldCallDeleterWhenDeleted)
     {
         Deleter(bool *done): m_done(done) {}
         
-        void deinit()
+        void operator()(int *)
         {
             *m_done = true;
         }
@@ -404,7 +404,7 @@ TEST(AnonymousUniqPtrTest, ShouldCallDeleterWhenResetedToNewValue)
     struct Deleter
     {
         Deleter(): m_d(false) {}        
-        void deinit() {m_d = true; }
+        void operator()(int *) {m_d = true; }
         
         bool m_d;
         
@@ -433,7 +433,7 @@ TEST(AnonymousUniqPtrTest, ShouldNotCallDeleterWhileMoving)
     struct Deleter
     {
         Deleter(): m_d(false) {}        
-        void deinit() {m_d = true; }
+        void operator()(int *) {m_d = true; }
         
         bool m_d;
         
@@ -465,7 +465,7 @@ TEST(AnonymousUniqPtrTest, ShouldAllowToReturnEncapsulatedPointer)
     struct Deleter
     {
         Deleter() {}
-        void deinit() {}                
+        void operator()(int *) {}                
     } deleter;
 
     //initial conditions
