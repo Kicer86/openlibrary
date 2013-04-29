@@ -117,6 +117,11 @@ class anonymous_uniq_ptr
         {
         }
         
+        T* get()
+        {
+            return m_ptr;
+        }
+        
         void reset(T* d)
         {
             release();

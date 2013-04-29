@@ -458,3 +458,24 @@ TEST(AnonymousUniqPtrTest, ShouldNotCallDeleterWhileMoving)
     //deleter should be called
     CHECK_EQUAL(true, deleter.m_d);
 }
+
+
+TEST(AnonymousUniqPtrTest, ShouldAllowToReturnEncapsulatedPointer)
+{
+    struct Deleter
+    {
+        Deleter() {}
+        void deinit() {}                
+    } deleter;
+
+    //initial conditions
+    int d;
+    anonymous_uniq_ptr<int, Deleter> ptr(&d, &deleter);
+    
+    CHECK_EQUAL(&d, ptr.get());
+
+    int e;
+    ptr.reset(&e);
+    
+    CHECK_EQUAL(&e, ptr.get());
+}
