@@ -11,6 +11,7 @@ set(LIB_SOURCES
     )
 
 set(LIB_HEADERS
+    anonymous_ptr.hpp
     data_ptr.hpp
     cpuinfo.hpp
 )
