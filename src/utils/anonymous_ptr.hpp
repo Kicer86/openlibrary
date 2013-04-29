@@ -81,4 +81,66 @@ class anonymous_ptr
         T *m_ptr;
 };
 
+
+
+/*  
+ *  anonymous_uniq_ptr a class which behaves as std::unique_ptr but does not
+ *  require T to be known type
+ */
+
+template<class T, class D>
+class anonymous_uniq_ptr
+{
+    public:
+        explicit anonymous_uniq_ptr(T *d, D *deleter) noexcept: m_deleter(deleter), m_ptr(nullptr)
+        {
+            assign(d);
+        }
+        
+        explicit anonymous_uniq_ptr(const anonymous_uniq_ptr<T, D> &other) = delete;
+        
+        explicit anonymous_uniq_ptr(anonymous_uniq_ptr<T, D> &&other) noexcept: m_deleter(nullptr), m_ptr(nullptr)
+        {
+            assign(other.m_ptr);
+            m_deleter = other.m_deleter;
+            other.m_ptr = 0;
+        }
+        
+        virtual ~anonymous_uniq_ptr()
+        {
+            reset(nullptr);
+        }
+        
+        anonymous_uniq_ptr<T, D>& operator=(const anonymous_uniq_ptr<T, D> &other) = delete;
+        
+        anonymous_uniq_ptr<T, D>& operator=(anonymous_ptr<T, D> &&other)
+        {
+        }
+        
+        void reset(T* d)
+        {
+            release();
+            assign(d);
+        }
+        
+    private:        
+        void release()
+        {
+            //is there anything to release?
+            if (m_ptr)
+            {
+                m_deleter->deinit();            
+                m_ptr = 0;
+            }
+        }
+        
+        void assign(T *d)
+        {
+            m_ptr = d;
+        }
+        
+        D *m_deleter;
+        T *m_ptr;
+};
+
 #endif

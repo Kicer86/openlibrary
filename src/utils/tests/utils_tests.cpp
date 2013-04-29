@@ -1,5 +1,6 @@
 
 #include <CppUTest/TestHarness.h>
+#include <memory>
 
 #include "../data_ptr.hpp"
 
@@ -361,4 +362,99 @@ TEST(AnonymousPtrTest, ShouldDropPreviousDataWhenReseted)
     ptr.reset(nullptr);
     
     CHECK_EQUAL(true, deleter.m_d);    
+}
+
+
+/******************************************************************************/
+
+
+TEST_GROUP(AnonymousUniqPtrTest)
+{
+    
+};
+
+
+TEST(AnonymousUniqPtrTest, ShouldCallDeleterWhenDeleted)
+{
+    bool done = false;
+    
+    struct Deleter
+    {
+        Deleter(bool *done): m_done(done) {}
+        
+        void deinit()
+        {
+            *m_done = true;
+        }
+        
+        bool *m_done;
+    } deleter(&done);
+
+    int d;
+    anonymous_uniq_ptr<int, Deleter> *ptr = new anonymous_uniq_ptr<int, Deleter>(&d, &deleter);
+    
+    delete ptr;
+
+    CHECK_EQUAL(true, done);
+}
+
+
+TEST(AnonymousUniqPtrTest, ShouldCallDeleterWhenResetedToNewValue)
+{
+    struct Deleter
+    {
+        Deleter(): m_d(false) {}        
+        void deinit() {m_d = true; }
+        
+        bool m_d;
+        
+    } deleter;
+
+    int d;
+    anonymous_uniq_ptr<int, Deleter> ptr (&d, &deleter);
+    
+    CHECK_EQUAL(false, deleter.m_d);
+    
+    int e;
+    ptr.reset(&e);
+    
+    CHECK_EQUAL(true, deleter.m_d);
+    
+    deleter.m_d = false;
+    
+    ptr.reset(nullptr);
+    
+    CHECK_EQUAL(true, deleter.m_d);    
+}
+
+
+TEST(AnonymousUniqPtrTest, ShouldNotCallDeleterWhileMoving)
+{
+    struct Deleter
+    {
+        Deleter(): m_d(false) {}        
+        void deinit() {m_d = true; }
+        
+        bool m_d;
+        
+    } deleter;
+
+    //initial conditions
+    int d;
+    anonymous_uniq_ptr<int, Deleter> *ptr = new anonymous_uniq_ptr<int, Deleter>(&d, &deleter);
+    
+    CHECK_EQUAL(false, deleter.m_d);
+    
+    //do move
+    anonymous_uniq_ptr<int, Deleter> *ptr2 = new anonymous_uniq_ptr<int, Deleter>( std::move(*ptr));
+    delete ptr;
+      
+    //deleter should not be called yet - we moved data
+    CHECK_EQUAL(false, deleter.m_d);
+    
+    //final destruction
+    delete ptr2;
+    
+    //deleter should be called
+    CHECK_EQUAL(true, deleter.m_d);
 }
