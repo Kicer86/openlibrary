@@ -59,7 +59,7 @@ class anonymous_ptr
                 //delete data only when last referer destroyed
                 if (m_data->m_ref_count == 0)
                 {                
-                    m_deleter->deinit();
+                    (*m_deleter)(m_ptr);
                     delete m_data, m_data = nullptr;
                     
                     m_ptr = nullptr;
@@ -99,7 +99,7 @@ class anonymous_uniq_ptr
         
         explicit anonymous_uniq_ptr(const anonymous_uniq_ptr<T, D> &other) = delete;
         
-        explicit anonymous_uniq_ptr(anonymous_uniq_ptr<T, D> &&other) noexcept: m_deleter(nullptr), m_ptr(nullptr)
+        anonymous_uniq_ptr(anonymous_uniq_ptr<T, D> &&other) noexcept: m_deleter(nullptr), m_ptr(nullptr)
         {
             assign(other.m_ptr);
             m_deleter = other.m_deleter;
@@ -134,7 +134,7 @@ class anonymous_uniq_ptr
             //is there anything to release?
             if (m_ptr)
             {
-                m_deleter->deinit();            
+                (*m_deleter)(m_ptr);            
                 m_ptr = 0;
             }
         }
