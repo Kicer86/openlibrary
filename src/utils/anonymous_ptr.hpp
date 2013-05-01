@@ -117,7 +117,7 @@ class anonymous_uniq_ptr
         {
         }
         
-        T* get()
+        T* get() const
         {
             return m_ptr;
         }
