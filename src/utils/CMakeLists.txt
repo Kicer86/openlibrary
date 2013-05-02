@@ -4,7 +4,7 @@ set(LIB_NAME utils)
 project( ${LIB_NAME} )
 cmake_minimum_required(VERSION 2.8)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src)
 
 set(LIB_SOURCES
     cpuinfo.cpp
