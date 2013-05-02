@@ -170,7 +170,7 @@ function(prepareExportFile filePath libraryName)
             ")
     else() #Visual Studio
         file(APPEND ${filePath} "
-            #ifdef ${libraryName}
+            #ifdef ${libraryName}_EXPORTS
                 #define ${LIBRARY_NAME}_EXPORTS __declspec( dllexport )
             #else
                 #define ${LIBRARY_NAME}_EXPORTS __declspec( dllimport )
