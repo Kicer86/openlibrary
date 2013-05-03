@@ -57,6 +57,8 @@ function(turnOnAllWarnings)
                 #addSourceFlags(${source} COMPILE_FLAGS "-Werror")
             else() #Visual Studio
 
+		addSourceFlags(${source} COMPILE_FLAGS "/W4")
+
             endif(CMAKE_COMPILER_IS_GNUCXX)
         endif(NOT isGenerated)
 
