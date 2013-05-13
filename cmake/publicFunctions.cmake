@@ -162,23 +162,31 @@ function(prepareExportFile filePath libraryName)
 
     #message(flag test "${MSVC}, ${MSVC_IDE}, ${MSVC60}, ${MSVC70}, ${MSVC71}, ${MSVC80}, ${CMAKE_COMPILER_2005}, ${MSVC90}, ${MSVC10} , ${CMAKE_GENERATOR}, ${WIN32}  ")
 
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        file(APPEND ${filePath} "
-            #ifdef ${libraryName}_EXPORTS
-                #define ${LIBRARY_NAME}_EXPORTS __attribute__ ((visibility (\"default\")))
-            #else
-                #define ${LIBRARY_NAME}_EXPORTS
-            #endif
-            ")
-    else() #Visual Studio
-        file(APPEND ${filePath} "
-            #ifdef ${libraryName}_EXPORTS
-                #define ${LIBRARY_NAME}_EXPORTS __declspec( dllexport )
-            #else
-                #define ${LIBRARY_NAME}_EXPORTS __declspec( dllimport )
-            #endif
-            ")
-    endif(CMAKE_COMPILER_IS_GNUCXX)
+    get_target_property(targetType ${libraryName} TYPE)
+
+    if(targetType STREQUAL "SHARED_LIBRARY")
+
+        if(CMAKE_COMPILER_IS_GNUCXX)
+            file(APPEND ${filePath} "
+                #ifdef ${libraryName}_EXPORTS
+                    #define ${LIBRARY_NAME}_EXPORTS __attribute__ ((visibility (\"default\")))
+                #else
+                    #define ${LIBRARY_NAME}_EXPORTS
+                #endif
+                ")
+        else() #Visual Studio
+            file(APPEND ${filePath} "
+                #ifdef ${libraryName}_EXPORTS
+                    #define ${LIBRARY_NAME}_EXPORTS __declspec( dllexport )
+                #else
+                    #define ${LIBRARY_NAME}_EXPORTS __declspec( dllimport )
+                #endif
+                ")
+        endif(CMAKE_COMPILER_IS_GNUCXX)
+
+    else()
+ 	 file(APPEND ${filePath} "\n#define ${LIBRARY_NAME}_EXPORTS\n")
+    endif(targetType STREQUAL "SHARED_LIBRARY")
 
 endfunction(prepareExportFile)
 
