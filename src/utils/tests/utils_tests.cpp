@@ -203,6 +203,24 @@ TEST(DataPtrTest, ShouldHandleAssigningTheSamePtrManyTimes)
     CHECK_EQUAL(2, test->m_data);
 }
 
+TEST(DataPtrTest, ShouldMoveDataWhileCallingMoveConstructor)
+{
+    struct Test
+    {
+        Test(): m_data(1) {}
+
+        int m_data;
+    };
+
+    Test *test = new Test;
+
+    data_ptr<Test> ptr1(test);
+    data_ptr<Test> ptr2(std::move(ptr1));
+
+    CHECK_EQUAL(0, ptr1.get());
+    CHECK_EQUAL(test, ptr2.get());
+}
+
 
 /******************************************************************************/
 

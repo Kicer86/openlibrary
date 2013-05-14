@@ -39,6 +39,12 @@ class data_ptr
         {
             copy(other);
         }
+        
+        data_ptr(data_ptr<T> &&other): m_ptr(0), m_deleter(nullptr), m_copier(nullptr)
+        {
+            move(other);
+            other.m_ptr = nullptr;
+        }
 
         virtual ~data_ptr()
         {
@@ -84,6 +90,16 @@ class data_ptr
         {
             return *m_ptr;
         }
+        
+        T* get()
+        {
+            return m_ptr;
+        }
+        
+        const T* get() const
+        {
+            return m_ptr;
+        }
 
     private:
         T *m_ptr;
@@ -111,6 +127,15 @@ class data_ptr
             //copy data
             copy(other.m_ptr);
         }
+        
+        
+        //move another copy_ptr
+        void move(const data_ptr<T> &other)
+        {
+            m_deleter = other.m_deleter;
+            m_copier = other.m_copier;
+            m_ptr = other.m_ptr;
+        }
 
         //copy object
         void copy(T *ptr)
@@ -121,7 +146,7 @@ class data_ptr
             //create copy
             getCopier()(m_ptr, ptr);
         }
-
+        
         //delete object
         void del() const
         {
