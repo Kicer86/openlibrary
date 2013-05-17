@@ -12,6 +12,7 @@ set(LIB_SOURCES
 
 set(LIB_HEADERS
     pqsort.hpp
+    ts_queue.hpp
 )
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
