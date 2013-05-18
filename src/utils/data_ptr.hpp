@@ -15,7 +15,10 @@ namespace OpenLibrary_CopyPtr
     template<class T>
     void copier(T* &to_ptr, const T *from_ptr)
     {
-        to_ptr = new T(*from_ptr);
+        if (from_ptr == nullptr)
+            to_ptr = new T;
+        else
+            to_ptr = new T(*from_ptr);
     }
 }
 
