@@ -15,11 +15,11 @@ set(LIB_HEADERS
     ts_queue.hpp
 )
 
+set(TEST_SRC
+    tests/RunAllTests.cpp
+    tests/palgorithm.cpp
+    )
+
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES qsort.cpp)
-
-############################### tests ###############################
-
-#registerTest(${LIB_NAME} tests/RunAllTests.cpp tests/utils_tests.cpp)
-
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
