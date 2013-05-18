@@ -24,7 +24,7 @@
 #include <condition_variable>
 #include <mutex>
 
-//based on: http://en.wikipedia.org/wiki/Producer%E2%80%93consumer_problem
+//based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
 template<class Queue>
 class TS_Queue
 {
@@ -46,12 +46,26 @@ class TS_Queue
             m_is_not_empty.notify_all();
         }
         
-        //reading        
-        PopType pop_front()
+        //reading  
+        template<class T = int>
+        PopType pop_front(const std::chrono::duration<T> waitTime = std::chrono::duration<T>())
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-             
-            m_is_not_empty.wait(lock, [&] { return m_queue.empty() == false; });   //wait for signal if there is no data 
+            
+            auto precond = [&] { return m_queue.empty() == false; };
+            
+            if (waitTime == std::chrono::duration<T>())
+                m_is_not_empty.wait(lock, precond);
+            else
+            {
+                const bool status=
+                    m_is_not_empty.wait_for(lock,
+                                            waitTime,
+                                            precond);   //wait for signal (or timeout) if there is no data 
+                    
+                if (status == false)                    //timeout
+                    throw std::runtime_error("timeout while waiting for data to be popped");
+            }
             
             PopType item = *(m_queue.begin());
             m_queue.pop_front();
