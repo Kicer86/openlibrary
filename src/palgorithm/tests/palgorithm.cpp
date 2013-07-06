@@ -16,8 +16,11 @@ TEST(TS_QueueShould, ReturnAllPassedData)
     queue.push_back(1);
     queue.push_back(2);
     
-    const int i1 = queue.pop_front();
-    const int i2 = queue.pop_front();
+    boost::optional<int> i1 = queue.pop_front();
+    boost::optional<int> i2 = queue.pop_front();
+    
+    CHECK_EQUAL(false, !i1);
+    CHECK_EQUAL(false, !i2);
     
     CHECK_EQUAL(1, i1);
     CHECK_EQUAL(2, i2);
@@ -30,17 +33,9 @@ TEST(TS_QueueShould, DealWithTakingFromEmptyContainer)
     
     queue.push_back(1);
     
-    const int i1 = queue.pop_front();
-    bool throwed = false;
+    boost::optional<int> i1 = queue.pop_front();
     
-    try
-    {
-        queue.pop_front(std::chrono::duration<int>::min());
-    }
-    catch(const std::runtime_error &)
-    {
-        throwed = true;
-    }
-    
-    CHECK_EQUAL(true, throwed);    
+    i1 = queue.pop_front(std::chrono::duration<int>::min());
+        
+    CHECK_EQUAL(true, !i1);
 }
