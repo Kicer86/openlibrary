@@ -90,6 +90,11 @@ class TS_Queue
             return result;
         }
         
+        void break_popping()
+        {
+            m_is_not_empty.notify_all();
+        }
+        
     private:
         Queue m_queue;
         std::condition_variable m_is_not_full;
