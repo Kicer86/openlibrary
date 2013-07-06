@@ -31,7 +31,7 @@ template<class Queue>
 class TS_Queue
 {
     public:
-        TS_Queue(size_t max_size): m_queue(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
+        TS_Queue(size_t max_size): m_queue(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size), m_break(false) {}
         virtual ~TS_Queue() {}
         
         typedef typename Queue::value_type PopType;
@@ -54,7 +54,10 @@ class TS_Queue
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
-            auto precond = [&] { return m_queue.empty() == false; };
+            auto precond = [&] 
+            { 
+                return !(m_break == false && m_queue.empty());
+            };
             
             if (waitTime == std::chrono::duration<T>())
                 m_is_not_empty.wait(lock, precond);
@@ -63,9 +66,10 @@ class TS_Queue
                                         waitTime,
                                         precond);   //wait for signal (or timeout) if there is no data 
             
+            m_break = false;
             boost::optional<PopType> result;
             
-            if ( precond() )
+            if ( m_queue.empty() == false )
             {
                 result = *(m_queue.begin());
                 m_queue.pop_front();
@@ -92,6 +96,7 @@ class TS_Queue
         
         void break_popping()
         {
+            m_break = true;
             m_is_not_empty.notify_all();
         }
         
@@ -101,6 +106,7 @@ class TS_Queue
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_mutex;
         size_t m_size;
+        bool m_break;
 };
 
 #endif
