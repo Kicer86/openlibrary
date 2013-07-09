@@ -11,13 +11,13 @@ add_custom_target(valgrind_test)           #all valgrind tests should attach her
 add_custom_target(test_code_coverage       #all code coeverage tests should attach here
                   DEPENDS test)
 
-add_subdirectory(src/htmlParser htmlParser)
-#add_subdirectory(qextserialport qextserialport)
-add_subdirectory(src/router router)
-add_subdirectory(src/QtExt QtExt)
-add_subdirectory(src/utils utils)
-add_subdirectory(src/math math)
-add_subdirectory(src/palgorithm)
+add_library_path(src/htmlParser htmlParser)
+#add_library_path(qextserialport qextserialport)
+add_library_path(src/router router)
+add_library_path(src/QtExt QtExt)
+add_library_path(src/utils utils)
+add_library_path(src/math math)
+add_library_path(src/palgorithm palgorithm)
 
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 

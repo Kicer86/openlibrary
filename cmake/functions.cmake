@@ -174,3 +174,16 @@ function(registerTest libraryName)
     endif(CPPUTEST_FOUND)
 
 endfunction(registerTest)
+
+
+function(add_library_path path name)
+
+    string(TOUPPER ${name} NAME)
+    set(LIB_VARIABLE OPENLIBRARY_${NAME}_BUILD)
+    set(${LIB_VARIABLE} TRUE CACHE BOOL "Build library ${name}")
+
+    if(${LIB_VARIABLE})
+        add_subdirectory(${path})
+    endif(${LIB_VARIABLE})
+
+endfunction(add_library_path)
