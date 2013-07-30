@@ -87,32 +87,48 @@ double getTime()
     return tv.tv_sec + 0.000001 * tv.tv_usec;
 }
 
+struct RandomArray
+{
+    RandomArray(int n): m_array(0), m_size(n)
+    {
+        m_array = new int[n];
+
+        for (int i = 0; i < n; i++)
+            m_array[i] = n - i;
+    }
+
+    ~RandomArray()
+    {
+        bool ok = true;
+        for (int i = 0; i < m_size - 1; i++)
+        {
+            if (m_array[i] > m_array[i + 1])
+                ok = false;
+        }
+
+        if (ok == false)
+            std::cerr << "blad !!!" << std::endl;
+
+        delete m_array;
+    }
+
+    int *m_array;
+    int m_size;
+};
+
 
 int main()
 {
-    const int n = 200000000;
-    int *array = new int[n];
+    const int n = 50000000;
+    RandomArray a(n);
 
     std::cout << "sorting array of " << n << " elements with " << omp_get_max_threads() << " thread(s)" << std::endl;
 
-    for (int i = 0; i < n; i++)
-        array[i] = n - i;
-
     double start = getTime();
-    quick_sort(array, n);
+    quick_sort(a.m_array, n);
     double end = getTime();
 
     std::cout << "sorting time: " << end-start << " sec" << std::endl;
-
-    bool ok = true;
-    for (int i = 0; i < n - 1; i++)
-    {
-        if (array[i] > array[i + 1])
-            ok = false;
-    }
-
-    if (ok == false)
-        std::cerr << "blad !!!" << std::endl;
 
     return 0;
 }
