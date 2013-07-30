@@ -1,7 +1,8 @@
 
 #include <algorithm>
 #include <iostream>
-//#include <omp.h>
+#include <omp.h>
+#include <sys/time.h>
 
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
@@ -28,7 +29,7 @@ void quick_sort1(int *array, size_t size)
 {
     if (size > 1)
     {
-        std::cout << "partitioning array of size " << size << std::endl;
+        //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = size / 2;
         size_t div = partition(array, 0, size - 1, pivot);
 
@@ -51,7 +52,7 @@ void quick_sort(int *array, size_t size)
 {
     if (size > 1)
     {
-        std::cout << "partitioning array of size " << size << std::endl;
+        //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = size / 2;
         size_t div = partition(array, 0, size - 1, pivot);
 
@@ -79,15 +80,29 @@ void quick_sort(int *array, size_t size)
 }
 
 
+double getTime()
+{
+    timeval tv;
+    gettimeofday (&tv, NULL);
+    return tv.tv_sec + 0.000001 * tv.tv_usec;
+}
+
+
 int main()
 {
-    const int n = 512/*200000000*/;
+    const int n = 200000000;
     int *array = new int[n];
+
+    std::cout << "sorting array of " << n << " elements with " << omp_get_max_threads() << " thread(s)" << std::endl;
 
     for (int i = 0; i < n; i++)
         array[i] = n - i;
 
+    double start = getTime();
     quick_sort(array, n);
+    double end = getTime();
+
+    std::cout << "sorting time: " << end-start << " sec" << std::endl;
 
     bool ok = true;
     for (int i = 0; i < n - 1; i++)
@@ -96,9 +111,6 @@ int main()
             ok = false;
     }
 
-//     for (int i = 0; i < n; i++)
-//         std::cout << array[i] << std::endl;
-//
     if (ok == false)
         std::cerr << "blad !!!" << std::endl;
 
