@@ -4,7 +4,9 @@ set(LIB_NAME palgorithm)
 project( ${LIB_NAME} )
 cmake_minimum_required(VERSION 2.8)
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
+find_package(Boost REQUIRED)
+
+include_directories(${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
 
 set(LIB_SOURCES
 
