@@ -31,3 +31,4 @@ register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_
 addSourceFlags(qsort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
 add_executable(qsort_tester qsort.cpp)
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
+turnOnCpp11(qsort_tester)

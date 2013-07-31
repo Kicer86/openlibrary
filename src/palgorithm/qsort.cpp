@@ -1,6 +1,8 @@
 
 #include <algorithm>
 #include <iostream>
+#include <initializer_list>
+
 #include <omp.h>
 #include <sys/time.h>
 
@@ -87,13 +89,19 @@ void quick_sort(int *array, size_t size)
 
 void bubble_sort(int array[], size_t size)
 {
-    for (int i = 0; i < size; i++)
+    int touchedIndex = size - 1;
+
+    for (int i = 0; touchedIndex > 0; i++)
     {
-        for (int j = 0; j < size - i - 1; j++)
+        int tmpTouchedIndex = 0;
+        for (int j = 0; j < touchedIndex; j++)
             if (array[j] > array[j + 1])
             {
-                std::swap(array[j], array[j+1]);
+                std::swap(array[j], array[j + 1]);
+                tmpTouchedIndex = j;
             }
+
+        touchedIndex = tmpTouchedIndex;
     }
 }
 
@@ -113,6 +121,16 @@ struct RandomArray
 
         for (int i = 0; i < n; i++)
             m_array[i] = n - i;
+    }
+
+    RandomArray(const std::initializer_list<int> &i_list)
+    {
+        m_size = i_list.size();
+        m_array = new int[m_size];
+
+        auto p = i_list.begin();
+        for (int i = 0; i < m_size; i++, ++p)
+            m_array[i] = *p;
     }
 
     ~RandomArray()
@@ -142,7 +160,7 @@ void std_sort(int *array, size_t size)
 
 void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
 {
-    const int n = 5; //0000000;
+    const int n = 50000000;
     RandomArray a(n);
 
     std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm" << std::endl;
@@ -157,8 +175,8 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    //test_algorithm(quick_sort, "pquick sort");
-    //test_algorithm(std_sort, "std::sort");
+    test_algorithm(quick_sort, "pquick sort");
+    test_algorithm(std_sort, "std::sort");
     test_algorithm(bubble_sort, "bubble sort");
     return 0;
 }
