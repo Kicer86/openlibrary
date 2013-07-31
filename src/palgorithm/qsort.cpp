@@ -85,6 +85,18 @@ void quick_sort(int *array, size_t size)
 
 /*****************************************************************************/
 
+void bubble_sort(int array[], size_t size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size - i - 1; j++)
+            if (array[j] > array[j + 1])
+            {
+                std::swap(array[j], array[j+1]);
+            }
+    }
+}
+
 
 double getTime()
 {
@@ -130,7 +142,7 @@ void std_sort(int *array, size_t size)
 
 void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
 {
-    const int n = 50000000;
+    const int n = 5; //0000000;
     RandomArray a(n);
 
     std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm" << std::endl;
@@ -145,7 +157,8 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    test_algorithm(quick_sort, "pquick sort");
-    test_algorithm(std_sort, "std::sort");
+    //test_algorithm(quick_sort, "pquick sort");
+    //test_algorithm(std_sort, "std::sort");
+    test_algorithm(bubble_sort, "bubble sort");
     return 0;
 }
