@@ -115,12 +115,37 @@ double getTime()
 
 struct RandomArray
 {
-    RandomArray(int n): m_array(0), m_size(n)
+    enum Mode
+    {
+        Reverse,
+        Random1,
+        Random2,
+        Random3,
+        Max
+    };
+
+    RandomArray(int n, Mode mode): m_array(0), m_size(n)
     {
         m_array = new int[n];
 
-        for (int i = 0; i < n; i++)
-            m_array[i] = n - i;
+        switch(mode)
+        {
+            case Reverse:
+                for (int i = 0; i < n; i++)
+                    m_array[i] = n - i;
+                break;
+
+            case Random1:\
+            case Random2:
+            case Random3:
+                srand(mode * 123);
+                for (int i = 0; i < n; i++)
+                    m_array[i] = rand();
+                break;
+
+            case Max:
+                break;
+        }
     }
 
     RandomArray(const std::initializer_list<int> &i_list)
@@ -161,15 +186,19 @@ void std_sort(int *array, size_t size)
 void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
 {
     const int n = 50000000;
-    RandomArray a(n);
 
-    std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm" << std::endl;
+    for (int m = 0; m < RandomArray::Max; m++)
+    {
+        RandomArray a(n, (RandomArray::Mode)m);
 
-    double start = getTime();
-    sorting_function(a.m_array, n);
-    double end = getTime();
+        std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm. Mode: " << m << std::endl;
 
-    std::cout << "sorting time: " << end-start << " sec" << std::endl;
+        double start = getTime();
+        sorting_function(a.m_array, n);
+        double end = getTime();
+
+        std::cout << "sorting time: " << end-start << " sec" << std::endl;
+    }
 }
 
 
@@ -177,6 +206,6 @@ int main()
 {
     test_algorithm(quick_sort, "pquick sort");
     test_algorithm(std_sort, "std::sort");
-    test_algorithm(bubble_sort, "bubble sort");
+    //test_algorithm(bubble_sort, "bubble sort");
     return 0;
 }
