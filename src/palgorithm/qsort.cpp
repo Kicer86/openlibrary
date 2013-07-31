@@ -4,6 +4,10 @@
 #include <omp.h>
 #include <sys/time.h>
 
+/*****************************************************************************/
+/*                                  PQSORT                                   */
+/*****************************************************************************/
+
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
 //   number of elements in subarray = right-left+1
@@ -78,6 +82,8 @@ void quick_sort(int *array, size_t size)
         }
     }
 }
+
+/*****************************************************************************/
 
 
 double getTime()
