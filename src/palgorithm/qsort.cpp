@@ -116,19 +116,30 @@ struct RandomArray
     int m_size;
 };
 
+void std_sort(int *array, size_t size)
+{
+    std::sort(&array[0], &array[size - 1]);
+}
 
-int main()
+
+void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
 {
     const int n = 50000000;
     RandomArray a(n);
 
-    std::cout << "sorting array of " << n << " elements with " << omp_get_max_threads() << " thread(s)" << std::endl;
+    std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm" << std::endl;
 
     double start = getTime();
-    quick_sort(a.m_array, n);
+    sorting_function(a.m_array, n);
     double end = getTime();
 
     std::cout << "sorting time: " << end-start << " sec" << std::endl;
+}
 
+
+int main()
+{
+    test_algorithm(quick_sort, "pquick sort");
+    test_algorithm(std_sort, "std::sort");
     return 0;
 }
