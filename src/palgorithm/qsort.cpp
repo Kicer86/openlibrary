@@ -118,7 +118,7 @@ struct RandomArray
 
 void std_sort(int *array, size_t size)
 {
-    std::sort(&array[0], &array[size - 1]);
+    std::sort(&array[0], &array[size]);
 }
 
 
