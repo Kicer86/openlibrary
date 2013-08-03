@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <initializer_list>
-#include <array>
+#include <vector>
 
 #include <omp.h>
 #include <sys/time.h>
@@ -64,7 +64,7 @@ size_t pivotIdx(int *array, size_t size)
             int minPos = i;
             int minVal = array[i];
 
-            for (int j = i + 1; j < size; j++)
+            for (size_t j = i + 1; j < size; j++)
             {
                 if (array[j] < minVal)
                 {
@@ -102,12 +102,27 @@ size_t pivotIdx(int *array, size_t size)
 }
 
 
+size_t pivotIdx2(int *array, size_t size)
+{
+    std::vector<int> stat;
+
+    const int step = size / 100;
+
+    for (int i = 0; i < 100; i++)
+        stat.push_back(array[step * i]);
+
+    const size_t pivot = pivotIdx(stat.data(), 100);
+
+    return pivot * step;
+}
+
+
 void quick_sort1(int *array, size_t size)
 {
     if (size > 1)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
-        const size_t pivot = pivotIdx(array, size);
+        const size_t pivot = pivotIdx2(array, size);
         size_t div = partition(array, 0, size - 1, pivot);
 
         if (div > 1)
@@ -130,7 +145,7 @@ void quick_sort(int *array, size_t size)
     if (size > 1)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
-        const size_t pivot = pivotIdx(array, size);
+        const size_t pivot = pivotIdx2(array, size);
         size_t div = partition(array, 0, size - 1, pivot);
 
         #pragma omp parallel sections default(shared)
