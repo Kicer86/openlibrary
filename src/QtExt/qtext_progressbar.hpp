@@ -3,7 +3,7 @@
 #define QEXPROGRESSBAR_HPP
 
 
-//class which extends QProgrssBar by posibility of storing and restoring it's content
+//class which extends QProgresBar by posibility of storing and restoring it's content
 
 #include <QProgressBar>
 
