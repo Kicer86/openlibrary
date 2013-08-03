@@ -64,7 +64,7 @@ size_t pivotIdx(int *array, size_t size)
             int minPos = i;
             int minVal = array[i];
 
-            for (int j = i + 1; j < 5; j++)
+            for (int j = i + 1; j < size; j++)
             {
                 if (array[j] < minVal)
                 {
@@ -275,8 +275,8 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    int table[11] = {1,3,2,9,8,0,4,7,5,6,10};
-    const int result = pivotIdx(table, 11);
+    int table[14] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13};
+    const int result = pivotIdx(table, 14);
 
     test_algorithm(quick_sort, "pquick sort");
     test_algorithm(std_sort, "std::sort");
