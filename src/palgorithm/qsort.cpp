@@ -1,7 +1,10 @@
 
+#include <assert.h>
+
 #include <algorithm>
 #include <iostream>
 #include <initializer_list>
+#include <array>
 
 #include <omp.h>
 #include <sys/time.h>
@@ -31,12 +34,80 @@ size_t partition(int *array, size_t left, size_t right, size_t pivotIndex)
 }
 
 
+size_t pivotIdx(int *array, size_t size)
+{
+    assert(size > 0);
+
+    if (size == 1 || size == 2)
+        return 0;
+
+    if (size == 3)
+    {
+        //3 values: a, b and c
+        if (array[0] > array[1])            //a > b?
+            std::swap(array[0], array[1]);
+
+        if (array[0] > array[2])
+            std::swap(array[0], array[2]);
+
+        if (array[1] > array[2])
+            std::swap(array[1], array[2]);
+
+        return 1;
+    }
+
+    if (size <= 5)
+    {
+        //find 3rd element
+        for (int i = 0; i < 3; i++)
+        {
+            int minPos = i;
+            int minVal = array[i];
+
+            for (int j = i + 1; j < 5; j++)
+            {
+                if (array[j] < minVal)
+                {
+                    minVal = array[j];
+                    minPos = j;
+                }
+            }
+
+            std::swap(array[i], array[minPos]);
+        }
+
+        return 2;
+    }
+
+    std::vector<int> medians( ceil(size / 5.0) );
+    std::vector<size_t> mediansOrigins(ceil(size / 5.0));
+
+    for (size_t i = 0; i < size; i+=5)
+    {
+        const int subarray_size = size - i < 5? size -i : 5;  //5 or 1..4 for last part (if original size % 5 != 0)
+        int *subarray = &array[i];
+        size_t subarrayPivotIdx = pivotIdx(subarray, subarray_size);
+        medians[i / 5] = subarray[subarrayPivotIdx];
+
+        assert(subarrayPivotIdx + i >= 0);
+        assert(subarrayPivotIdx + i < size);
+        mediansOrigins[i / 5] = subarrayPivotIdx + i;
+    }
+
+    const size_t resultIdx = pivotIdx(medians.data(), medians.size());
+
+    assert(resultIdx < mediansOrigins.size());
+
+    return mediansOrigins[resultIdx];
+}
+
+
 void quick_sort1(int *array, size_t size)
 {
     if (size > 1)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
-        const size_t pivot = size / 2;
+        const size_t pivot = pivotIdx(array, size);
         size_t div = partition(array, 0, size - 1, pivot);
 
         if (div > 1)
@@ -59,7 +130,7 @@ void quick_sort(int *array, size_t size)
     if (size > 1)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
-        const size_t pivot = size / 2;
+        const size_t pivot = pivotIdx(array, size);
         size_t div = partition(array, 0, size - 1, pivot);
 
         #pragma omp parallel sections default(shared)
@@ -204,6 +275,9 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
+    int table[11] = {1,3,2,9,8,0,4,7,5,6,10};
+    const int result = pivotIdx(table, 11);
+
     test_algorithm(quick_sort, "pquick sort");
     test_algorithm(std_sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
