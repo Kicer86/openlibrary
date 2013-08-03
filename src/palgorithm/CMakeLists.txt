@@ -5,7 +5,7 @@ project( ${LIB_NAME} )
 cmake_minimum_required(VERSION 2.8)
 
 find_package(Boost REQUIRED)
-find_package(openmp)
+find_package(OpenMP)
 
 include_directories(${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
 
