@@ -41,6 +41,8 @@ endif()
 register_library(${LIB_NAME} SOURCES ${LIB_SRC} ${LIB_MOCFILES} HEADERS ${LIB_HEADERS})
 turnOnCpp11(${LIB_NAME})
 
+message("${LIB_NAME}: using Qt5: ${Qt5}")    
+
 if(Qt5)
 	qt5_use_modules(${LIB_NAME} Widgets)
 else()
