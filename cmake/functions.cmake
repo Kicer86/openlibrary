@@ -59,15 +59,15 @@ function(register_library name)
 
         get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)              #get library file
         get_filename_component(library_file_name ${library_location} NAME)
-        message("       Sources: ${SOURCES} -> ${library_file_name} -> installation path: ${LIB_DESTINATION}")
+        #message("       Sources: ${SOURCES} -> ${library_file_name} -> installation path: ${LIB_DESTINATION}")
 
         #create variables for sub-library
         list(GET ${HEADERS} 1 header)
     endif(SOURCES)
 
-    if(HEADERS)
-        message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PATH}")
-    endif(HEADERS)
+    #if(HEADERS)
+    #    message("       Headers: ${HEADERS} installatation path: ${HEADERS_INSTALL_PATH}")
+    #endif(HEADERS)
 
     #test
     if(TEST_SOURCES)
