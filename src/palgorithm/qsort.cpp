@@ -11,29 +11,57 @@
 #include <sys/time.h>
 
 
-template<class T, size_t items>
-void fast_sort(T *array)
+template<class T>
+void sort_swap(T *array, size_t i1, size_t i2)
 {
-    static_assert(items < 4, "bad number of items");
-    
+    if (array[i1] > array[i2])
+        std::swap(array[i1], array[i2]);
+}
+
+
+// sorting network:
+// http://pages.ripco.net/~jgamble/nw.html
+// http://en.wikipedia.org/wiki/Sorting_network
+
+template<class T>
+void fast_sort(T *array, size_t items)
+{        
     if (items == 0 || items == 1)
     {}
     else if (items == 2)
     {
-        if (array[0] > array[1])
-            std::swap(array[0], array[1]);
+        sort_swap<T>(array, 0, 1);
     }
     else if (items == 3)
     {
-        if (array[0] > array[1])
-            std::swap(array[0], array[1]);
-
-        if (array[0] > array[2])
-            std::swap(array[0], array[2]);
-
-        if (array[1] > array[2])
-            std::swap(array[1], array[2]);
+        sort_swap<T>(array, 1, 2);        
+        sort_swap<T>(array, 0, 2);
+        sort_swap<T>(array, 0, 1);
     }
+    else if (items == 4)
+    {        
+        sort_swap<T>(array, 0, 2);        
+        sort_swap<T>(array, 1, 3);
+        sort_swap<T>(array, 0, 1);
+        sort_swap<T>(array, 2, 3);
+        sort_swap<T>(array, 1, 2);
+    }
+    else if (items == 5)
+    {
+        sort_swap<T>(array, 0, 1);        
+        sort_swap<T>(array, 3, 4);
+        sort_swap<T>(array, 2, 4);
+        sort_swap<T>(array, 2, 3);
+        sort_swap<T>(array, 1, 4);
+        sort_swap<T>(array, 0, 3);        
+        sort_swap<T>(array, 0, 2);
+        sort_swap<T>(array, 1, 3);
+        sort_swap<T>(array, 1, 2);
+    }
+    else
+        assert(!"bad range");
+    
+    assert(items == 0 || std::is_sorted(&array[0], &array[items]));
 }
 
 
@@ -119,7 +147,7 @@ size_t pivotIdx2(int *array, size_t size)
 void quick_sort1(int *array, size_t size) __attribute__((noinline));
 void quick_sort1(int *array, size_t size)
 {
-    if (size > 3)
+    if (size > 5)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -137,16 +165,14 @@ void quick_sort1(int *array, size_t size)
             quick_sort1(&array[div + 1], size - div - 1);
         }
     }
-    else if (size == 3)
-        fast_sort<int, 3>(array);
-    else if (size == 2)
-        fast_sort<int, 2>(array);
+    else 
+        fast_sort<int>(array, size);
 }
 
 void quick_sort(int *array, size_t size) __attribute__((noinline));
 void quick_sort(int *array, size_t size)
 {
-    if (size > 3)
+    if (size > 5)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -173,11 +199,8 @@ void quick_sort(int *array, size_t size)
             }
         }
     }
-    else if (size == 3)
-        fast_sort<int, 3>(array);
-    else if (size == 2)
-        fast_sort<int, 2>(array);
-
+    else
+        fast_sort<int>(array, size);
 }
 
 
