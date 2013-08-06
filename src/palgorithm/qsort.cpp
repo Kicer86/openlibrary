@@ -5,9 +5,37 @@
 #include <iostream>
 #include <initializer_list>
 #include <vector>
+#include <set>
 
 #include <omp.h>
 #include <sys/time.h>
+
+
+template<class T, size_t items>
+void fast_sort(T *array)
+{
+    static_assert(items < 4, "bad number of items");
+    
+    if (items == 0 || items == 1)
+    {}
+    else if (items == 2)
+    {
+        if (array[0] > array[1])
+            std::swap(array[0], array[1]);
+    }
+    else if (items == 3)
+    {
+        if (array[0] > array[1])
+            std::swap(array[0], array[1]);
+
+        if (array[0] > array[2])
+            std::swap(array[0], array[2]);
+
+        if (array[1] > array[2])
+            std::swap(array[1], array[2]);
+    }
+}
+
 
 /*****************************************************************************/
 /*                                  PQSORT                                   */
@@ -16,8 +44,9 @@
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
 //   number of elements in subarray = right-left+1
+size_t partition(int *array, size_t left, size_t right, size_t pivotIndex) __attribute__((noinline));
 size_t partition(int *array, size_t left, size_t right, size_t pivotIndex)
-{
+{    
     int pivotValue = array[pivotIndex];
     std::swap(array[pivotIndex], array[right]);  // Move pivot to end
     size_t storeIndex = left;
@@ -34,92 +63,63 @@ size_t partition(int *array, size_t left, size_t right, size_t pivotIndex)
 }
 
 
-size_t pivotIdx(int *array, size_t size)
-{
-    assert(size > 0);
-
-    if (size == 1 || size == 2)
-        return 0;
-
-    if (size == 3)
-    {
-        //3 values: a, b and c
-        if (array[0] > array[1])            //a > b?
-            std::swap(array[0], array[1]);
-
-        if (array[0] > array[2])
-            std::swap(array[0], array[2]);
-
-        if (array[1] > array[2])
-            std::swap(array[1], array[2]);
-
-        return 1;
-    }
-
-    if (size <= 5)
-    {
-        //find 3rd element
-        for (int i = 0; i < 3; i++)
-        {
-            int minPos = i;
-            int minVal = array[i];
-
-            for (size_t j = i + 1; j < size; j++)
-            {
-                if (array[j] < minVal)
-                {
-                    minVal = array[j];
-                    minPos = j;
-                }
-            }
-
-            std::swap(array[i], array[minPos]);
-        }
-
-        return 2;
-    }
-
-    std::vector<int> medians( ceil(size / 5.0) );
-    std::vector<size_t> mediansOrigins(ceil(size / 5.0));
-
-    for (size_t i = 0; i < size; i+=5)
-    {
-        const int subarray_size = size - i < 5? size -i : 5;  //5 or 1..4 for last part (if original size % 5 != 0)
-        int *subarray = &array[i];
-        size_t subarrayPivotIdx = pivotIdx(subarray, subarray_size);
-        medians[i / 5] = subarray[subarrayPivotIdx];
-
-        assert(subarrayPivotIdx + i >= 0);
-        assert(subarrayPivotIdx + i < size);
-        mediansOrigins[i / 5] = subarrayPivotIdx + i;
-    }
-
-    const size_t resultIdx = pivotIdx(medians.data(), medians.size());
-
-    assert(resultIdx < mediansOrigins.size());
-
-    return mediansOrigins[resultIdx];
-}
-
-
+size_t pivotIdx2(int *array, size_t size) __attribute__((noinline));
 size_t pivotIdx2(int *array, size_t size)
 {
-    std::vector<int> stat;
+    struct Pair
+    {
+        Pair(): first(0), second(0) {}
+        Pair(int f, int s): first(f), second(s) {}
+        
+        int first;
+        int second;
+        
+        bool operator<(const Pair &other) const
+        {
+            return first < other.first;
+        }
+        
+        bool operator>(const Pair &other) const
+        {
+            return first > other.first;
+        }
+        
+        Pair& operator=(const Pair &other)
+        {
+            first = other.first;
+            second= other.second;
+            
+            return *this;
+        }
+    };
+        
+    srand(size);
 
-    const int step = size / 100;
+    Pair data[3];
+    
+    for (int i = 0; i < 3; i++)
+    {
+        const int idx = rand() % size;
+        data[i] = Pair(array[idx], idx);
+    }
 
-    for (int i = 0; i < 100; i++)
-        stat.push_back(array[step * i]);
-
-    const size_t pivot = pivotIdx(stat.data(), 100);
-
-    return pivot * step;
+    size_t result;
+    
+    if (data[0].first < data[1].first && data[1].first < data[2].first)
+        result = data[1].second;
+    else if (data[1].first < data[2].first && data[2].first < data[0].first)
+        result = data[2].second;
+    else
+        result = data[0].second;
+    
+    return result;
+        
 }
 
-
+void quick_sort1(int *array, size_t size) __attribute__((noinline));
 void quick_sort1(int *array, size_t size)
 {
-    if (size > 1)
+    if (size > 3)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -137,12 +137,16 @@ void quick_sort1(int *array, size_t size)
             quick_sort1(&array[div + 1], size - div - 1);
         }
     }
+    else if (size == 3)
+        fast_sort<int, 3>(array);
+    else if (size == 2)
+        fast_sort<int, 2>(array);
 }
 
-
+void quick_sort(int *array, size_t size) __attribute__((noinline));
 void quick_sort(int *array, size_t size)
 {
-    if (size > 1)
+    if (size > 3)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -169,9 +173,63 @@ void quick_sort(int *array, size_t size)
             }
         }
     }
+    else if (size == 3)
+        fast_sort<int, 3>(array);
+    else if (size == 2)
+        fast_sort<int, 2>(array);
+
 }
 
+
+void merge_sort(int *array, size_t size) __attribute__((noinline));
+void merge_sort(int *array, size_t size)
+{
+    assert(size > 0);
+    if (size == 2)
+    {
+        if (array[0] > array[1])
+            std::swap(array[0], array[1]);
+    }
+    else if (size > 2)
+    {
+        const int middle = size/2;
+        
+        const size_t size_1 = middle;
+        const size_t size_2 = size - middle;
+        int *array_1 = array;
+        int *array_2 = array + middle;
+        
+        //divide into two parts
+        
+        merge_sort(array, middle);
+        merge_sort(array + middle, size - middle);
+        
+        //merge them
+        size_t idx_1 = 0, idx_2 = 0;
+        size_t inserter = 0;
+        
+        int *tmp = new int[size];
+
+        while (idx_1 < size_1 || idx_2 < size_2)
+        {
+            bool use1 = idx_2 == size_2 || (idx_1 < size_1 && array_1[idx_1] < array_2[idx_2]);
+                        
+            if (use1)
+                tmp[inserter++] = array_1[idx_1++];
+            else
+                tmp[inserter++] = array_2[idx_2++];
+        }
+        
+        for (size_t i = 0; i < size; i++)
+            array[i] = tmp[i];
+        
+        delete [] tmp;
+    }    
+}
+
+
 /*****************************************************************************/
+
 
 void bubble_sort(int array[], size_t size)
 {
@@ -221,7 +279,7 @@ struct RandomArray
                     m_array[i] = n - i;
                 break;
 
-            case Random1:\
+            case Random1:
             case Random2:
             case Random3:
                 srand(mode * 123);
@@ -271,9 +329,9 @@ void std_sort(int *array, size_t size)
 
 void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
 {
-    const int n = 50000000;
+    const int n = 2000000;
 
-    for (int m = 0; m < RandomArray::Max; m++)
+    for (int m = 0; m < 1 /*RandomArray::Max*/; m++)
     {
         RandomArray a(n, (RandomArray::Mode)m);
 
@@ -290,11 +348,14 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    int table[14] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13};
-    const int result = pivotIdx(table, 14);
+    //int table[14] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13};
+    //const int result = pivotIdx2(table, 14);
+    //int table[9] = {1, 3, 5, 7, 9, 2, 4, 6, 8};
+    //merge_sort(table, 9);
 
     test_algorithm(quick_sort, "pquick sort");
-    test_algorithm(std_sort, "std::sort");
+    //test_algorithm(std_sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
+    //test_algorithm(merge_sort, "merge sort");
     return 0;
 }
