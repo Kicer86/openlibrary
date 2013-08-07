@@ -548,6 +548,109 @@ void fast_sort(T *array, size_t items)
         sort_swap<T>(array, 6, 7);
         sort_swap<T>(array, 8, 9);
     }
+    else if (items == 17)
+    {
+        sort_swap<T>(array, 0, 1);
+        sort_swap<T>(array, 2, 3);
+        sort_swap<T>(array, 4, 5);
+        sort_swap<T>(array, 6, 7);
+        sort_swap<T>(array, 8, 9);
+        sort_swap<T>(array, 10, 11);
+        sort_swap<T>(array, 12, 13);
+        sort_swap<T>(array, 15, 16);
+
+        sort_swap<T>(array, 0, 2);
+        sort_swap<T>(array, 1, 3);
+        sort_swap<T>(array, 4, 6);
+        sort_swap<T>(array, 5, 7);
+        sort_swap<T>(array, 8, 10);
+        sort_swap<T>(array, 9, 11);
+        sort_swap<T>(array, 14, 16);
+
+        sort_swap<T>(array, 1, 2);
+        sort_swap<T>(array, 5, 6);
+        sort_swap<T>(array, 0, 4);
+        sort_swap<T>(array, 3, 7);
+        sort_swap<T>(array, 9, 10);
+        sort_swap<T>(array, 14, 15);
+        sort_swap<T>(array, 13, 16);
+
+        sort_swap<T>(array, 1, 5);
+        sort_swap<T>(array, 2, 6);
+        sort_swap<T>(array, 12, 15);
+        sort_swap<T>(array, 11, 16);
+
+        sort_swap<T>(array, 1, 4);
+        sort_swap<T>(array, 3, 6);
+        sort_swap<T>(array, 12, 14);
+        sort_swap<T>(array, 13, 15);
+        sort_swap<T>(array, 7, 16);
+
+        sort_swap<T>(array, 2, 4);
+        sort_swap<T>(array, 3, 5);
+        sort_swap<T>(array, 13, 14);
+        sort_swap<T>(array, 10, 15);
+
+        sort_swap<T>(array, 3, 4);
+        sort_swap<T>(array, 8, 13);
+        sort_swap<T>(array, 9, 14);
+        sort_swap<T>(array, 11, 15);
+
+        sort_swap<T>(array, 8, 12);
+        sort_swap<T>(array, 9, 13);
+        sort_swap<T>(array, 11, 14);
+        sort_swap<T>(array, 6, 15);
+
+        sort_swap<T>(array, 9, 12);
+        sort_swap<T>(array, 10, 13);
+        sort_swap<T>(array, 5, 14);
+        sort_swap<T>(array, 7, 15);
+
+        sort_swap<T>(array, 10, 12);
+        sort_swap<T>(array, 11, 13);
+        sort_swap<T>(array, 0, 9);
+        sort_swap<T>(array, 7, 14);
+
+        sort_swap<T>(array, 11, 12);
+        sort_swap<T>(array, 0, 8);
+        sort_swap<T>(array, 1, 10);
+        sort_swap<T>(array, 4, 13);
+
+        sort_swap<T>(array, 1, 9);
+        sort_swap<T>(array, 2, 11);
+        sort_swap<T>(array, 3, 12);
+        sort_swap<T>(array, 5, 13);
+
+        sort_swap<T>(array, 1, 8);
+        sort_swap<T>(array, 3, 11);
+        sort_swap<T>(array, 2, 9);
+        sort_swap<T>(array, 6, 13);
+
+        sort_swap<T>(array, 2, 8);
+        sort_swap<T>(array, 3, 10);
+        sort_swap<T>(array, 7, 13);
+        sort_swap<T>(array, 6, 11);
+
+        sort_swap<T>(array, 3, 9);
+        sort_swap<T>(array, 5, 10);
+        sort_swap<T>(array, 7, 12);
+
+        sort_swap<T>(array, 3, 8);
+        sort_swap<T>(array, 4, 9);
+        sort_swap<T>(array, 7, 11);
+
+        sort_swap<T>(array, 4, 8);
+        sort_swap<T>(array, 5, 9);
+        sort_swap<T>(array, 7, 10);
+
+        sort_swap<T>(array, 5, 8);
+        sort_swap<T>(array, 6, 9);
+
+        sort_swap<T>(array, 6, 8);
+        sort_swap<T>(array, 7, 9);
+
+        sort_swap<T>(array, 7, 8);
+    }
     else
         assert(!"bad range");
     
@@ -587,32 +690,10 @@ size_t pivotIdx2(int *array, size_t size)
     struct Pair
     {
         Pair(): first(0), second(0) {}
-        Pair(int f, int s): first(f), second(s) {}
+        Pair(int f, size_t s): first(f), second(s) {}
         
         int first;
-        int second;
-        
-        /*
-        bool operator<(const Pair &other) const
-        {
-            return first < other.first;
-        }
-        
-        bool operator>(const Pair &other) const
-        {
-            return first > other.first;
-        }
-        */
-        
-        /*
-        Pair& operator=(const Pair &other)
-        {
-            first = other.first;
-            second= other.second;
-            
-            return *this;
-        }
-        */
+        size_t second;        
     };
         
     srand(size);
@@ -621,7 +702,7 @@ size_t pivotIdx2(int *array, size_t size)
     
     for (int i = 0; i < 3; i++)
     {
-        const int idx = rand() % size;
+        const unsigned int idx = rand() % size;
         data[i] = Pair(array[idx], idx);
     }
 
@@ -641,7 +722,7 @@ size_t pivotIdx2(int *array, size_t size)
 void quick_sort1(int *array, size_t size) __attribute__((noinline));
 void quick_sort1(int *array, size_t size)
 {
-    if (size > 16)
+    if (size > 17)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -666,7 +747,7 @@ void quick_sort1(int *array, size_t size)
 void quick_sort(int *array, size_t size) __attribute__((noinline));
 void quick_sort(int *array, size_t size)
 {
-    if (size > 16)
+    if (size > 17)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
