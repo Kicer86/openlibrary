@@ -846,7 +846,7 @@ void std_sort(int *array, size_t size)
 
 void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
 {
-    const int n = 2000000;
+    const int n = 5000000;
 
     for (int m = 0; m < 1 /*RandomArray::Max*/; m++)
     {
