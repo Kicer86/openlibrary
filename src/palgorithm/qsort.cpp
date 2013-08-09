@@ -18,6 +18,97 @@ void sort_swap(T *array, size_t i1, size_t i2)
         std::swap(array[i1], array[i2]);
 }
 
+//bose-nelson algorithm based on:
+// http://www.drdobbs.com/sorting-networks/184402663?pgno=2
+
+template<class T>
+class BoseNelsonSortingNetwork
+{
+    public:
+        BoseNelsonSortingNetwork(T *array): m_array(array) {}
+        
+        //sort array provided in constructor which is of size 'size'
+        template<size_t size>
+        void sort()
+        {
+            bose<size>();
+        }
+
+    private:
+        T *m_array;
+        
+        template<size_t i, size_t j>
+        void P()
+        {
+            //printf("swap(%lu, %lu);\n", i, j);
+            sort_swap<T>(m_array, i, j);
+        }
+
+
+        template<size_t i, size_t x, size_t j, size_t y>
+        void Pbracket()
+//int i;  /* value of first element in sequence 1 */
+//int x;  /* length of sequence 1 */
+//int j;  /* value of first element in sequence 2 */
+//int y;  /* length of sequence 2 */
+        {
+            if(x == 1 && y == 1)
+                P<i, j>(); /* 1 comparison sorts 2 items */
+            else if(x == 1 && y == 2)
+            {
+                /* 2 comparisons inserts an item into an
+                 * already sorted sequence of length 2. */
+                P<i, (j + 1)>();
+                P<i, j>();
+            }
+            else if(x == 2 && y == 1)
+            {
+                /* As above, but inserting j */
+                P<i, j>();
+                P<(i + 1), j>();
+            }
+            else
+            {
+                /* Recurse on shorter sequences, attempting
+                 * to make the length of one subsequence odd
+                 * and the length of the other even. If we
+                 * can do this, we eventually merge the two. */
+                constexpr size_t a = x / 2;
+                constexpr size_t b = (x & 1) ? (y / 2) : ((y + 1) / 2);
+                Pbracket<i, a, j, b>();
+                Pbracket<(i + a), (x - a), (j + b), (y - b)>();
+                Pbracket<(i + a), (x - a), j, b>();
+            }
+        }
+
+        template<size_t i, size_t m>
+        void Pstar()
+//int i;  /* value of first element in sequence */
+//int m;  /* length of sequence */
+        {
+            if(m > 1)
+            {
+                /* Partition into 2 shorter sequences,
+                 * generate a sorting method for each,
+                 * and merge the two sub-networks. */
+                constexpr size_t a = m / 2;
+                Pstar<i, a>();
+                Pstar<(i + a), (m - a)>();
+                Pbracket<i, a, (i + a), (m - a)>();
+            }
+        }
+
+        /* Calling bose(n) generates a network
+         * to sort n items. See R. C. Bose & R. J. Nelson,
+         * "A Sorting Problem", JACM Vol. 9, Pp. 282-296. */
+        template<size_t n>
+        void bose()
+        {
+            //Pstar(1, n); /* sort the sequence {X1,...,Xn} */
+            Pstar<0, n>(); //like in original but start from 0
+        }
+};
+
 
 // sorting network:
 // http://pages.ripco.net/~jgamble/nw.html
@@ -27,630 +118,73 @@ void sort_swap(T *array, size_t i1, size_t i2)
 
 template<class T>
 void fast_sort(T *array, size_t items)
-{        
+{    
+    BoseNelsonSortingNetwork<T> boseNelson(array);
+    
     if (items == 0 || items == 1)
     {}
     else if (items == 2)
-    {
-        sort_swap<T>(array, 0, 1);
-    }
+        boseNelson.template sort<2>();
     else if (items == 3)
-    {
-        sort_swap<T>(array, 1, 2);        
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 0, 1);
-    }
+        boseNelson.template sort<3>();
     else if (items == 4)
-    {        
-        sort_swap<T>(array, 0, 2);        
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 1, 2);
-    }
+        boseNelson.template sort<4>();
     else if (items == 5)
-    {
-        sort_swap<T>(array, 0, 1);        
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 0, 3);        
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 1, 2);
-    }
+        boseNelson.template sort<5>();
     else if (items == 6)
-    {
-        sort_swap<T>(array, 1, 2);        
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 3, 4);        
-        sort_swap<T>(array, 2, 5);
-        sort_swap<T>(array, 0, 3);
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 2, 3);
-    }
+        boseNelson.template sort<6>();
     else if (items == 7)
-    {
-        sort_swap<T>(array, 1, 2);        
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 4, 6);        
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 0, 3);        
-        sort_swap<T>(array, 2, 5);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 2, 3);
-    }
+        boseNelson.template sort<7>();
     else if (items == 8)
-    {
-        sort_swap<T>(array, 0, 1);        
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 1, 3);        
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 3, 7);        
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 3, 6);
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 3, 4);
-    }
+        boseNelson.template sort<8>();
     else if (items == 9)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 6, 7);
-
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 7, 8);
-
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 2, 5);
-
-        sort_swap<T>(array, 0, 3);
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 5, 8);
-
-        sort_swap<T>(array, 3, 6);
-        sort_swap<T>(array, 4, 7);
-        sort_swap<T>(array, 2, 5);
-
-        sort_swap<T>(array, 0, 3);
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 2, 6);
-
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 4, 6);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 5, 6);
-
-        sort_swap<T>(array, 2, 3);
-    }
+        boseNelson.template sort<9>();
     else if (items == 10)
-    {
-        sort_swap<T>(array, 4, 9);
-        sort_swap<T>(array, 3, 8);
-        sort_swap<T>(array, 2, 7);
-        sort_swap<T>(array, 1, 6);
-        sort_swap<T>(array, 0, 5);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 6, 9);
-        sort_swap<T>(array, 0, 3);
-        sort_swap<T>(array, 5, 8);
-
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 3, 6);
-        sort_swap<T>(array, 7, 9);
-
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 8, 9);
-
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 7, 8);
-        sort_swap<T>(array, 3, 5);
-
-        sort_swap<T>(array, 2, 5);
-        sort_swap<T>(array, 6, 8);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 4, 7);
-
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 6, 7);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-
-        sort_swap<T>(array, 4, 5);
-    }
+        boseNelson.template sort<10>();
     else if (items == 11)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 8, 10);
-
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 9, 10);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 3, 7);
-
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 6, 10);
-        sort_swap<T>(array, 4, 8);
-
-        sort_swap<T>(array, 5, 9);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 3, 8);
-
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 6, 10);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 8, 9);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 7, 10);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 6, 8);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 7, 9);
-        sort_swap<T>(array, 5, 6);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 7, 8);
-    }
+        boseNelson.template sort<11>();
     else if (items == 12)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-        sort_swap<T>(array, 10, 11);
-
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 9, 11);
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 8, 10);
-
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 9, 10);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 7, 11);
-
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 6, 10);
-        sort_swap<T>(array, 3, 7);
-        sort_swap<T>(array, 4, 8);
-
-        sort_swap<T>(array, 5, 9);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 7, 11);
-        sort_swap<T>(array, 3, 8);
-
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 6, 10);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 8, 9);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 7, 10);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 6, 8);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 7, 9);
-        sort_swap<T>(array, 5, 6);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 7, 8);
-    }
+        boseNelson.template sort<12>();
     else if (items == 13)
-    {
-        sort_swap<T>(array, 1, 7);
-        sort_swap<T>(array, 9, 11);
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 8);
-        sort_swap<T>(array, 0, 12);
-        sort_swap<T>(array, 2, 6);
-
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 8, 11);
-        sort_swap<T>(array, 7, 12);
-        sort_swap<T>(array, 5, 9);
-
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 3, 7);
-        sort_swap<T>(array, 10, 11);
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 6, 12);
-
-        sort_swap<T>(array, 7, 8);
-        sort_swap<T>(array, 11, 12);
-        sort_swap<T>(array, 4, 9);
-        sort_swap<T>(array, 6, 10);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 8, 9);
-        sort_swap<T>(array, 10, 11);
-        sort_swap<T>(array, 1, 7);
-
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 9, 11);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 4, 7);
-        sort_swap<T>(array, 8, 10);
-        sort_swap<T>(array, 0, 5);
-
-        sort_swap<T>(array, 2, 5);
-        sort_swap<T>(array, 6, 8);
-        sort_swap<T>(array, 9, 10);
-
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 7, 8);
-        sort_swap<T>(array, 4, 6);
-
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-    }
+        boseNelson.template sort<13>();
     else if (items == 14)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-        sort_swap<T>(array, 10, 11);
-        sort_swap<T>(array, 12, 13);
-
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 8, 10);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 9, 11);
-
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 8, 12);
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 9, 13);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 3, 7);
-
-        sort_swap<T>(array, 0, 8);
-        sort_swap<T>(array, 1, 9);
-        sort_swap<T>(array, 2, 10);
-        sort_swap<T>(array, 3, 11);
-        sort_swap<T>(array, 4, 12);
-        sort_swap<T>(array, 5, 13);
-
-        sort_swap<T>(array, 5, 10);
-        sort_swap<T>(array, 6, 9);
-        sort_swap<T>(array, 3, 12);
-        sort_swap<T>(array, 7, 11);
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 4, 8);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 7, 13);
-        sort_swap<T>(array, 2, 8);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 9, 10);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 11, 13);
-        sort_swap<T>(array, 3, 8);
-        sort_swap<T>(array, 7, 12);
-
-        sort_swap<T>(array, 6, 8);
-        sort_swap<T>(array, 10, 12);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 7, 9);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 7, 8);
-        sort_swap<T>(array, 9, 10);
-        sort_swap<T>(array, 11, 12);
-
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-    }
+        boseNelson.template sort<14>();
     else if (items == 15)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-        sort_swap<T>(array, 10, 11);
-        sort_swap<T>(array, 12, 13);
-
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 8, 10);
-        sort_swap<T>(array, 12, 14);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 9, 11);
-
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 8, 12);
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 9, 13);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 10, 14);
-        sort_swap<T>(array, 3, 7);
-
-        sort_swap<T>(array, 0, 8);
-        sort_swap<T>(array, 1, 9);
-        sort_swap<T>(array, 2, 10);
-        sort_swap<T>(array, 3, 11);
-        sort_swap<T>(array, 4, 12);
-        sort_swap<T>(array, 5, 13);
-        sort_swap<T>(array, 6, 14);
-
-        sort_swap<T>(array, 5, 10);
-        sort_swap<T>(array, 6, 9);
-        sort_swap<T>(array, 3, 12);
-        sort_swap<T>(array, 13, 14);
-        sort_swap<T>(array, 7, 11);
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 4, 8);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 7, 13);
-        sort_swap<T>(array, 2, 8);
-        sort_swap<T>(array, 11, 14);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 9, 10);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 11, 13);
-        sort_swap<T>(array, 3, 8);
-        sort_swap<T>(array, 7, 12);
-
-        sort_swap<T>(array, 6, 8);
-        sort_swap<T>(array, 10, 12);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 7, 9);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 7, 8);
-        sort_swap<T>(array, 9, 10);
-        sort_swap<T>(array, 11, 12);
-
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-    }
+        boseNelson.template sort<15>();
     else if (items == 16)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-        sort_swap<T>(array, 10, 11);
-        sort_swap<T>(array, 12, 13);
-        sort_swap<T>(array, 14, 15);
-
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 8, 10);
-        sort_swap<T>(array, 12, 14);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 9, 11);
-        sort_swap<T>(array, 13, 15);
-
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 8, 12);
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 9, 13);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 10, 14);
-        sort_swap<T>(array, 3, 7);
-        sort_swap<T>(array, 11, 15);
-
-        sort_swap<T>(array, 0, 8);
-        sort_swap<T>(array, 1, 9);
-        sort_swap<T>(array, 2, 10);
-        sort_swap<T>(array, 3, 11);
-        sort_swap<T>(array, 4, 12);
-        sort_swap<T>(array, 5, 13);
-        sort_swap<T>(array, 6, 14);
-        sort_swap<T>(array, 7, 15);
-
-        sort_swap<T>(array, 5, 10);
-        sort_swap<T>(array, 6, 9);
-        sort_swap<T>(array, 3, 12);
-        sort_swap<T>(array, 13, 14);
-        sort_swap<T>(array, 7, 11);
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 4, 8);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 7, 13);
-        sort_swap<T>(array, 2, 8);
-        sort_swap<T>(array, 11, 14);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 9, 10);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 11, 13);
-        sort_swap<T>(array, 3, 8);
-        sort_swap<T>(array, 7, 12);
-
-        sort_swap<T>(array, 6, 8);
-        sort_swap<T>(array, 10, 12);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 7, 9);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 7, 8);
-        sort_swap<T>(array, 9, 10);
-        sort_swap<T>(array, 11, 12);
-
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-    }
+        boseNelson.template sort<16>();
     else if (items == 17)
-    {
-        sort_swap<T>(array, 0, 1);
-        sort_swap<T>(array, 2, 3);
-        sort_swap<T>(array, 4, 5);
-        sort_swap<T>(array, 6, 7);
-        sort_swap<T>(array, 8, 9);
-        sort_swap<T>(array, 10, 11);
-        sort_swap<T>(array, 12, 13);
-        sort_swap<T>(array, 15, 16);
-
-        sort_swap<T>(array, 0, 2);
-        sort_swap<T>(array, 1, 3);
-        sort_swap<T>(array, 4, 6);
-        sort_swap<T>(array, 5, 7);
-        sort_swap<T>(array, 8, 10);
-        sort_swap<T>(array, 9, 11);
-        sort_swap<T>(array, 14, 16);
-
-        sort_swap<T>(array, 1, 2);
-        sort_swap<T>(array, 5, 6);
-        sort_swap<T>(array, 0, 4);
-        sort_swap<T>(array, 3, 7);
-        sort_swap<T>(array, 9, 10);
-        sort_swap<T>(array, 14, 15);
-        sort_swap<T>(array, 13, 16);
-
-        sort_swap<T>(array, 1, 5);
-        sort_swap<T>(array, 2, 6);
-        sort_swap<T>(array, 12, 15);
-        sort_swap<T>(array, 11, 16);
-
-        sort_swap<T>(array, 1, 4);
-        sort_swap<T>(array, 3, 6);
-        sort_swap<T>(array, 12, 14);
-        sort_swap<T>(array, 13, 15);
-        sort_swap<T>(array, 7, 16);
-
-        sort_swap<T>(array, 2, 4);
-        sort_swap<T>(array, 3, 5);
-        sort_swap<T>(array, 13, 14);
-        sort_swap<T>(array, 10, 15);
-
-        sort_swap<T>(array, 3, 4);
-        sort_swap<T>(array, 8, 13);
-        sort_swap<T>(array, 9, 14);
-        sort_swap<T>(array, 11, 15);
-
-        sort_swap<T>(array, 8, 12);
-        sort_swap<T>(array, 9, 13);
-        sort_swap<T>(array, 11, 14);
-        sort_swap<T>(array, 6, 15);
-
-        sort_swap<T>(array, 9, 12);
-        sort_swap<T>(array, 10, 13);
-        sort_swap<T>(array, 5, 14);
-        sort_swap<T>(array, 7, 15);
-
-        sort_swap<T>(array, 10, 12);
-        sort_swap<T>(array, 11, 13);
-        sort_swap<T>(array, 0, 9);
-        sort_swap<T>(array, 7, 14);
-
-        sort_swap<T>(array, 11, 12);
-        sort_swap<T>(array, 0, 8);
-        sort_swap<T>(array, 1, 10);
-        sort_swap<T>(array, 4, 13);
-
-        sort_swap<T>(array, 1, 9);
-        sort_swap<T>(array, 2, 11);
-        sort_swap<T>(array, 3, 12);
-        sort_swap<T>(array, 5, 13);
-
-        sort_swap<T>(array, 1, 8);
-        sort_swap<T>(array, 3, 11);
-        sort_swap<T>(array, 2, 9);
-        sort_swap<T>(array, 6, 13);
-
-        sort_swap<T>(array, 2, 8);
-        sort_swap<T>(array, 3, 10);
-        sort_swap<T>(array, 7, 13);
-        sort_swap<T>(array, 6, 11);
-
-        sort_swap<T>(array, 3, 9);
-        sort_swap<T>(array, 5, 10);
-        sort_swap<T>(array, 7, 12);
-
-        sort_swap<T>(array, 3, 8);
-        sort_swap<T>(array, 4, 9);
-        sort_swap<T>(array, 7, 11);
-
-        sort_swap<T>(array, 4, 8);
-        sort_swap<T>(array, 5, 9);
-        sort_swap<T>(array, 7, 10);
-
-        sort_swap<T>(array, 5, 8);
-        sort_swap<T>(array, 6, 9);
-
-        sort_swap<T>(array, 6, 8);
-        sort_swap<T>(array, 7, 9);
-
-        sort_swap<T>(array, 7, 8);
-    }
+        boseNelson.template sort<17>();
+    else if (items == 18)
+        boseNelson.template sort<18>();
+    else if (items == 19)
+        boseNelson.template sort<19>();
+    else if (items == 20)
+        boseNelson.template sort<20>();
+    else if (items == 21)
+        boseNelson.template sort<21>();
+    else if (items == 22)
+        boseNelson.template sort<22>();
+    else if (items == 23)
+        boseNelson.template sort<23>();
+    else if (items == 24)
+        boseNelson.template sort<24>();
+    else if (items == 25)
+        boseNelson.template sort<25>();
+    else if (items == 26)
+        boseNelson.template sort<26>();
+    else if (items == 27)
+        boseNelson.template sort<27>();
+    else if (items == 28)
+        boseNelson.template sort<28>();
+    else if (items == 29)
+        boseNelson.template sort<29>();
+    else if (items == 30)
+        boseNelson.template sort<30>();
+    else if (items == 31)
+        boseNelson.template sort<31>();
+    else if (items == 32)
+        boseNelson.template sort<32>();
     else
         assert(!"bad range");
     
@@ -722,7 +256,7 @@ size_t pivotIdx2(int *array, size_t size)
 void quick_sort1(int *array, size_t size) __attribute__((noinline));
 void quick_sort1(int *array, size_t size)
 {
-    if (size > 17)
+    if (size > 32)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -747,7 +281,7 @@ void quick_sort1(int *array, size_t size)
 void quick_sort(int *array, size_t size) __attribute__((noinline));
 void quick_sort(int *array, size_t size)
 {
-    if (size > 17)
+    if (size > 32)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -946,6 +480,10 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
+    //int table[14] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13};
+    //BoseNelsonSortingNetwork<int> boseNelson(table);
+    //boseNelson.sort<14>();
+    
     //int table[14] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13};
     //const int result = pivotIdx2(table, 14);
     //int table[9] = {1, 3, 5, 7, 9, 2, 4, 6, 8};
