@@ -25,7 +25,7 @@ template<class T>
 class BoseNelsonSortingNetwork
 {
     public:
-        static constexpr int max_items = 32;
+        static constexpr size_t max_items = 32;
         
         BoseNelsonSortingNetwork(T *array): m_array(array) {}
         
@@ -127,7 +127,7 @@ class JumpTable
             Generator<T, BoseNelsonSortingNetwork<T>::max_items>().generate(m_jumpTable);
         }
         
-        inline void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx) const
+        inline void call(BoseNelsonSortingNetwork<T> &boseNelson, size_t idx) const
         {
             assert(idx <= BoseNelsonSortingNetwork<T>::max_items);
             
@@ -202,33 +202,16 @@ size_t partition(int *array, size_t left, size_t right, size_t pivotIndex)
 size_t pivotIdx(int *array, size_t size) __attribute__((noinline));
 size_t pivotIdx(int *array, size_t size)
 {
-    struct Pair
-    {
-        Pair(): first(0), second(0) {}
-        Pair(int f, size_t s): first(f), second(s) {}
-        
-        int first;
-        size_t second;        
+    std::pair<int, size_t> data[3] = 
+    { 
+      {array[0], 0},
+      {array[size / 2], size / 2},
+      {array[size - 1], size - 1}
     };
-        
-    srand(size);
-
-    Pair data[3];
     
-    for (int i = 0; i < 3; i++)
-    {
-        const unsigned int idx = rand() % size;
-        data[i] = Pair(array[idx], idx);
-    }
-
-    size_t result;
+    fast_sort(data, 3);
     
-    if (data[0].first < data[1].first && data[1].first < data[2].first)
-        result = data[1].second;
-    else if (data[1].first < data[2].first && data[2].first < data[0].first)
-        result = data[2].second;
-    else
-        result = data[0].second;
+    const size_t result = data[1].second;
     
     return result;
         
@@ -444,7 +427,7 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 {
     const int n = 5000000;
 
-    for (int m = 0; m < 1 /*RandomArray::Max*/; m++)
+    for (int m = 0; m < RandomArray::Max; m++)
     {
         RandomArray a(n, (RandomArray::Mode)m);
 
@@ -461,8 +444,9 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
-    std::sort(&table[0], &table[16]);
+    //int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
+    //quick_sort(table, 17);
+    //std::sort(&table[0], &table[16]);
     //BoseNelsonSortingNetwork<int> boseNelson(table);
     //boseNelson.sort<14>();
     
@@ -474,6 +458,6 @@ int main()
     test_algorithm(quick_sort, "pquick sort");
     test_algorithm(std_sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
-    //test_algorithm(merge_sort, "merge sort");
+    test_algorithm(merge_sort, "merge sort");
     return 0;
 }
