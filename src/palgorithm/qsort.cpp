@@ -12,7 +12,7 @@
 
 
 template<class T>
-void sort_swap(T *array, size_t i1, size_t i2)
+inline void sort_swap(T *array, size_t i1, size_t i2)
 {
     if (array[i1] > array[i2])
         std::swap(array[i1], array[i2]);
@@ -31,7 +31,7 @@ class BoseNelsonSortingNetwork
         
         //sort array provided in constructor which is of size 'size'
         template<size_t size>
-        void sort()
+        inline void sort() const
         {
             bose<size>();
         }
@@ -40,15 +40,14 @@ class BoseNelsonSortingNetwork
         T *m_array;
         
         template<size_t i, size_t j>
-        void P()
+        inline void P() const
         {
             //printf("swap(%lu, %lu);\n", i, j);
             sort_swap<T>(m_array, i, j);
         }
 
-
         template<size_t i, size_t x, size_t j, size_t y>
-        void Pbracket()
+        inline void Pbracket() const
 //int i;  /* value of first element in sequence 1 */
 //int x;  /* length of sequence 1 */
 //int j;  /* value of first element in sequence 2 */
@@ -84,7 +83,7 @@ class BoseNelsonSortingNetwork
         }
 
         template<size_t i, size_t m>
-        void Pstar()
+        inline void Pstar() const
 //int i;  /* value of first element in sequence */
 //int m;  /* length of sequence */
         {
@@ -104,7 +103,7 @@ class BoseNelsonSortingNetwork
          * to sort n items. See R. C. Bose & R. J. Nelson,
          * "A Sorting Problem", JACM Vol. 9, Pp. 282-296. */
         template<size_t n>
-        void bose()
+        inline void bose() const
         {
             //Pstar(1, n); /* sort the sequence {X1,...,Xn} */
             Pstar<0, n>(); //like in original but start from 0
@@ -120,7 +119,7 @@ class BoseNelsonSortingNetwork
 template<class T>
 class JumpTable
 {
-        typedef void (BoseNelsonSortingNetwork<T>::*SortingFunction)();
+        typedef void (BoseNelsonSortingNetwork<T>::*SortingFunction)() const;
         
     public:
         JumpTable(): m_jumpTable(new SortingFunction[BoseNelsonSortingNetwork<T>::max_items + 1])
@@ -128,9 +127,9 @@ class JumpTable
             Generator<T, BoseNelsonSortingNetwork<T>::max_items>().generate(m_jumpTable);
         }
         
-        void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx)
+        inline void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx) const
         {
-            assert(idx <= BoseNelsonSortingNetwork::max_items);
+            assert(idx <= BoseNelsonSortingNetwork<T>::max_items);
             
             SortingFunction sort = m_jumpTable[idx];
             (boseNelson.*sort)();
@@ -142,7 +141,7 @@ class JumpTable
         template<class P, int iteration>
         struct Generator
         {
-            void generate(SortingFunction *table)
+            inline void generate(SortingFunction *table) const
             {
                 Generator<P, iteration - 1>().generate(table);
                 table[iteration] = &BoseNelsonSortingNetwork<T>::template sort<iteration>;          
@@ -152,7 +151,7 @@ class JumpTable
         template<class P>
         struct Generator<P, -1>
         {
-            void generate(SortingFunction *)
+            inline void generate(SortingFunction *) const
             {
             }
         };
@@ -165,7 +164,7 @@ void fast_sort(T *array, size_t items)
 {   
     static JumpTable<T> jmpTab;
         
-    assert(items <= BoseNelsonSortingNetwork::max_items || !"bad range");
+    assert(items <= BoseNelsonSortingNetwork<T>::max_items || !"bad range");
     
     BoseNelsonSortingNetwork<T> boseNelson(array);
     jmpTab.call(boseNelson, items);
@@ -200,8 +199,8 @@ size_t partition(int *array, size_t left, size_t right, size_t pivotIndex)
 }
 
 
-size_t pivotIdx2(int *array, size_t size) __attribute__((noinline));
-size_t pivotIdx2(int *array, size_t size)
+size_t pivotIdx(int *array, size_t size) __attribute__((noinline));
+size_t pivotIdx(int *array, size_t size)
 {
     struct Pair
     {
@@ -241,7 +240,7 @@ void quick_sort1(int *array, size_t size)
     if (size > BoseNelsonSortingNetwork<int>::max_items)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
-        const size_t pivot = pivotIdx2(array, size);
+        const size_t pivot = pivotIdx(array, size);
         size_t div = partition(array, 0, size - 1, pivot);
 
         if (div > 1)
@@ -266,7 +265,7 @@ void quick_sort(int *array, size_t size)
     if (size > BoseNelsonSortingNetwork<int>::max_items)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
-        const size_t pivot = pivotIdx2(array, size);
+        const size_t pivot = pivotIdx(array, size);
         size_t div = partition(array, 0, size - 1, pivot);
 
         #pragma omp parallel sections default(shared)
@@ -462,7 +461,8 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    //int table[14] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13};
+    int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
+    std::sort(&table[0], &table[16]);
     //BoseNelsonSortingNetwork<int> boseNelson(table);
     //boseNelson.sort<14>();
     
@@ -472,7 +472,7 @@ int main()
     //merge_sort(table, 9);
 
     test_algorithm(quick_sort, "pquick sort");
-    //test_algorithm(std_sort, "std::sort");
+    test_algorithm(std_sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
     //test_algorithm(merge_sort, "merge sort");
     return 0;
