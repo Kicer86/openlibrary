@@ -25,6 +25,8 @@ template<class T>
 class BoseNelsonSortingNetwork
 {
     public:
+        static constexpr int max_items = 32;
+        
         BoseNelsonSortingNetwork(T *array): m_array(array) {}
         
         //sort array provided in constructor which is of size 'size'
@@ -113,80 +115,60 @@ class BoseNelsonSortingNetwork
 // sorting network:
 // http://pages.ripco.net/~jgamble/nw.html
 // http://en.wikipedia.org/wiki/Sorting_network
-
 // parser: sed -e "s@\[\[@\[@g" -e "s@\]\]@\]@g" -e "s@\],\[@\]\[@g" -e "s@\[\([0-9]\+\),\([0-9]\+\)\]@sort_swap<T>(array, \1, \2);\n@g" input
 
 template<class T>
+class JumpTable
+{
+        typedef void (BoseNelsonSortingNetwork<T>::*SortingFunction)();
+        
+    public:
+        JumpTable(): m_jumpTable(new SortingFunction[BoseNelsonSortingNetwork<T>::max_items + 1])
+        {            
+            Generator<T, BoseNelsonSortingNetwork<T>::max_items>().generate(m_jumpTable);
+        }
+        
+        void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx)
+        {
+            assert(idx <= BoseNelsonSortingNetwork::max_items);
+            
+            SortingFunction sort = m_jumpTable[idx];
+            (boseNelson.*sort)();
+        }
+                
+    private:
+        SortingFunction *m_jumpTable;
+        
+        template<class P, int iteration>
+        struct Generator
+        {
+            void generate(SortingFunction *table)
+            {
+                Generator<P, iteration - 1>().generate(table);
+                table[iteration] = &BoseNelsonSortingNetwork<T>::template sort<iteration>;          
+            }
+        };
+        
+        template<class P>
+        struct Generator<P, -1>
+        {
+            void generate(SortingFunction *)
+            {
+            }
+        };
+
+};
+
+
+template<class T>
 void fast_sort(T *array, size_t items)
-{    
-    BoseNelsonSortingNetwork<T> boseNelson(array);
+{   
+    static JumpTable<T> jmpTab;
+        
+    assert(items <= BoseNelsonSortingNetwork::max_items || !"bad range");
     
-    if (items == 0 || items == 1)
-    {}
-    else if (items == 2)
-        boseNelson.template sort<2>();
-    else if (items == 3)
-        boseNelson.template sort<3>();
-    else if (items == 4)
-        boseNelson.template sort<4>();
-    else if (items == 5)
-        boseNelson.template sort<5>();
-    else if (items == 6)
-        boseNelson.template sort<6>();
-    else if (items == 7)
-        boseNelson.template sort<7>();
-    else if (items == 8)
-        boseNelson.template sort<8>();
-    else if (items == 9)
-        boseNelson.template sort<9>();
-    else if (items == 10)
-        boseNelson.template sort<10>();
-    else if (items == 11)
-        boseNelson.template sort<11>();
-    else if (items == 12)
-        boseNelson.template sort<12>();
-    else if (items == 13)
-        boseNelson.template sort<13>();
-    else if (items == 14)
-        boseNelson.template sort<14>();
-    else if (items == 15)
-        boseNelson.template sort<15>();
-    else if (items == 16)
-        boseNelson.template sort<16>();
-    else if (items == 17)
-        boseNelson.template sort<17>();
-    else if (items == 18)
-        boseNelson.template sort<18>();
-    else if (items == 19)
-        boseNelson.template sort<19>();
-    else if (items == 20)
-        boseNelson.template sort<20>();
-    else if (items == 21)
-        boseNelson.template sort<21>();
-    else if (items == 22)
-        boseNelson.template sort<22>();
-    else if (items == 23)
-        boseNelson.template sort<23>();
-    else if (items == 24)
-        boseNelson.template sort<24>();
-    else if (items == 25)
-        boseNelson.template sort<25>();
-    else if (items == 26)
-        boseNelson.template sort<26>();
-    else if (items == 27)
-        boseNelson.template sort<27>();
-    else if (items == 28)
-        boseNelson.template sort<28>();
-    else if (items == 29)
-        boseNelson.template sort<29>();
-    else if (items == 30)
-        boseNelson.template sort<30>();
-    else if (items == 31)
-        boseNelson.template sort<31>();
-    else if (items == 32)
-        boseNelson.template sort<32>();
-    else
-        assert(!"bad range");
+    BoseNelsonSortingNetwork<T> boseNelson(array);
+    jmpTab.call(boseNelson, items);
     
     assert(items == 0 || std::is_sorted(&array[0], &array[items]));
 }
@@ -256,7 +238,7 @@ size_t pivotIdx2(int *array, size_t size)
 void quick_sort1(int *array, size_t size) __attribute__((noinline));
 void quick_sort1(int *array, size_t size)
 {
-    if (size > 32)
+    if (size > BoseNelsonSortingNetwork<int>::max_items)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
@@ -281,7 +263,7 @@ void quick_sort1(int *array, size_t size)
 void quick_sort(int *array, size_t size) __attribute__((noinline));
 void quick_sort(int *array, size_t size)
 {
-    if (size > 32)
+    if (size > BoseNelsonSortingNetwork<int>::max_items)
     {
         //std::cout << "partitioning array of size " << size << std::endl;
         const size_t pivot = pivotIdx2(array, size);
