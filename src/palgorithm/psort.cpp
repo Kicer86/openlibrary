@@ -4,13 +4,10 @@
 #include <algorithm>
 #include <iostream>
 #include <initializer_list>
-#include <vector>
-#include <set>
 
-#include <omp.h>
 #include <sys/time.h>
 
-
+#include "psort.hpp"
 
 double getTime()
 {
@@ -110,8 +107,8 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 
 int main()
 {
-    //int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
-    //quick_sort(table, 17);
+    int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
+    quick_sort(table, 17);
     //std::sort(&table[0], &table[16]);
     //BoseNelsonSortingNetwork<int> boseNelson(table);
     //boseNelson.sort<14>();
