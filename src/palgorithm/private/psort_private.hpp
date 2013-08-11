@@ -270,7 +270,7 @@ namespace OpenLibrary
             if (size > BoseNelsonSortingNetwork<int>::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
-                ArrayIterator pivot= pivotIdx(left, right);                                
+                ArrayIterator pivot = pivotIdx(left, right);                                
                 ArrayIterator div = partition(left, right, pivot);
                 
                 const auto div_pos = div - left;
