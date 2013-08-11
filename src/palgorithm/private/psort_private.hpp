@@ -275,20 +275,21 @@ namespace OpenLibrary
                 
                 const auto div_pos = div - left;
                 
-                const int cores_to_use = avail_cpus > 2? 2: 1;
+                const int cores_to_use = avail_cpus > 2? 2: 1;   // 2 - parallel; 1 - single
+                const int cores_for_sub = avail_cpus / cores_to_use;
 
                 #pragma omp parallel sections default(shared) num_threads(cores_to_use)
                 {
                     #pragma omp section
                     {
                         if (div_pos > 1)
-                            quick_sort(left, div, avail_cpus - 1);
+                            quick_sort(left, div, cores_for_sub);
                     }
 
                     #pragma omp section
                     {
                         if (div_pos < (size - 2) )
-                            quick_sort(div + 1, right, avail_cpus - 1);
+                            quick_sort(div + 1, right, cores_for_sub);
                     }
                 }
                  
