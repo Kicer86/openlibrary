@@ -14,8 +14,9 @@ set(LIB_SOURCES
     )
 
 set(LIB_HEADERS
-    pqsort.hpp
+    psort.hpp
     ts_queue.hpp
+    private/psort_private.hpp
 )
 
 set(TEST_SRC
@@ -30,6 +31,6 @@ register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_
 #test targets
 addSourceFlags(qsort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnAllWarnings(qsort.cpp ${TEST_SRC})
-add_executable(qsort_tester qsort.cpp)
+add_executable(qsort_tester psort.cpp)
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnCpp11(qsort_tester)

@@ -177,6 +177,8 @@ void fast_sort(T *array, size_t items)
 /*                                  PQSORT                                   */
 /*****************************************************************************/
 
+// http://pl.wikipedia.org/wiki/Sortowanie_introspektywne
+
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
 //   number of elements in subarray = right-left+1
