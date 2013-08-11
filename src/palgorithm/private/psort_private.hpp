@@ -2,29 +2,28 @@
 #ifndef PSORT_PRIVATE
 #define PSORT_PRIVATE
 
-/*
 namespace OpenLibrary
 {
     namespace Private
     {
-*/
-        template<class T>
-        inline void sort_swap(T* array, size_t i1, size_t i2)
+
+        template<class ArrayIterator>
+        inline void sort_swap(ArrayIterator i1, ArrayIterator i2)
         {
-            if (array[i1] > array[i2])
-                std::swap(array[i1], array[i2]);
+            if (*i1 > *i2)
+                std::swap(*i1, *i2);
         }
 
 //bose-nelson algorithm based on:
 // http://www.drdobbs.com/sorting-networks/184402663?pgno=2
 
-        template<class T>
+        template<class ArrayIterator>
         class BoseNelsonSortingNetwork
         {
             public:
                 static constexpr size_t max_items = 32;
 
-                BoseNelsonSortingNetwork(T* array): m_array(array) {}
+                BoseNelsonSortingNetwork(ArrayIterator arrayBegin): m_array(arrayBegin) {}
 
                 //sort array provided in constructor which is of size 'size'
                 template<size_t size>
@@ -34,13 +33,13 @@ namespace OpenLibrary
                 }
 
             private:
-                T* m_array;
+                ArrayIterator m_array;
 
                 template<size_t i, size_t j>
                 inline void P() const
                 {
                     //printf("swap(%lu, %lu);\n", i, j);
-                    sort_swap<T>(m_array, i, j);
+                    sort_swap(m_array + i, m_array + j);
                 }
 
                 template<size_t i, size_t x, size_t j, size_t y>
@@ -156,17 +155,18 @@ namespace OpenLibrary
         };
 
 
-        template<class T>
-        void fast_sort(T* array, size_t items)
+        template<class ArrayIterator>
+        void fast_sort(ArrayIterator left, ArrayIterator right)
         {
-            static JumpTable<T> jmpTab;
+            const auto items = right - left;
+            static JumpTable<ArrayIterator> jmpTab;
 
-            assert(items <= BoseNelsonSortingNetwork<T>::max_items || !"bad range");
+            assert(items <= BoseNelsonSortingNetwork<ArrayIterator>::max_items || !"bad range");
 
-            BoseNelsonSortingNetwork<T> boseNelson(array);
+            BoseNelsonSortingNetwork<ArrayIterator> boseNelson(left);
             jmpTab.call(boseNelson, items);
 
-            assert(items == 0 || std::is_sorted(&array[0], &array[items]));
+            assert(items == 0 || std::is_sorted(left, right));
         }
 
 
@@ -186,7 +186,8 @@ namespace OpenLibrary
         ArrayIterator partition(ArrayIterator left, ArrayIterator right, ArrayIterator pivotIndex)
         {
             int pivotValue = *pivotIndex;
-            std::swap(*pivotIndex, *right);  // Move pivot to end
+            const ArrayIterator last_item = right - 1;
+            std::swap(*pivotIndex, *last_item);  // Move pivot to end
             ArrayIterator storeIndex = left;
 
             for (ArrayIterator i = left; i < right; ++i)  // left ≤ i < right
@@ -198,7 +199,7 @@ namespace OpenLibrary
                 }
             }
 
-            std::swap(*storeIndex, *right);  // Move pivot to its final place
+            std::swap(*storeIndex, *last_item);  // Move pivot to its final place
             return storeIndex;
         }
 
@@ -209,6 +210,7 @@ namespace OpenLibrary
         ArrayIterator pivotIdx(ArrayIterator left, ArrayIterator right)
         {
             typedef decltype (*left) ArrayType;
+            --right;
             
             ArrayIterator mid = left + (right - left) / 2;
             std::pair<ArrayType, ArrayIterator> data[3] =
@@ -218,7 +220,7 @@ namespace OpenLibrary
                 {*right, right}
             };
 
-            fast_sort(data, 3);
+            fast_sort(&data[0], &data[2]);
 
             const ArrayIterator result = data[1].second;
 
@@ -226,6 +228,7 @@ namespace OpenLibrary
 
         }
 
+        /*
         void quick_sort1(int* array, size_t size) __attribute__((noinline));
         void quick_sort1(int* array, size_t size)
         {
@@ -253,44 +256,54 @@ namespace OpenLibrary
             else
                 fast_sort<int>(array, size);
         }
+        */
 
-        void quick_sort(int* array, size_t size) __attribute__((noinline));
-        void quick_sort(int* array, size_t size)
+        template<class ArrayIterator>
+        void quick_sort(ArrayIterator left, ArrayIterator right, int avail_cpus) __attribute__((noinline));
+        
+        template<class ArrayIterator>
+        void quick_sort(ArrayIterator left, ArrayIterator right, int avail_cpus)
         {
+            const auto size = right - left;
+            
             if (size > BoseNelsonSortingNetwork<int>::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
-                int *pivot_tmp = pivotIdx(&array[0], &array[size - 1]);
-                size_t pivot = pivot_tmp - &array[0];
+                ArrayIterator pivot= pivotIdx(left, right);                                
+                ArrayIterator div = partition(left, right, pivot);
                 
-                int *div_tmp = partition(&array[0], &array[size - 1], &array[pivot]);
-                size_t div = div_tmp - &array[0];
+                const auto div_pos = div - left;
 
-                #pragma omp parallel sections default(shared)
+                if (avail_cpus > 1)
                 {
-                    #pragma omp section
+                    #pragma omp parallel sections default(shared)
                     {
-                        if (div > 1)
+                        #pragma omp section
                         {
-//                     std::cout << "analyzing sub array of size " << div << " by thread #" << omp_get_thread_num() << std::endl;
-                            quick_sort1(array, div);
+                            if (div_pos > 1)
+                                quick_sort(left, div, avail_cpus - 1);
                         }
-                    }
 
-                    #pragma omp section
-                    {
-                        if (div < (size - 2) )
+                        #pragma omp section
                         {
-//                     std::cout << "analyzing sub array of size " << size - div << " by thread #" << omp_get_thread_num() << std::endl;
-                            quick_sort1(&array[div + 1], size - div - 1);
+                            if (div_pos < (size - 2) )
+                                quick_sort(div + 1, right, avail_cpus - 1);
                         }
                     }
                 }
+                else
+                {
+                    if (div_pos > 1)
+                        quick_sort(left, div, avail_cpus);
+
+                    if (div_pos < (size - 2) )
+                        quick_sort(div + 1, right, avail_cpus);
+                }                      
             }
             else
-                fast_sort<int>(array, size);
+                fast_sort(left, right);
         }
-
+        
 
         void merge_sort(int* array, size_t size) __attribute__((noinline));
         void merge_sort(int* array, size_t size)
@@ -361,9 +374,8 @@ namespace OpenLibrary
                 touchedIndex = tmpTouchedIndex;
             }
         }
-
-        /*
+        
     }
 }
-*/
+
 #endif
