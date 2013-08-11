@@ -80,13 +80,8 @@ struct RandomArray
     int m_size;
 };
 
-void std_sort(int *array, size_t size)
-{
-    std::sort(&array[0], &array[size]);
-}
 
-
-void test_algorithm(void (*sorting_function)(int *array, size_t size), const char *name)
+void test_algorithm(void (*sorting_function)(int *, int *), const char *name)
 {
     const int n = 5000000;
 
@@ -97,7 +92,7 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
         std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm. Mode: " << m << std::endl;
 
         double start = getTime();
-        sorting_function(a.m_array, n);
+        sorting_function(&a.m_array[0], &a.m_array[n]);
         double end = getTime();
 
         std::cout << "sorting time: " << end-start << " sec" << std::endl;
@@ -108,7 +103,7 @@ void test_algorithm(void (*sorting_function)(int *array, size_t size), const cha
 int main()
 {
     int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
-    quick_sort(table, 17);
+    sort(&table[0], &table[17]);
     //std::sort(&table[0], &table[16]);
     //BoseNelsonSortingNetwork<int> boseNelson(table);
     //boseNelson.sort<14>();
@@ -118,9 +113,9 @@ int main()
     //int table[9] = {1, 3, 5, 7, 9, 2, 4, 6, 8};
     //merge_sort(table, 9);
 
-    test_algorithm(quick_sort, "pquick sort");
-    test_algorithm(std_sort, "std::sort");
+    test_algorithm(sort, "pquick sort");
+    test_algorithm(std::sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
-    test_algorithm(merge_sort, "merge sort");
+    //test_algorithm(merge_sort, "merge sort");
     return 0;
 }
