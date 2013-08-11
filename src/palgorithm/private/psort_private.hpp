@@ -2,11 +2,12 @@
 #ifndef PSORT_PRIVATE
 #define PSORT_PRIVATE
 
+/*
 namespace OpenLibrary
 {
     namespace Private
     {
-
+*/
         template<class T>
         inline void sort_swap(T* array, size_t i1, size_t i2)
         {
@@ -178,23 +179,26 @@ namespace OpenLibrary
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
 //   number of elements in subarray = right-left+1
-        size_t partition(int* array, size_t left, size_t right, size_t pivotIndex) __attribute__((noinline));
-        size_t partition(int* array, size_t left, size_t right, size_t pivotIndex)
+        template<class ArrayIterator>
+        ArrayIterator partition(ArrayIterator left, ArrayIterator right, ArrayIterator pivotIndex) __attribute__((noinline));
+        
+        template<class ArrayIterator>
+        ArrayIterator partition(ArrayIterator left, ArrayIterator right, ArrayIterator pivotIndex)
         {
-            int pivotValue = array[pivotIndex];
-            std::swap(array[pivotIndex], array[right]);  // Move pivot to end
-            size_t storeIndex = left;
+            int pivotValue = *pivotIndex;
+            std::swap(*pivotIndex, *right);  // Move pivot to end
+            ArrayIterator storeIndex = left;
 
-            for (size_t i = left; i < right; i++)  // left ≤ i < right
+            for (ArrayIterator i = left; i < right; ++i)  // left ≤ i < right
             {
-                if (array[i] < pivotValue)
+                if (*i < pivotValue)
                 {
-                    std::swap(array[i], array[storeIndex]);
+                    std::swap(*i, *storeIndex);
                     storeIndex++;
                 }
             }
 
-            std::swap(array[storeIndex], array[right]);  // Move pivot to its final place
+            std::swap(*storeIndex, *right);  // Move pivot to its final place
             return storeIndex;
         }
 
@@ -224,7 +228,8 @@ namespace OpenLibrary
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
                 const size_t pivot = pivotIdx(array, size);
-                size_t div = partition(array, 0, size - 1, pivot);
+                int *div_tmp = partition(&array[0], &array[size - 1], &array[pivot]);
+                size_t div = div_tmp - &array[0];
 
                 if (div > 1)
                 {
@@ -249,7 +254,9 @@ namespace OpenLibrary
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
                 const size_t pivot = pivotIdx(array, size);
-                size_t div = partition(array, 0, size - 1, pivot);
+                
+                int *div_tmp = partition(&array[0], &array[size - 1], &array[pivot]);
+                size_t div = div_tmp - &array[0];
 
                 #pragma omp parallel sections default(shared)
                 {
@@ -347,7 +354,8 @@ namespace OpenLibrary
             }
         }
 
+        /*
     }
 }
-
+*/
 #endif
