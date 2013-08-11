@@ -202,20 +202,25 @@ namespace OpenLibrary
             return storeIndex;
         }
 
-
-        size_t pivotIdx(int* array, size_t size) __attribute__((noinline));
-        size_t pivotIdx(int* array, size_t size)
+        template<class ArrayIterator>
+        ArrayIterator pivotIdx(ArrayIterator left, ArrayIterator right) __attribute__((noinline));
+        
+        template<class ArrayIterator>
+        ArrayIterator pivotIdx(ArrayIterator left, ArrayIterator right)
         {
-            std::pair<int, size_t> data[3] =
+            typedef decltype (*left) ArrayType;
+            
+            ArrayIterator mid = left + (right - left) / 2;
+            std::pair<ArrayType, ArrayIterator> data[3] =
             {
-                {array[0], 0},
-                {array[size / 2], size / 2},
-                {array[size - 1], size - 1}
+                {*left, left},
+                {*mid, mid},
+                {*right, right}
             };
 
             fast_sort(data, 3);
 
-            const size_t result = data[1].second;
+            const ArrayIterator result = data[1].second;
 
             return result;
 
@@ -227,7 +232,9 @@ namespace OpenLibrary
             if (size > BoseNelsonSortingNetwork<int>::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
-                const size_t pivot = pivotIdx(array, size);
+                int *pivot_tmp = pivotIdx(&array[0], &array[size - 1]);
+                size_t pivot = pivot_tmp - &array[0];
+                
                 int *div_tmp = partition(&array[0], &array[size - 1], &array[pivot]);
                 size_t div = div_tmp - &array[0];
 
@@ -253,7 +260,8 @@ namespace OpenLibrary
             if (size > BoseNelsonSortingNetwork<int>::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
-                const size_t pivot = pivotIdx(array, size);
+                int *pivot_tmp = pivotIdx(&array[0], &array[size - 1]);
+                size_t pivot = pivot_tmp - &array[0];
                 
                 int *div_tmp = partition(&array[0], &array[size - 1], &array[pivot]);
                 size_t div = div_tmp - &array[0];
