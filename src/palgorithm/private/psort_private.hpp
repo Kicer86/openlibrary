@@ -264,6 +264,7 @@ namespace OpenLibrary
         template<class ArrayIterator>
         void quick_sort(ArrayIterator left, ArrayIterator right, int avail_cpus)
         {
+            assert(avail_cpus > 0);
             const auto size = right - left;
             
             if (size > BoseNelsonSortingNetwork<int>::max_items)
@@ -273,32 +274,24 @@ namespace OpenLibrary
                 ArrayIterator div = partition(left, right, pivot);
                 
                 const auto div_pos = div - left;
+                
+                const int cores_to_use = avail_cpus > 2? 2: 1;
 
-                if (avail_cpus > 1)
+                #pragma omp parallel sections default(shared) num_threads(cores_to_use)
                 {
-                    #pragma omp parallel sections default(shared)
+                    #pragma omp section
                     {
-                        #pragma omp section
-                        {
-                            if (div_pos > 1)
-                                quick_sort(left, div, avail_cpus - 1);
-                        }
+                        if (div_pos > 1)
+                            quick_sort(left, div, avail_cpus - 1);
+                    }
 
-                        #pragma omp section
-                        {
-                            if (div_pos < (size - 2) )
-                                quick_sort(div + 1, right, avail_cpus - 1);
-                        }
+                    #pragma omp section
+                    {
+                        if (div_pos < (size - 2) )
+                            quick_sort(div + 1, right, avail_cpus - 1);
                     }
                 }
-                else
-                {
-                    if (div_pos > 1)
-                        quick_sort(left, div, avail_cpus);
-
-                    if (div_pos < (size - 2) )
-                        quick_sort(div + 1, right, avail_cpus);
-                }                      
+                 
             }
             else
                 fast_sort(left, right);
