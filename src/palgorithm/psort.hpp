@@ -10,7 +10,7 @@
 template<class ArrayIterator>
 void sort(ArrayIterator first, ArrayIterator last)
 {
-    const int cores = omp_get_num_threads();
+    const int cores = omp_get_num_procs();
     OpenLibrary::Private::quick_sort(first, last, cores);
 }
 
