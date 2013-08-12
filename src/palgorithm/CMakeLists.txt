@@ -29,8 +29,8 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
 
 #test targets
-addSourceFlags(qsort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-turnOnAllWarnings(qsort.cpp ${TEST_SRC})
+addSourceFlags(psort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
+turnOnAllWarnings(psort.cpp ${TEST_SRC})
 add_executable(qsort_tester psort.cpp)
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnCpp11(qsort_tester)
