@@ -275,11 +275,11 @@ namespace OpenLibrary
                 
                 const auto div_pos = div - left;
                 
-                const int cores_to_use = avail_cpus > 2? 2: 1;   // 2 - parallel; 1 - single
+                const int cores_to_use = avail_cpus >= 2? 2: 1;   // 2 - parallel; 1 - single
                 const int cores_for_sub = avail_cpus / cores_to_use;
 
                 #pragma omp parallel sections default(shared) num_threads(cores_to_use)
-                {
+                {                    
                     #pragma omp section
                     {
                         if (div_pos > 1)
