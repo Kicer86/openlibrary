@@ -1,4 +1,6 @@
 
+//#define  _GLIBCXX_PARALLEL 
+
 #include <assert.h>
 
 #include <algorithm>
@@ -51,7 +53,7 @@ struct RandomArray
         }
     }
 
-    RandomArray(const std::initializer_list<int> &i_list)
+    RandomArray(const std::initializer_list<int> &i_list): m_array(nullptr), m_size(0)
     {
         m_size = i_list.size();
         m_array = new int[m_size];
@@ -60,6 +62,8 @@ struct RandomArray
         for (int i = 0; i < m_size; i++, ++p)
             m_array[i] = *p;
     }
+    
+    RandomArray(const RandomArray &) = delete;
 
     ~RandomArray()
     {
@@ -75,6 +79,8 @@ struct RandomArray
 
         delete m_array;
     }
+    
+    void operator=(const RandomArray &) = delete;
 
     int *m_array;
     int m_size;
@@ -83,11 +89,11 @@ struct RandomArray
 
 void test_algorithm(void (*sorting_function)(int *, int *), const char *name)
 {
-    const int n = 5000000;
+    const int n = 100000000;
 
     for (int m = 0; m < RandomArray::Max; m++)
     {
-        RandomArray a(n, (RandomArray::Mode)m);
+        RandomArray a(n, static_cast<RandomArray::Mode>(m));
 
         std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm. Mode: " << m << std::endl;
 
