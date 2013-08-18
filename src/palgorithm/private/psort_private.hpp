@@ -282,14 +282,26 @@ namespace OpenLibrary
                 {                    
                     #pragma omp section
                     {
+                        if (cores_to_use > 1)
+                            std::cout << "thread " << omp_get_thread_num() << " enters" <<std::endl;
+                        
                         if (div_pos > 1)
                             quick_sort(left, div, cores_for_sub);
+                        
+                        if (cores_to_use > 1)
+                            std::cout << "thread " << omp_get_thread_num() << " leaves" <<std::endl;
                     }
 
                     #pragma omp section
                     {
+                        if (cores_to_use > 1)
+                            std::cout << "thread " << omp_get_thread_num() << " enters" <<std::endl;
+                        
                         if (div_pos < (size - 2) )
                             quick_sort(div + 1, right, cores_for_sub);
+                        
+                        if (cores_to_use > 1)
+                            std::cout << "thread " << omp_get_thread_num() << " leaves" <<std::endl;
                     }
                 }
                  
