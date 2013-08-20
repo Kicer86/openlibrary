@@ -2,6 +2,10 @@
 #ifndef PSORT_PRIVATE
 #define PSORT_PRIVATE
 
+#include <assert.h>
+#include <omp.h>
+#include <algorithm>
+
 namespace OpenLibrary
 {
     namespace Private
@@ -21,7 +25,7 @@ namespace OpenLibrary
         class BoseNelsonSortingNetwork
         {
             public:
-                static constexpr size_t max_items = 32;
+                static constexpr int max_items = 32;
 
                 BoseNelsonSortingNetwork(ArrayIterator arrayBegin): m_array(arrayBegin) {}
 
@@ -123,7 +127,7 @@ namespace OpenLibrary
                     Generator<T, BoseNelsonSortingNetwork<T>::max_items>().generate(m_jumpTable);
                 }
 
-                inline void call(BoseNelsonSortingNetwork<T> &boseNelson, size_t idx) const
+                inline void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx) const
                 {
                     assert(idx <= BoseNelsonSortingNetwork<T>::max_items);
 
@@ -179,9 +183,7 @@ namespace OpenLibrary
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
 //   number of elements in subarray = right-left+1
-        template<class ArrayIterator>
-        ArrayIterator partition(ArrayIterator left, ArrayIterator right, ArrayIterator pivotIndex) __attribute__((noinline));
-        
+
         template<class ArrayIterator>
         ArrayIterator partition(ArrayIterator left, ArrayIterator right, ArrayIterator pivotIndex)
         {
@@ -203,8 +205,6 @@ namespace OpenLibrary
             return storeIndex;
         }
 
-        template<class ArrayIterator>
-        ArrayIterator pivotIdx(ArrayIterator left, ArrayIterator right) __attribute__((noinline));
         
         template<class ArrayIterator>
         ArrayIterator pivotIdx(ArrayIterator left, ArrayIterator right)
@@ -228,38 +228,6 @@ namespace OpenLibrary
 
         }
 
-        /*
-        void quick_sort1(int* array, size_t size) __attribute__((noinline));
-        void quick_sort1(int* array, size_t size)
-        {
-            if (size > BoseNelsonSortingNetwork<int>::max_items)
-            {
-                //std::cout << "partitioning array of size " << size << std::endl;
-                int *pivot_tmp = pivotIdx(&array[0], &array[size - 1]);
-                size_t pivot = pivot_tmp - &array[0];
-                
-                int *div_tmp = partition(&array[0], &array[size - 1], &array[pivot]);
-                size_t div = div_tmp - &array[0];
-
-                if (div > 1)
-                {
-//            std::cout << "analyzing sub array of size " << div << " by thread #" << omp_get_thread_num() << std::endl;
-                    quick_sort1(array, div);
-                }
-
-                if (div < (size - 2) )
-                {
-//             std::cout << "analyzing sub array of size " << size - div << " by thread #" << omp_get_thread_num() << std::endl;
-                    quick_sort1(&array[div + 1], size - div - 1);
-                }
-            }
-            else
-                fast_sort<int>(array, size);
-        }
-        */
-
-        template<class ArrayIterator>
-        void quick_sort(ArrayIterator left, ArrayIterator right, int avail_cpus) __attribute__((noinline));
         
         template<class ArrayIterator>
         void quick_sort(ArrayIterator left, ArrayIterator right, int avail_cpus)
@@ -267,7 +235,7 @@ namespace OpenLibrary
             assert(avail_cpus > 0);
             const auto size = right - left;
             
-            if (size > BoseNelsonSortingNetwork<int>::max_items)
+            if (size > BoseNelsonSortingNetwork<ArrayIterator>::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
                 ArrayIterator pivot = pivotIdx(left, right);                                
@@ -282,26 +250,26 @@ namespace OpenLibrary
                 {                    
                     #pragma omp section
                     {
-                        if (cores_to_use > 1)
-                            std::cout << "thread " << omp_get_thread_num() << " enters" <<std::endl;
+                        //if (cores_to_use > 1)
+                        //    std::cout << "thread " << omp_get_thread_num() << " enters" <<std::endl;
                         
                         if (div_pos > 1)
                             quick_sort(left, div, cores_for_sub);
                         
-                        if (cores_to_use > 1)
-                            std::cout << "thread " << omp_get_thread_num() << " leaves" <<std::endl;
+                        //if (cores_to_use > 1)
+                        //    std::cout << "thread " << omp_get_thread_num() << " leaves" << std::endl;
                     }
 
                     #pragma omp section
                     {
-                        if (cores_to_use > 1)
-                            std::cout << "thread " << omp_get_thread_num() << " enters" <<std::endl;
+                        //if (cores_to_use > 1)
+                        //    std::cout << "thread " << omp_get_thread_num() << " enters" << std::endl;
                         
                         if (div_pos < (size - 2) )
                             quick_sort(div + 1, right, cores_for_sub);
                         
-                        if (cores_to_use > 1)
-                            std::cout << "thread " << omp_get_thread_num() << " leaves" <<std::endl;
+                        //if (cores_to_use > 1)
+                        //    std::cout << "thread " << omp_get_thread_num() << " leaves" << std::endl;
                     }
                 }
                  
