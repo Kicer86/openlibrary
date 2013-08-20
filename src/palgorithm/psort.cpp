@@ -95,14 +95,17 @@ void test_algorithm(void (*sorting_function)(int *, int *), const char *name)
     {
         RandomArray a(n, static_cast<RandomArray::Mode>(m));
 
-        std::cout << "sorting array of " << n << " elements with '" << name << "' algorithm. Mode: " << m << std::endl;
+        std::cout << "sorting array of " << n << " items with '" << name << "' algorithm. Mode: " << m << ". Time: ";
+        std::flush(std::cout);
 
         double start = getTime();
         sorting_function(&a.m_array[0], &a.m_array[n]);
         double end = getTime();
 
-        std::cout << "sorting time: " << end-start << " sec" << std::endl;
+        std::cout << end-start << " secs" << std::endl;
     }
+    
+    std::cout << std::endl;
 }
 
 
