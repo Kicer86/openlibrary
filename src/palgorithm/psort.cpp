@@ -111,8 +111,8 @@ void test_algorithm(void (*sorting_function)(int *, int *), const char *name)
 
 int main()
 {
-    int table[17] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,16,14,15};
-    sort(&table[0], &table[17]);
+    int table[16] = {1,3,2,9,8,0,4,7,5,6,10,11,12,13,14,15};
+    merge_sort(&table[0], &table[16]);
     //std::sort(&table[0], &table[16]);
     //BoseNelsonSortingNetwork<int> boseNelson(table);
     //boseNelson.sort<14>();
@@ -125,6 +125,6 @@ int main()
     test_algorithm(sort, "pquick sort");
     test_algorithm(std::sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
-    //test_algorithm(merge_sort, "merge sort");
+    test_algorithm(merge_sort, "merge sort");
     return 0;
 }
