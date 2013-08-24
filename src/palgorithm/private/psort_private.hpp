@@ -12,7 +12,7 @@ namespace OpenLibrary
     {
 
         template<class ArrayIterator>
-        inline void sort_swap(ArrayIterator i1, ArrayIterator i2)
+        void sort_swap(ArrayIterator i1, ArrayIterator i2)
         {
             if (*i1 > *i2)
                 std::swap(*i1, *i2);
@@ -31,7 +31,7 @@ namespace OpenLibrary
 
                 //sort array provided in constructor which is of size 'size'
                 template<size_t size>
-                inline void sort() const
+                void sort() const
                 {
                     bose<size>();
                 }
@@ -40,14 +40,14 @@ namespace OpenLibrary
                 ArrayIterator m_array;
 
                 template<size_t i, size_t j>
-                inline void P() const
+                void P() const
                 {
                     //printf("swap(%lu, %lu);\n", i, j);
                     sort_swap(m_array + i, m_array + j);
                 }
 
                 template<size_t i, size_t x, size_t j, size_t y>
-                inline void Pbracket() const
+                void Pbracket() const
 //int i;  /* value of first element in sequence 1 */
 //int x;  /* length of sequence 1 */
 //int j;  /* value of first element in sequence 2 */
@@ -127,7 +127,7 @@ namespace OpenLibrary
                     Generator<T, BoseNelsonSortingNetwork<T>::max_items>().generate(m_jumpTable);
                 }
 
-                inline void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx) const
+                void call(BoseNelsonSortingNetwork<T> &boseNelson, int idx) const
                 {
                     assert(idx <= BoseNelsonSortingNetwork<T>::max_items);
 
@@ -279,7 +279,6 @@ namespace OpenLibrary
         }
         
 
-        void merge_sort(int* array, size_t size) __attribute__((noinline));
         void merge_sort(int* array, size_t size)
         {
             assert(size > 0);
