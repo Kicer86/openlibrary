@@ -251,26 +251,15 @@ namespace OpenLibrary
                 {                    
                     #pragma omp section
                     {
-                        //if (cores_to_use > 1)
-                        //    std::cout << "thread " << omp_get_thread_num() << " enters" <<std::endl;
-                        
                         if (div_pos > 1)
-                            quick_sort(left, div, cores_for_sub);
+                            quick_sort(left, div, cores_for_sub);                        
                         
-                        //if (cores_to_use > 1)
-                        //    std::cout << "thread " << omp_get_thread_num() << " leaves" << std::endl;
                     }
 
                     #pragma omp section
                     {
-                        //if (cores_to_use > 1)
-                        //    std::cout << "thread " << omp_get_thread_num() << " enters" << std::endl;
-                        
                         if (div_pos < (size - 2) )
-                            quick_sort(div + 1, right, cores_for_sub);
-                        
-                        //if (cores_to_use > 1)
-                        //    std::cout << "thread " << omp_get_thread_num() << " leaves" << std::endl;
+                            quick_sort(div + 1, right, cores_for_sub);                        
                     }
                 }
                  
@@ -322,9 +311,19 @@ namespace OpenLibrary
                 data2.main_left = data.main_left + middle;
                 data2.tmp_left = data.tmp_left + middle;
                 data2.size = size_2;
+                
+                //run
+                const int cores_to_use = avail_cpus >= 2? 2: 1;   // 2 - parallel; 1 - single
+                const int cores_for_sub = avail_cpus / cores_to_use;
 
-                merge_sort_internal(data1, avail_cpus, level + 1);
-                merge_sort_internal(data2, avail_cpus, level + 1);
+                #pragma omp parallel sections default(shared) num_threads(cores_to_use)
+                {                    
+                    #pragma omp section
+                        merge_sort_internal(data1, cores_for_sub, level + 1);
+                        
+                    #pragma omp section
+                        merge_sort_internal(data2, cores_for_sub, level + 1);
+                }
 
                 //merge them
                 ArrayIterator array_1 = data.getWork(level + 1);           //where level + 1 was working?
