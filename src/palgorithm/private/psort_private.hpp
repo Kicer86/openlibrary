@@ -333,9 +333,11 @@ namespace OpenLibrary
                 ArrayIterator insert = data.getWork(level);                //where do we work?
                 while (idx_1 < size_1 || idx_2 < size_2)
                 {
-                    bool use1 = idx_2 == size_2 || (idx_1 < size_1 && array_1[idx_1] < array_2[idx_2]);
+                    const bool array2_empty = idx_2 == size_2;
+                    const bool array1_not_empty = idx_1 < size_1;
+                    const bool use_array1 = array2_empty || (array1_not_empty && array_1[idx_1] < array_2[idx_2]);
 
-                    if (use1)
+                    if (use_array1)
                     {
                         *insert = *(array_1 + idx_1);
                         ++idx_1;
