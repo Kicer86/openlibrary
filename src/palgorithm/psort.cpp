@@ -89,7 +89,7 @@ struct RandomArray
 
 void test_algorithm(void (*sorting_function)(int *, int *), const char *name)
 {
-    const int n = 100000000;
+    const int n = 10000000;
 
     for (int m = 0; m < RandomArray::Max; m++)
     {
