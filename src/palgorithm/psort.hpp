@@ -21,4 +21,10 @@ void merge_sort(ArrayIterator first, ArrayIterator last)
     OpenLibrary::Private::merge_sort(first, last, cores);
 }
 
+template<class ArrayIterator>
+void fast_sort(ArrayIterator first, ArrayIterator last)
+{
+    OpenLibrary::Private::fast_sort(first, last);
+}
+
 #endif 
