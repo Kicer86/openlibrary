@@ -7,7 +7,7 @@ namespace OpenLibrary
 {
     namespace Private
     {
-      template<class ArrayIterator>
+	template<class ArrayIterator>
         void sort_swap(ArrayIterator i1, ArrayIterator i2)
         {
             if (*i1 > *i2)
