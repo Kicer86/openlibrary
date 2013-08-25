@@ -345,7 +345,7 @@ namespace OpenLibrary
                 {
                     const bool array2_empty = idx_2 == size_2;
                     const bool array1_not_empty = idx_1 < size_1;
-                    const bool use_array1 = array2_empty || (array1_not_empty && array_1[idx_1] < array_2[idx_2]);
+                    const bool use_array1 = array2_empty || (array1_not_empty && array_1[idx_1] <= array_2[idx_2]);   //<= guaranties that merge sort will be stable
 
                     if (use_array1)
                     {
