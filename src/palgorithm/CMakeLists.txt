@@ -34,3 +34,9 @@ turnOnAllWarnings(psort.cpp ${TEST_SRC})
 add_executable(qsort_tester psort.cpp)
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnCpp11(qsort_tester)
+
+
+add_executable(opt_test opt_test.cpp)
+turnOnCpp11(opt_test)
+
+add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)
