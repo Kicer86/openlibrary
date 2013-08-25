@@ -244,8 +244,18 @@ namespace OpenLibrary
                 
                 const auto div_pos = div - left;
                 
-                const int cores_to_use = avail_cpus >= 2? 2: 1;   // 2 - parallel; 1 - single
-                const int cores_for_sub = avail_cpus / cores_to_use;
+                int cores_to_use = avail_cpus >= 2? 2: 1;   // 2 - parallel; 1 - single
+                int cores_for_sub = avail_cpus / cores_to_use;
+		
+		const int size1 = div_pos;
+		const int size2 = size - div_pos;
+		
+		//when one of the parts is much more bigger than another, do not use parallelism here but propagate it down
+		if (size1 / 2 >= size2 || size2 / 2 >= size1)
+		{
+		    cores_to_use = 1;
+		    cores_for_sub = avail_cpus;
+		}
 
                 #pragma omp parallel sections default(shared) num_threads(cores_to_use)
                 {                    
