@@ -22,7 +22,7 @@ namespace OpenLibrary
 
             assert(items <= BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items || !"bad range");
 
-            jmpTab.call(left, right);
+            jmpTab.sort(left, right);
 
             assert(items == 0 || std::is_sorted(left, right));
         }

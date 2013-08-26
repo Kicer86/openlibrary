@@ -2,6 +2,8 @@
 #ifndef SORTING_NETWORKS_HPP
 #define SORTING_NETWORKS_HPP
 
+#include <assert.h>
+
 #include <algorithm>
 
 namespace OpenLibrary
@@ -126,7 +128,7 @@ namespace OpenLibrary
                     Generator<ArrayIterator, BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items>().generate(m_swapInstructions);
                 }
 
-                void call(ArrayIterator left, ArrayIterator right) const
+                void sort(ArrayIterator left, ArrayIterator right) const
                 {
                     const auto size = right - left;
 		    
