@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <array>
 
 namespace OpenLibrary
 {
@@ -124,7 +125,10 @@ namespace OpenLibrary
         {
 
             public:
-                SortingNetworksSort(): m_swapInstructions(BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items + 1)
+                typedef std::array<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions, 
+                                   BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items + 1> InstructionsSet;
+                                   
+                SortingNetworksSort(): m_swapInstructions()
                 {
                     Generator<ArrayIterator, BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items>().generate(m_swapInstructions);
                 }
@@ -142,16 +146,16 @@ namespace OpenLibrary
                 }
 
             private:
-                std::vector<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions> m_swapInstructions;
+                InstructionsSet m_swapInstructions;
 
                 template<class P, int iteration>
                 struct Generator
                 {
-                    inline void generate(std::vector<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions> &table) const
+                    inline void generate(InstructionsSet &inst_table) const
                     {
-                        Generator < P, iteration - 1 > ().generate(table);
+                        Generator < P, iteration - 1 > ().generate(inst_table);
 			
-                        BoseNelsonSortingNetworkGenerator<ArrayIterator> boseNelson(table[iteration]);
+                        BoseNelsonSortingNetworkGenerator<ArrayIterator> boseNelson(inst_table[iteration]);
                         boseNelson.template generate<iteration>();
                     }
                 };
@@ -159,7 +163,7 @@ namespace OpenLibrary
                 template<class P>
                 struct Generator < P, -1 >
                 {
-                    inline void generate(std::vector<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions> &) const
+                    inline void generate(InstructionsSet &) const
                     {
                     }
                 };
