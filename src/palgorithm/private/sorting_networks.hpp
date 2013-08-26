@@ -2,6 +2,7 @@
 #ifndef SORTING_NETWORKS_HPP
 #define SORTING_NETWORKS_HPP
 
+#include <algorithm>
 
 namespace OpenLibrary
 {
@@ -18,14 +19,14 @@ namespace OpenLibrary
 // http://www.drdobbs.com/sorting-networks/184402663?pgno=2
 
         template<class ArrayIterator>
-        class BoseNelsonSortingNetwork
+        class BoseNelsonSortingNetworkGenerator
         {
             public:
                 static constexpr int max_items = 32;
                 typedef std::pair<int, int> SwapInfo;
                 typedef std::vector<SwapInfo> SwapInstructions;
 
-                BoseNelsonSortingNetwork(SwapInstructions &v): m_swapInstr(v) {}
+                BoseNelsonSortingNetworkGenerator(SwapInstructions &v): m_swapInstr(v) {}
 
                 //sort array provided in constructor which is of size 'size'
                 template<size_t size>
@@ -120,34 +121,34 @@ namespace OpenLibrary
         {
 
             public:
-                JumpTable(): m_swapInstructions(BoseNelsonSortingNetwork<ArrayIterator>::max_items + 1)
+                JumpTable(): m_swapInstructions(BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items + 1)
                 {
-                    Generator<ArrayIterator, BoseNelsonSortingNetwork<ArrayIterator>::max_items>().generate(m_swapInstructions);
+                    Generator<ArrayIterator, BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items>().generate(m_swapInstructions);
                 }
 
                 void call(ArrayIterator left, ArrayIterator right) const
                 {
                     const auto size = right - left;
 		    
-                    assert(size <= BoseNelsonSortingNetwork<ArrayIterator>::max_items);
+                    assert(size <= BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items);
 
-                    const typename BoseNelsonSortingNetwork<ArrayIterator>::SwapInstructions& instructions = m_swapInstructions[size];
+                    const typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions& instructions = m_swapInstructions[size];
                     
                     for(const auto &instruction: instructions)
                         sort_swap(left + instruction.first, left + instruction.second);
                 }
 
             private:
-                std::vector<typename BoseNelsonSortingNetwork<ArrayIterator>::SwapInstructions> m_swapInstructions;
+                std::vector<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions> m_swapInstructions;
 
                 template<class P, int iteration>
                 struct Generator
                 {
-                    inline void generate(std::vector<typename BoseNelsonSortingNetwork<ArrayIterator>::SwapInstructions> &table) const
+                    inline void generate(std::vector<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions> &table) const
                     {
                         Generator < P, iteration - 1 > ().generate(table);
 			
-                        BoseNelsonSortingNetwork<ArrayIterator> boseNelson(table[iteration]);
+                        BoseNelsonSortingNetworkGenerator<ArrayIterator> boseNelson(table[iteration]);
                         boseNelson.template sort<iteration>();
                     }
                 };
@@ -155,7 +156,7 @@ namespace OpenLibrary
                 template<class P>
                 struct Generator < P, -1 >
                 {
-                    inline void generate(std::vector<typename BoseNelsonSortingNetwork<ArrayIterator>::SwapInstructions> &) const
+                    inline void generate(std::vector<typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions> &) const
                     {
                     }
                 };
