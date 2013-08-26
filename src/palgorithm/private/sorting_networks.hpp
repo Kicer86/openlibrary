@@ -5,6 +5,7 @@
 #include <assert.h>
 
 #include <algorithm>
+#include <vector>
 
 namespace OpenLibrary
 {
@@ -30,9 +31,9 @@ namespace OpenLibrary
 
                 BoseNelsonSortingNetworkGenerator(SwapInstructions &v): m_swapInstr(v) {}
 
-                //sort array provided in constructor which is of size 'size'
+                //generate sort instructions
                 template<size_t size>
-                void sort() const
+                void generate() const
                 {
                     bose<size>();
                 }
@@ -151,7 +152,7 @@ namespace OpenLibrary
                         Generator < P, iteration - 1 > ().generate(table);
 			
                         BoseNelsonSortingNetworkGenerator<ArrayIterator> boseNelson(table[iteration]);
-                        boseNelson.template sort<iteration>();
+                        boseNelson.template generate<iteration>();
                     }
                 };
 
