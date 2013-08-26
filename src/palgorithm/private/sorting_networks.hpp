@@ -22,8 +22,8 @@ namespace OpenLibrary
         {
             public:
                 static constexpr int max_items = 32;
-		typedef std::pair<int, int> SwapInfo;
-		typedef std::vector<SwapInfo> SwapInstructions;
+                typedef std::pair<int, int> SwapInfo;
+                typedef std::vector<SwapInfo> SwapInstructions;
 
                 BoseNelsonSortingNetwork(SwapInstructions &v): m_swapInstr(v) {}
 
@@ -127,16 +127,14 @@ namespace OpenLibrary
 
                 void call(ArrayIterator left, ArrayIterator right) const
                 {
-		    const auto size = right - left;
+                    const auto size = right - left;
 		    
                     assert(size <= BoseNelsonSortingNetwork<ArrayIterator>::max_items);
 
-		    const typename BoseNelsonSortingNetwork<ArrayIterator>::SwapInstructions& instructions = m_swapInstructions[size];
-		    
-		    for(const auto &instruction: instructions)
-		    {
-			sort_swap(left + instruction.first, left + instruction.second);
-		    }
+                    const typename BoseNelsonSortingNetwork<ArrayIterator>::SwapInstructions& instructions = m_swapInstructions[size];
+                    
+                    for(const auto &instruction: instructions)
+                        sort_swap(left + instruction.first, left + instruction.second);
                 }
 
             private:
@@ -149,7 +147,7 @@ namespace OpenLibrary
                     {
                         Generator < P, iteration - 1 > ().generate(table);
 			
-			BoseNelsonSortingNetwork<ArrayIterator> boseNelson(table[iteration]);
+                        BoseNelsonSortingNetwork<ArrayIterator> boseNelson(table[iteration]);
                         boseNelson.template sort<iteration>();
                     }
                 };
