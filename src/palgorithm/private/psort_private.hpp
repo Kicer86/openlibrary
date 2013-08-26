@@ -24,6 +24,7 @@ namespace OpenLibrary
 
             jmpTab.sort(left, right);
 
+            (void) items;
             assert(items == 0 || std::is_sorted(left, right));
         }
 
@@ -36,7 +37,7 @@ namespace OpenLibrary
 
 // left is the index of the leftmost element of the array
 // right is the index of the rightmost element of the array (inclusive)
-//   number of elements in subarray = right-left+1
+// number of elements in subarray = right-left
 
         template<class ArrayIterator>
         ArrayIterator partition(ArrayIterator left, ArrayIterator right, ArrayIterator pivotIndex)
