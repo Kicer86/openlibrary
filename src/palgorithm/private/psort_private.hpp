@@ -18,7 +18,7 @@ namespace OpenLibrary
         void fast_sort(ArrayIterator left, ArrayIterator right)
         {
             const auto items = right - left;
-            static JumpTable<ArrayIterator> jmpTab;
+            static SortingNetworksSort<ArrayIterator> jmpTab;
 
             assert(items <= BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items || !"bad range");
 

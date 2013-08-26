@@ -117,11 +117,11 @@ namespace OpenLibrary
 // parser: sed -e "s@\[\[@\[@g" -e "s@\]\]@\]@g" -e "s@\],\[@\]\[@g" -e "s@\[\([0-9]\+\),\([0-9]\+\)\]@sort_swap<T>(array, \1, \2);\n@g" input
 
         template<class ArrayIterator>
-        class JumpTable
+        class SortingNetworksSort
         {
 
             public:
-                JumpTable(): m_swapInstructions(BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items + 1)
+                SortingNetworksSort(): m_swapInstructions(BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items + 1)
                 {
                     Generator<ArrayIterator, BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items>().generate(m_swapInstructions);
                 }
