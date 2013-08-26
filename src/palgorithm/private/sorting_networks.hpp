@@ -30,7 +30,7 @@ namespace OpenLibrary
                 typedef std::pair<int, int> SwapInfo;
                 typedef std::vector<SwapInfo> SwapInstructions;
 
-                BoseNelsonSortingNetworkGenerator(SwapInstructions &v): m_swapInstr(v) {}
+                constexpr BoseNelsonSortingNetworkGenerator(SwapInstructions &v): m_swapInstr(v) {}
 
                 //generate sort instructions
                 template<size_t size>
@@ -136,7 +136,7 @@ namespace OpenLibrary
                 void sort(ArrayIterator left, ArrayIterator right) const
                 {
                     const auto size = right - left;
-		    
+
                     assert(size <= BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items);
 
                     const typename BoseNelsonSortingNetworkGenerator<ArrayIterator>::SwapInstructions& instructions = m_swapInstructions[size];
