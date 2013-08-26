@@ -20,7 +20,7 @@ namespace OpenLibrary
             const auto items = right - left;
             static JumpTable<ArrayIterator> jmpTab;
 
-            assert(items <= BoseNelsonSortingNetwork<ArrayIterator>::max_items || !"bad range");
+            assert(items <= BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items || !"bad range");
 
             jmpTab.call(left, right);
 
@@ -89,7 +89,7 @@ namespace OpenLibrary
             assert(avail_cpus > 0);
             const auto size = right - left;
             
-            if (size > BoseNelsonSortingNetwork<ArrayIterator>::max_items)
+            if (size > BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
                 ArrayIterator pivot = pivotIdx(left, right);                                
@@ -158,7 +158,7 @@ namespace OpenLibrary
             const auto size = data.size;
             assert(size > 0);
 
-            if (size > BoseNelsonSortingNetwork<ArrayIterator>::max_items || level % 2 == 0)
+            if (size > BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items || level % 2 == 0)
             {
                 const int middle = size / 2;
 
