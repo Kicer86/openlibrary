@@ -18,9 +18,7 @@
 class BoseNelsonSortingNetworkGenerator
 {
     public:
-        static constexpr int max_items = 32;
-        typedef std::pair<int, int> SwapInfo;
-        typedef std::vector<SwapInfo> SwapInstructions;
+        typedef std::vector<int> SwapInstructions;
 
         constexpr BoseNelsonSortingNetworkGenerator(SwapInstructions &v): m_swapInstr(v) {}
 
@@ -36,8 +34,8 @@ class BoseNelsonSortingNetworkGenerator
         void P(size_t i, size_t j) const
         {
             //printf("swap(%lu, %lu);\n", i, j);
-            SwapInfo info(i, j);
-            m_swapInstr.push_back(info);
+            m_swapInstr.push_back(i);
+            m_swapInstr.push_back(j);
         }
 
         void Pbracket(size_t i, size_t x, size_t j, size_t y) const
