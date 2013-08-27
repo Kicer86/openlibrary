@@ -7,6 +7,8 @@ cmake_minimum_required(VERSION 2.8)
 find_package(Boost REQUIRED)
 find_package(OpenMP)
 
+add_subdirectory(bose-nelson)
+
 include_directories(${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
 
 set(LIB_SOURCES
