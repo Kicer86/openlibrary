@@ -31,6 +31,7 @@ class OutputGenerator
         OutputGenerator(int size);
         
         void generate(std::ostream &, BoseNelsonSortingNetworkGenerator::SwapInstructions &);
+        void generate_hpp(std::ostream &, BoseNelsonSortingNetworkGenerator::SwapInstructions &);
         
     private:
         int m_size;
