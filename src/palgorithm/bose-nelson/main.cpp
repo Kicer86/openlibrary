@@ -5,6 +5,8 @@
 #include "bose-nelson.hpp"
 #include "output_generator.hpp"
 
+#define MAX_SIZE 128
+
 int main(int argc, char* argv[])
 {
     if (argc != 3)
@@ -18,8 +20,11 @@ int main(int argc, char* argv[])
     
     cpp_output << "namespace BoseNelson {" << std::endl;
     hpp_output << "namespace BoseNelson {" << std::endl;
+    hpp_output << "const int max_items = " << MAX_SIZE << ";" << std::endl;
     
-    for (int i = 0; i <= 128; i++)
+    std::vector<int> sizes;
+    
+    for (int i = 0; i <= MAX_SIZE; i++)
     {
         BoseNelsonSortingNetworkGenerator::SwapInstructions instructions;
         BoseNelsonSortingNetworkGenerator generator(instructions);
@@ -29,9 +34,28 @@ int main(int argc, char* argv[])
         o_generator.generate(cpp_output, instructions);
         o_generator.generate_hpp(hpp_output, instructions);
         
+        sizes.push_back(instructions.size() / 2);
+        
         cpp_output << std::endl;
     }
     
+    //list of tables
+    hpp_output << "extern int* instructionsTable[" << MAX_SIZE + 1 << "];" << std::endl << std::endl;
+    cpp_output << "int* instructionsTable[" << MAX_SIZE + 1 << "] = {";
+    for (int i = 0; i <= MAX_SIZE; i++)
+        cpp_output << "swap_data_" << i << ", ";
+    
+    cpp_output << "};" << std::endl << std::endl;    
+
+    //list of sizes
+    hpp_output << "extern int instructionsTableSize[" << MAX_SIZE + 1 << "];" << std::endl << std::endl;
+    cpp_output << "int instructionsTableSize[" << MAX_SIZE + 1 << "] = {";
+    for (int i = 0; i <= MAX_SIZE; i++)
+        cpp_output << sizes[i] << ", ";
+    
+    cpp_output << "};" << std::endl << std::endl;
+    
+    //finish namespace
     cpp_output << "}";
     hpp_output << "}";
 
