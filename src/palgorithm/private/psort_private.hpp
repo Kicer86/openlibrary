@@ -7,24 +7,42 @@
 #include <algorithm>
 #include <type_traits>
 
-#include "sorting_networks.hpp"
+#include "swap_tables.hpp"
 
 namespace OpenLibrary
 {
     namespace Private
     {
+        template<class ArrayIterator>
+        void sort_swap(ArrayIterator i1, ArrayIterator i2)
+        {
+            if (*i1 > *i2)
+                std::swap(*i1, *i2);
+        }
+
 
         template<class ArrayIterator>
         void fast_sort(ArrayIterator left, ArrayIterator right)
         {
             const auto items = right - left;
-            static SortingNetworksSort<ArrayIterator> jmpTab;
+            
+            assert(items <= BoseNelson::max_items);
+            
+            if (items <= BoseNelson::max_items)
+            {
+                const int swapInstructionsSteps = BoseNelson::instructionsTableSize[items];
+                const int* swapsList = BoseNelson::instructionsTable[items];
+            
+                for(int i = 0; i < swapInstructionsSteps; i++)
+                {
+                    const size_t item_left = swapsList[i * 2];
+                    const size_t item_right = swapsList[i * 2 + 1];
+                    
+                    sort_swap(left + item_left, left + item_right);
+                }
+            }
 
-            assert(items <= BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items || !"bad range");
 
-            jmpTab.sort(left, right);
-
-            (void) items;
             assert(items == 0 || std::is_sorted(left, right));
         }
 
@@ -90,7 +108,7 @@ namespace OpenLibrary
             assert(avail_cpus > 0);
             const auto size = right - left;
             
-            if (size > BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items)
+            if (size > BoseNelson::max_items)
             {
                 //std::cout << "partitioning array of size " << size << std::endl;
                 ArrayIterator pivot = pivotIdx(left, right);                                
@@ -159,7 +177,7 @@ namespace OpenLibrary
             const auto size = data.size;
             assert(size > 0);
 
-            if (size > BoseNelsonSortingNetworkGenerator<ArrayIterator>::max_items || level % 2 == 0)
+            if (size > BoseNelson::max_items || level % 2 == 0)
             {
                 const int middle = size / 2;
 
