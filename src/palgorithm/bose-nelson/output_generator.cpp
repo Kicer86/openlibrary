@@ -38,8 +38,8 @@ void OutputGenerator::generate(std::ostream &stream, BoseNelsonSortingNetworkGen
 
 void OutputGenerator::generate_hpp(std::ostream &stream, BoseNelsonSortingNetworkGenerator::SwapInstructions &instructions)
 {
-    const int data_size = instructions.size();
-    stream << "extern int swap_data_" << m_size << "[];" << std::endl;
+    //const int data_size = instructions.size();
+    //stream << "extern int swap_data_" << m_size << "[];" << std::endl;
 }
 
 
