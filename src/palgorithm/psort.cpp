@@ -89,7 +89,7 @@ struct RandomArray
 
 void test_algorithm(void (*sorting_function)(int *, int *), const char *name)
 {
-    const int n = 10000000;
+    const int n = 100000000;
 
     for (int m = 0; m < RandomArray::Max; m++)
     {
@@ -125,6 +125,6 @@ int main()
     test_algorithm(sort, "pquick sort");
     test_algorithm(std::sort, "std::sort");
     //test_algorithm(bubble_sort, "bubble sort");
-    test_algorithm(merge_sort, "merge sort");
+    test_algorithm(merge_sort, "pmerge sort");
     return 0;
 }
