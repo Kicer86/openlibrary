@@ -28,5 +28,5 @@ function(generateSwapTables directory baseFileName cpp_file hpp_file)       #cpp
 
     add_custom_command(OUTPUT ${_cpp_file} ${_hpp_file}
                        COMMAND bose-nelson ARGS ${_cpp_file} ${_hpp_file}
-                       DEPENDS ${SRC})
+                       DEPENDS bose-nelson)
 endfunction(generateSwapTables)
