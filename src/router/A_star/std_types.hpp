@@ -109,7 +109,7 @@ namespace OpenLibrary
         class OpenSet
         {
             public:
-                OpenSet() {}
+                OpenSet(): m_points(), m_value() {}
                 virtual ~OpenSet()
                 {
                     clear();

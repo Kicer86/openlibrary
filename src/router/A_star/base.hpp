@@ -48,7 +48,7 @@ namespace OpenLibrary
                     container.push_back(element);
                 }
             };
-        };
+        }
 
         /**
             \class AStar
@@ -85,7 +85,7 @@ namespace OpenLibrary
         class AStar
         {
             public:
-                AStar() {}
+                AStar(): m_openSet(), m_closedSet() {}
                 virtual ~AStar() {}
 
                 /**
