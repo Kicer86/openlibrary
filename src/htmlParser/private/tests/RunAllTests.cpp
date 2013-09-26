@@ -1,4 +1,6 @@
 
+#define CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+
 #include <CppUTest/CommandLineTestRunner.h>
 
 IMPORT_TEST_GROUP(HtmlTag);

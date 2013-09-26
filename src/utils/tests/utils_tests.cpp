@@ -1,6 +1,8 @@
 
-#include <CppUTest/TestHarness.h>
 #include <memory>
+
+#define CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#include <CppUTest/TestHarness.h>
 
 #include "../data_ptr.hpp"
 
