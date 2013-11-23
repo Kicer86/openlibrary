@@ -32,7 +32,6 @@ register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_
 
 #test targets
 addSourceFlags(psort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-turnOnAllWarnings(psort.cpp ${TEST_SRC})
 add_executable(qsort_tester psort.cpp ${LIB_SOURCES})
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnCpp11(qsort_tester)

@@ -24,7 +24,6 @@ function(register_library name)
         target_link_libraries(${LIBRARY_NAME} ${LIBRARIES})
 
         hideSymbols(${LIBRARY_NAME})
-        turnOnAllWarnings(${SOURCES})
 
         #install files
         if(WIN32)  # for windows (dll = runtime)
@@ -131,7 +130,6 @@ function(registerTest libraryName)
 
         target_link_libraries(${targetName} ${LIBRARIES})
 
-        turnOnAllWarnings(${SOURCES})
         turnOnCpp11(${targetName})
         enableCodeCoverage(${targetName})
 

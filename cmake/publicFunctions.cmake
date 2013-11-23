@@ -43,29 +43,6 @@ function(turnOnIntelSyntax target)
 endfunction(turnOnIntelSyntax)
 
 
-#add source files which should be checked for warnings
-function(turnOnAllWarnings)
-
-    foreach(source ${ARGN})
-
-        get_source_file_property(isGenerated ${source} GENERATED)
-
-        if (NOT isGenerated)
-
-            if(CMAKE_COMPILER_IS_GNUCXX)
-                addSourceFlags(${source} COMPILE_FLAGS "-W -Wall -Wextra -Winit-self -Wformat=2 -Wshadow -Wlogical-op -Wsequence-point -Wfloat-equal -Weffc++ -Wold-style-cast")
-                #addSourceFlags(${source} COMPILE_FLAGS "-Werror")
-            else() #Visual Studio
-
-		addSourceFlags(${source} COMPILE_FLAGS "/W4")
-
-            endif(CMAKE_COMPILER_IS_GNUCXX)
-        endif(NOT isGenerated)
-
-    endforeach(source ${ARGN})
-
-endfunction(turnOnAllWarnings)
-
 function(enableCodeCoverage target)
 
     if(CMAKE_COMPILER_IS_GNUCXX)
