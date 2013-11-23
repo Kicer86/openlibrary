@@ -28,7 +28,14 @@ endfunction(addSourceFlags)
 function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         addFlags(${target} COMPILE_FLAGS "--std=c++11")
-    else() #Visual Studio
+    elseif(MSVC) #Visual Studio
+    
+        #on by default
+        
+    else()
+    
+        #assumption it's llvm
+        addFlags(${target} COMPILE_FLAGS "-std=c++11")
 
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnCpp11)
@@ -77,14 +84,14 @@ function(enableCodeCoverageForSources target) #after target go sources
     #linker
     if(CMAKE_COMPILER_IS_GNUCXX)
         addFlags(${target} LINK_FLAGS "--coverage")
-        
+
     elseif(MSVC) #Visual Studio
                         
     else() 
         
         #assumption it's llvm
         addFlags(${target} LINK_FLAGS "--coverage")
-            
+
     endif(CMAKE_COMPILER_IS_GNUCXX)
 
 endfunction(enableCodeCoverageForSources)
