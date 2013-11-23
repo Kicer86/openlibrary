@@ -78,6 +78,41 @@ function(enableCodeCoverage target)
 endfunction(enableCodeCoverage)
 
 
+function(enableCodeCoverageForSources target) #after target go sources
+
+    #sources
+    foreach(source ${ARGN})
+       
+        if(CMAKE_COMPILER_IS_GNUCXX)
+            addSourceFlags(${source} COMPILE_FLAGS "--coverage")
+
+        elseif(MSVC) #Visual Studio
+                    
+        else() 
+        
+            #assumption it's llvm
+            addSourceFlags(${source} COMPILE_FLAGS "--coverage")
+            
+        endif(CMAKE_COMPILER_IS_GNUCXX)
+        
+    endforeach(source ${ARGN})
+
+    #linker
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        addFlags(${target} LINK_FLAGS "--coverage")
+        
+    elseif(MSVC) #Visual Studio
+                        
+    else() 
+        
+        #assumption it's llvm
+        addFlags(${target} LINK_FLAGS "--coverage")
+            
+    endif(CMAKE_COMPILER_IS_GNUCXX)
+
+endfunction(enableCodeCoverageForSources)
+
+
 function(hideSymbols target)
 
     if(CMAKE_COMPILER_IS_GNUCXX)
