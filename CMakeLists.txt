@@ -19,6 +19,8 @@ add_library_path(src/utils utils)
 add_library_path(src/math math)
 add_library_path(src/palgorithm palgorithm)
 
+add_subdirectory(src/tools)
+
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
