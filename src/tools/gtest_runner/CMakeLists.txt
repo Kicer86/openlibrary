@@ -20,8 +20,20 @@ set(RUNNER_SOURCES
     main.cpp
    )
 
-
 add_executable(gtest_runner ${RUNNER_SOURCES})
 target_link_libraries(gtest_runner ${CMAKE_DL_LIBS} ${GTEST_LIBRARY})
 turnOnCpp11(gtest_runner)
 
+install(TARGETS gtest_runner RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary/bin)
+
+
+#test lib
+set(TEST_SOURCES
+    so_main.cpp
+   )
+
+add_library(gtest_runner_test SHARED ${TEST_SOURCES})
+target_link_libraries(gtest_runner_test ${GTEST_LIBRARY})
+turnOnCpp11(gtest_runner_test)
+
+install(TARGETS gtest_runner_test LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary/bin)
