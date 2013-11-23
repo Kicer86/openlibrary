@@ -98,6 +98,7 @@ function(getHeadersBasePath path)
     set(${path} ${CMAKE_INSTALL_PREFIX}/include/ PARENT_SCOPE)
 endfunction(getHeadersBasePath)
 
+
 function(getHeadersPath path)
     getHeadersBasePath(basePath)
     set(${path} ${basePath}/${OPENLIBRARY_DIR_NAME} PARENT_SCOPE)
@@ -131,7 +132,7 @@ function(registerTest libraryName)
         target_link_libraries(${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
-        enableCodeCoverage(${targetName})
+        enableCodeCoverageForSources(${targetName} ${SOURCES})
 
         #attach perform${targetName} to 'test' target
         add_dependencies(test perform_${targetName})

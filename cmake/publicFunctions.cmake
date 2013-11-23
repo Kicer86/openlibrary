@@ -50,18 +50,6 @@ function(turnOnIntelSyntax target)
 endfunction(turnOnIntelSyntax)
 
 
-function(enableCodeCoverage target)
-
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        addFlags(${target} COMPILE_FLAGS "--coverage")
-        addFlags(${target} LINK_FLAGS "--coverage")
-    else() #Visual Studio
-
-    endif(CMAKE_COMPILER_IS_GNUCXX)
-
-endfunction(enableCodeCoverage)
-
-
 function(enableCodeCoverageForSources target) #after target go sources
 
     #sources
