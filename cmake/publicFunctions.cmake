@@ -90,26 +90,60 @@ endfunction(enableCodeCoverageForSources)
 # 2. registers test target (an internal binary file is used to launch gtest test from target)
 # 3. registers another target which uses 'lcov' tool to generate html with code coverage
 #
-# as arguments use target and then sources which contain gtest tests
+# as arguments use target, all sources with tests should be included in target already (use if(GTEST) as condition fo them)
 function(enableGTestAndCodeCoverage target)
 
     #TODO: check GTest availability
     
     #register new static library with tests
-    set(sources ${ARGN})
-    set(libname ${target}_test_library)
+    #set(sources ${ARGN})
+    #set(libname ${target}_test_library)
     
-    add_library(${libname} STATIC ${sources})
-    set_target_properties(${libname} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-    target_link_libraries(${target} ${libname})
+    #add_library(${libname} STATIC ${sources})
+    #set_target_properties(${libname} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    #target_link_libraries(${target} ${libname})
     
     #link target with gtest    
     target_link_libraries(${target} ${GTEST_LIBRARY})
     
     #register test
-    add_test(${target}_tests echo "testing")
+    find_program(GTEST_RUNNER gtest_runner)    #TODO: do it smarter
+    get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
+    add_test(${target}_tests echo ${GTEST_RUNNER} ${LIB_LOCATION})
+    
+    find_program(LCOV lcov)
+    find_program(GENHTML genhtml)
     
     #register lcov
+    if (LCOV AND NOT TARGET lcov_zero_counters)        #register lcov targets only once, for whole binary tree
+    
+        #init counters
+        add_custom_target(lcov_zero_counters
+                          COMMAND lcov --directory ${CMAKE_BINARY_DIR} --zerocounters
+                          COMMENT "zeroing lcov counters")
+                      
+        add_dependencies(test lcov_zero_counters) #zero counters before executing tests
+                
+                
+        #gather info and generate html
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov.info
+                           COMMAND ${LCOV} --capture --directory ${CMAKE_BINARY_DIR} --output-file ${CMAKE_BINARY_DIR}/lcov.info
+                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+                           
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/code_coverage/index.html
+                           COMMAND ${GENHTML} ${CMAKE_BINARY_DIR}/lcov.info --output-directory ${CMAKE_BINARY_DIR}/code_coverage
+                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+                           DEPENDS ${CMAKE_BINARY_DIR}/lcov.info)
+                           
+        add_custom_target(lcov_generate
+                          DEPENDS ${CMAKE_BINARY_DIR}/code_coverage/index.html
+                          COMMENT "generating lcov data"
+                          WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+                          
+        add_dependencies(lcov_generate test)   #run tests before lcov generation
+                           
+    endif(LCOV AND NOT TARGET lcov_zero_counters)
+    
 
 endfunction(enableGTestAndCodeCoverage)
 
