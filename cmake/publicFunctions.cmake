@@ -140,6 +140,7 @@ function(enableGTestAndCodeCoverage target)
         #gather info and generate html
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/test_run
                            DEPENDS ${CMAKE_BINARY_DIR}/lcov/clear
+                           DEPENDS ${target}
                            COMMAND ctest
                            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/lcov/test_run
                            COMMENT "running tests")
