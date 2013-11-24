@@ -85,6 +85,35 @@ function(enableCodeCoverageForSources target) #after target go sources
 endfunction(enableCodeCoverageForSources)
 
 
+# function does:
+# 1. link 'target' with gtest library
+# 2. registers test target (an internal binary file is used to launch gtest test from target)
+# 3. registers another target which uses 'lcov' tool to generate html with code coverage
+#
+# as arguments use target and then sources which contain gtest tests
+function(enableGTestAndCodeCoverage target)
+
+    #TODO: check GTest availability
+    
+    #register new static library with tests
+    set(sources ${ARGN})
+    set(libname ${target}_test_library)
+    
+    add_library(${libname} STATIC ${sources})
+    set_target_properties(${libname} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    target_link_libraries(${target} ${libname})
+    
+    #link target with gtest    
+    target_link_libraries(${target} ${GTEST_LIBRARY})
+    
+    #register test
+    add_test(${target}_tests echo "testing")
+    
+    #register lcov
+
+endfunction(enableGTestAndCodeCoverage)
+
+
 function(hideSymbols target)
 
     if(CMAKE_COMPILER_IS_GNUCXX)
@@ -95,16 +124,6 @@ function(hideSymbols target)
 
 endfunction(hideSymbols)
 
-
-function(addFirstIncludeDir sourceFile includeDir)
-
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        addSourceFlags(${sourceFile} COMPILE_FLAGS "-isystem '${includeDir}'")
-    else() #Visual Studio
-
-    endif(CMAKE_COMPILER_IS_GNUCXX)
-
-endfunction(addFirstIncludeDir)
 
 #usage:
 #parseArguments( list of keywords_pattern 'ARGUMENTS' list of arguments to be parsed )
