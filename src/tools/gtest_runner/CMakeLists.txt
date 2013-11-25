@@ -12,16 +12,22 @@ elseif(WIN32)
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 endif(UNIX OR CYGWIN)
 
-find_package(GTest REQUIRED)
+find_package(GTest)
 
-include_directories(${GTEST_INCLUDES})
-
+if(GTest)
+  include_directories(${GTEST_INCLUDES})
+endif(GTest)
+  
 set(RUNNER_SOURCES
     main.cpp
    )
 
 add_executable(gtest_runner ${RUNNER_SOURCES})
-target_link_libraries(gtest_runner ${CMAKE_DL_LIBS} ${GTEST_LIBRARY})
+
+if(GTest)
+  target_link_libraries(gtest_runner ${CMAKE_DL_LIBS} ${GTEST_LIBRARY})
+endif(GTest)
+
 turnOnCpp11(gtest_runner)
 enableTestsAndCodeCoverage(gtest_runner)   #only link option, no sources. Without it, loaded library will not be instrumented
 
@@ -34,7 +40,11 @@ set(TEST_SOURCES
    )
 
 add_library(gtest_runner_test SHARED ${TEST_SOURCES})
-target_link_libraries(gtest_runner_test ${GTEST_LIBRARY})
+
+if(GTest)
+  target_link_libraries(gtest_runner_test ${GTEST_LIBRARY})
+endif(GTest)  
+  
 turnOnCpp11(gtest_runner_test)
 
 install(TARGETS gtest_runner_test LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary/bin)
