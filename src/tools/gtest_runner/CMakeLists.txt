@@ -23,7 +23,7 @@ set(RUNNER_SOURCES
 add_executable(gtest_runner ${RUNNER_SOURCES})
 target_link_libraries(gtest_runner ${CMAKE_DL_LIBS} ${GTEST_LIBRARY})
 turnOnCpp11(gtest_runner)
-enableGTestAndCodeCoverage(gtest_runner)   #only link option, no sources. Without it, loaded library will not be instrumented
+enableTestsAndCodeCoverage(gtest_runner)   #only link option, no sources. Without it, loaded library will not be instrumented
 
 install(TARGETS gtest_runner RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary/bin)
 

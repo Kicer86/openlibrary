@@ -86,29 +86,18 @@ endfunction(enableCodeCoverageForSources)
 
 
 # function does:
-# 1. link 'target' with gtest library
-# 2. registers test target (an internal binary file is used to launch gtest test from target)
-# 3. registers another target which uses 'lcov' tool to generate html with code coverage
+# 1. registers test target (an internal binary file is used to launch gtest test from target)
+# 2. registers another target which uses 'lcov' tool to generate html with code coverage
 #
-# as arguments use target, all sources with tests should be included in target already (use if(GTEST) as condition fo them)
-macro(enableGTestAndCodeCoverage target)
-
-    
-    
-    #register new static library with tests
-    #set(sources ${ARGN})
-    #set(libname ${target}_test_library)
-    
-    #add_library(${libname} STATIC ${sources})
-    #set_target_properties(${libname} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-    #target_link_libraries(${target} ${libname})
-    
+# as arguments use target, all sources with tests should be included in target already
+macro(enableTestsAndCodeCoverage target)
     
     #register test
     find_program(GTEST_RUNNER gtest_runner)    #TODO: do it smarter
     get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
     add_test(${target}_tests ${GTEST_RUNNER} ${LIB_LOCATION})
     
+    #TODO: some errors
     find_program(LCOV lcov)
     find_program(GENHTML genhtml)
    
@@ -177,7 +166,7 @@ macro(enableGTestAndCodeCoverage target)
     endif(LCOV)
     
 
-endmacro(enableGTestAndCodeCoverage)
+endmacro(enableTestsAndCodeCoverage)
 
 
 function(hideSymbols target)
