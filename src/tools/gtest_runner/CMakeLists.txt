@@ -14,19 +14,20 @@ endif(UNIX OR CYGWIN)
 
 find_package(GTest)
 
-if(GTest)
-  include_directories(${GTEST_INCLUDES})
-endif(GTest)
+if(GTEST_INCLUDE_DIRS)
+    include_directories(${GTEST_INCLUDES})
+endif(GTEST_INCLUDE_DIRS)
   
 set(RUNNER_SOURCES
     main.cpp
    )
 
 add_executable(gtest_runner ${RUNNER_SOURCES})
+target_link_libraries(gtest_runner ${CMAKE_DL_LIBS})
 
-if(GTest)
-  target_link_libraries(gtest_runner ${CMAKE_DL_LIBS} ${GTEST_LIBRARY})
-endif(GTest)
+if(GTEST_LIBRARY)
+    target_link_libraries(gtest_runner ${GTEST_LIBRARY})
+endif(GTEST_LIBRARY)
 
 turnOnCpp11(gtest_runner)
 enableTestsAndCodeCoverage(gtest_runner)   #only link option, no sources. Without it, loaded library will not be instrumented
