@@ -129,7 +129,7 @@ macro(enableTestsAndCodeCoverage target)
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "preparing lcov environment")
                           
-        add_custom_target(lcov_gather_data
+        add_custom_target(lcov_gather_data                                #target-related targets attach here
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "gathering code coverage data")
                                    
@@ -152,6 +152,7 @@ macro(enableTestsAndCodeCoverage target)
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            DEPENDS ${CMAKE_BINARY_DIR}/lcov/test_run
                            COMMAND ${LCOV} --capture --directory . --output-file ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
+                           COMMAND ${LCOV} --remove ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            WORKING_DIRECTORY ${LIB_DIR}
                            COMMENT "gathering code coverage data for target ${target}")
                            
