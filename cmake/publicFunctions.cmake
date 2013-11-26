@@ -92,6 +92,8 @@ endfunction(enableCodeCoverageForSources)
 # as arguments use target, all sources with tests should be included in target already
 macro(enableTestsAndCodeCoverage target)
     
+    #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
+    
     #register test
     find_program(GTEST_RUNNER gtest_runner)    #TODO: do it smarter
     get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
