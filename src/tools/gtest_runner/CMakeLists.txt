@@ -1,7 +1,6 @@
 
 project(gtest_runner)
 
-
 cmake_minimum_required(VERSION 2.8.10)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -15,12 +14,14 @@ endif(UNIX OR CYGWIN)
 find_package(GTest)
 
 if(GTEST_INCLUDE_DIRS)
-    include_directories(${GTEST_INCLUDES})
+    include_directories(${GTEST_INCLUDE_DIRS})
 endif(GTEST_INCLUDE_DIRS)
   
-set(RUNNER_SOURCES
-    main.cpp
-   )
+if(WIN32)
+	set(RUNNER_SOURCES main.cpp)
+elseif()
+	set(RUNNER_SOURCES main_win.cpp)
+endif(WIN32)
 
 add_executable(gtest_runner ${RUNNER_SOURCES})
 target_link_libraries(gtest_runner ${CMAKE_DL_LIBS})
@@ -42,10 +43,16 @@ set(TEST_SOURCES
 
 add_library(gtest_runner_test SHARED ${TEST_SOURCES})
 
-if(GTest)
+if(GTEST_LIBRARY)
   target_link_libraries(gtest_runner_test ${GTEST_LIBRARY})
-endif(GTest)  
+endif(GTEST_LIBRARY)  
   
 turnOnCpp11(gtest_runner_test)
 
-install(TARGETS gtest_runner_test LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary/bin)
+if(WIN32)
+	set(target_type RUNTIME)
+else()
+	set(target_type LIBRARY)
+endif(WIN32)
+
+install(TARGETS gtest_runner_test ${target_type} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary/bin)
