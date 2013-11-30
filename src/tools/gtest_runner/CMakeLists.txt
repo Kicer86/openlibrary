@@ -19,7 +19,7 @@ endif(GTEST_INCLUDE_DIRS)
   
 if(WIN32)
 	set(RUNNER_SOURCES main_win.cpp)
-elseif()
+else()
 	set(RUNNER_SOURCES main.cpp)
 endif(WIN32)
 
