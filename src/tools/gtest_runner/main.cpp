@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     }
     
     //load library
-    dlopen(argv[1], RTLD_LAZY);
+    dlopen(argv[1], RTLD_LAZY | RTLD_LOCAL);
     
     argc--;  //remove first argument and
     argv++;  //move to second one
