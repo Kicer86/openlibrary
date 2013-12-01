@@ -24,7 +24,7 @@ endif(WIN32)
 set(RUNNER_SOURCES ${RUNNER_SOURCES} ${GTEST_SOURCES})
 
 add_executable(gtest_runner ${RUNNER_SOURCES})
-target_link_libraries(gtest_runner ${CMAKE_DL_LIBS})
+target_link_libraries(gtest_runner ${CMAKE_DL_LIBS} ${GTEST_LIBRARIES})
 
 turnOnCpp11(gtest_runner)
 enableTestsAndCodeCoverage(gtest_runner)   #only link option, no sources. Without it, loaded library will not be instrumented
