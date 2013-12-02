@@ -90,7 +90,7 @@ endfunction(enableCodeCoverageForSources)
 # 2. registers another target which uses 'lcov' tool to generate html with code coverage
 #
 # as arguments use target, all sources with tests should be included in target already
-macro(enableTestsAndCodeCoverage target)
+function(enableTestsAndCodeCoverage target)
     
     #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
     
@@ -169,7 +169,7 @@ macro(enableTestsAndCodeCoverage target)
     endif(LCOV)
     
 
-endmacro(enableTestsAndCodeCoverage)
+endfunction(enableTestsAndCodeCoverage)
 
 
 function(hideSymbols target)
