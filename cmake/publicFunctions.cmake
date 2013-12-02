@@ -93,11 +93,7 @@ endfunction(enableCodeCoverageForSources)
 function(enableTestsAndCodeCoverage target)
     
     #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
-    
-    #register test
-    find_program(GTEST_RUNNER gtest_runner)    #TODO: do it smarter
-    get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
-    add_test(${target}_tests ${GTEST_RUNNER} ${LIB_LOCATION})
+    find_package(GTest REQUIRED)
     
     #TODO: some errors
     find_program(LCOV lcov)
@@ -150,6 +146,7 @@ function(enableTestsAndCodeCoverage target)
     
     #per target build step
     if(LCOV)
+        get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
         get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            DEPENDS ${CMAKE_BINARY_DIR}/lcov/test_run
@@ -168,7 +165,13 @@ function(enableTestsAndCodeCoverage target)
         enableCodeCoverageForSources(${target} ${sources})
     endif(LCOV)
     
-
+    #prepare test target
+    add_executable(${target}_test ${GTEST_MAIN_LIBRARY})
+    set_target_properties(${target}_test PROPERTIES LINKER_LANGUAGE C)
+    target_link_libraries(${target}_test ${target} ${GTEST_MAIN_LIBRARY})
+    
+    add_test(${target} ${target}_test)
+    
 endfunction(enableTestsAndCodeCoverage)
 
 
