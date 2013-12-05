@@ -85,12 +85,10 @@ function(enableCodeCoverageForSources target) #after target go sources
 endfunction(enableCodeCoverageForSources)
 
 
-# function does:
-# 1. registers test target (an internal binary file is used to launch gtest test from target)
-# 2. registers another target which uses 'lcov' tool to generate html with code coverage
+# function registers target which uses 'lcov' tool to generate html with code coverage
 #
-# as arguments use target, all sources with tests should be included in target already
-function(enableTestsAndCodeCoverage target)
+# as arguments use target to be coveraged
+function(enableCodeCoverage target)
     
     #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
     find_package(GTest REQUIRED)
@@ -164,13 +162,6 @@ function(enableTestsAndCodeCoverage target)
         get_property(sources TARGET ${target} PROPERTY SOURCES)
         enableCodeCoverageForSources(${target} ${sources})
     endif(LCOV)
-    
-    #prepare test target
-    add_executable(${target}_test ${GTEST_MAIN_LIBRARY})
-    set_target_properties(${target}_test PROPERTIES LINKER_LANGUAGE C)
-    target_link_libraries(${target}_test ${target} ${GTEST_MAIN_LIBRARY})
-    
-    add_test(${target} ${target}_test)
     
 endfunction(enableTestsAndCodeCoverage)
 
