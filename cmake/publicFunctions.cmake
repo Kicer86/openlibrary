@@ -176,7 +176,7 @@ function(enableGTest target mode)
     else()
         message(FATAL_ERROR "For 'mode' argument use 'GTEST' or 'GMOCK'. Currently ${mode} was provided")
     endif()
-                
+    
     #prepare test target
     exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.c)
     add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.c)
