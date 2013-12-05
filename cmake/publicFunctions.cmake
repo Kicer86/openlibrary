@@ -163,7 +163,28 @@ function(enableCodeCoverage target)
         enableCodeCoverageForSources(${target} ${sources})
     endif(LCOV)
     
-endfunction(enableTestsAndCodeCoverage)
+endfunction(enableCodeCoverage)
+
+
+#Enables gtest for target. 'target' will be linked with GTest's or GMock's main library depending on mode (use value GTEST or GMOCK)
+function(enableGTest target mode)
+        
+    if("${mode}" STREQUAL "GTEST")
+        set(link_library ${GTEST_MAIN_LIBRARY})
+    elseif("${mode}" STREQUAL "GMOCK")
+        set(link_library ${GMOCK_MAIN_LIBRARY})
+    else()
+        message(FATAL_ERROR "For 'mode' argument use 'GTEST' or 'GMOCK'. Currently ${mode} was provided")
+    endif()
+                
+    #prepare test target
+    exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.c)
+    add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.c)
+    target_link_libraries(${target}_test ${target} ${link_library})
+    
+    add_test(${target} ${target}_test)
+
+endfunction(enableGTest)
 
 
 function(hideSymbols target)
