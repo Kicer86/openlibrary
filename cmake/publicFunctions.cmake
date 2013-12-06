@@ -170,7 +170,7 @@ endfunction(enableCodeCoverage)
 function(enableGTest target mode)
         
     if("${mode}" STREQUAL "GTEST")
-        set(link_library ${GTEST_MAIN_LIBRARY})
+        set(link_library ${GTEST_MAIN_LIBRARY} ${GTEST_LIBRARY})  #in GTest 1.7 main library contains only mian function. Linking against base library is required
     elseif("${mode}" STREQUAL "GMOCK")
         set(link_library ${GMOCK_MAIN_LIBRARY})
     else()
@@ -178,9 +178,14 @@ function(enableGTest target mode)
     endif()
     
     #prepare test target
-    exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.c)
-    add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.c)
-    target_link_libraries(${target}_test ${target} ${link_library})
+    find_package (Threads)
+    exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
+    add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
+    target_link_libraries(${target}_test 
+                          ${target}                     #library with code and tests
+                          ${link_library}               #gmock or gtest library
+                          ${CMAKE_THREAD_LIBS_INIT}     #pthreads
+                         )
     
     add_test(${target} ${target}_test)
 
