@@ -91,8 +91,7 @@ endfunction(enableCodeCoverageForSources)
 function(enableCodeCoverage target)
     
     #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
-    find_package(GTest REQUIRED)
-    
+   
     #TODO: some errors
     find_program(LCOV lcov)
     find_program(GENHTML genhtml)
@@ -120,17 +119,17 @@ function(enableCodeCoverage target)
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                            COMMENT "running tests")
                            
-        add_custom_target(lcov_prepare
+        add_custom_target(_lcov_prepare
                           DEPENDS ${CMAKE_BINARY_DIR}/lcov/test_run
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "preparing lcov environment")
                           
-        add_custom_target(lcov_gather_data                                #target-related targets attach here
+        add_custom_target(_lcov_gather_data                                #target-related targets attach here
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "gathering code coverage data")
                                    
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/code_coverage/index.html
-                           DEPENDS lcov_gather_data
+                           DEPENDS _lcov_gather_data
                            COMMAND ${GENHTML} ${CMAKE_BINARY_DIR}/lcov/lcov_*.info --output-directory ${CMAKE_BINARY_DIR}/code_coverage
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/lcov/clear #not clean anymore
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -153,11 +152,11 @@ function(enableCodeCoverage target)
                            WORKING_DIRECTORY ${LIB_DIR}
                            COMMENT "gathering code coverage data for target ${target}")
                            
-        add_custom_target(lcov_${target}_info_gathering
+        add_custom_target(_lcov_${target}_info_gathering
                           DEPENDS ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
-        add_dependencies(lcov_gather_data lcov_${target}_info_gathering)
+        add_dependencies(_lcov_gather_data _lcov_${target}_info_gathering)
                           
         get_property(sources TARGET ${target} PROPERTY SOURCES)
         enableCodeCoverageForSources(${target} ${sources})
@@ -289,7 +288,7 @@ function(prepareExportFile filePath libraryName)
         endif(CMAKE_COMPILER_IS_GNUCXX)
 
     else()
- 	 file(APPEND ${filePath} "\n#define ${LIBRARY_NAME}_EXPORTS\n")
+        file(APPEND ${filePath} "\n#define ${LIBRARY_NAME}_EXPORTS\n")
     endif(targetType STREQUAL "SHARED_LIBRARY")
 
 endfunction(prepareExportFile)
