@@ -146,7 +146,7 @@ function(enableCodeCoverage target)
         get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
         get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
-                           DEPENDS ${CMAKE_BINARY_DIR}/lcov/test_run
+                           DEPENDS _lcov_prepare
                            COMMAND ${LCOV} --quiet --capture --directory . --output-file ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            COMMAND ${LCOV} --quiet --remove ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            WORKING_DIRECTORY ${LIB_DIR}
