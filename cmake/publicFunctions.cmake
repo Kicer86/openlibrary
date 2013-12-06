@@ -98,7 +98,7 @@ function(enableCodeCoverage target)
    
     #register lcov's global targets
     if (LCOV AND NOT TARGET lcov_generate)   #register lcov targets only once, for whole binary tree
-            
+               
         #init counters
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/clear 
                            COMMAND lcov --directory ${CMAKE_BINARY_DIR} --zerocounters
@@ -130,7 +130,7 @@ function(enableCodeCoverage target)
                                    
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/code_coverage/index.html
                            DEPENDS _lcov_gather_data
-                           COMMAND ${GENHTML} ${CMAKE_BINARY_DIR}/lcov/lcov_*.info --output-directory ${CMAKE_BINARY_DIR}/code_coverage
+                           COMMAND ${GENHTML} --quiet ${CMAKE_BINARY_DIR}/lcov/lcov_*.info --output-directory ${CMAKE_BINARY_DIR}/code_coverage
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/lcov/clear #not clean anymore
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                            
@@ -147,8 +147,8 @@ function(enableCodeCoverage target)
         get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            DEPENDS ${CMAKE_BINARY_DIR}/lcov/test_run
-                           COMMAND ${LCOV} --capture --directory . --output-file ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
-                           COMMAND ${LCOV} --remove ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
+                           COMMAND ${LCOV} --quiet --capture --directory . --output-file ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
+                           COMMAND ${LCOV} --quiet --remove ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
                            WORKING_DIRECTORY ${LIB_DIR}
                            COMMENT "gathering code coverage data for target ${target}")
                            
