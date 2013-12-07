@@ -32,7 +32,7 @@ template<class Queue>
 class TS_Queue
 {
     public:
-        TS_Queue(size_t max_size): m_queue(), m_item_type(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size), m_break(false) {}
+        TS_Queue(size_t max_size): m_queue(), m_item_type(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
         virtual ~TS_Queue() {}
         
         typedef typename Queue::value_type PopType;
@@ -55,8 +55,17 @@ class TS_Queue
             
             if ( m_queue.empty() == false )
             {
-                result = *(m_queue.begin());
+                const int type = *(m_item_type.begin());
+                
+                if (type == 0)
+                    result = *(m_queue.begin());
+                else if (type == 1)
+                {
+                    //do nothing - result is invalid, we just got info that we need to stop waiting
+                }
+                
                 m_queue.pop_front();
+                m_item_type.pop_front();
             
                 m_is_not_full.notify_all();                
             }
@@ -80,7 +89,7 @@ class TS_Queue
         
         void break_popping()
         {
-            m_break = true;
+            push_back(0, 1);
             m_is_not_empty.notify_all();
         }
         
@@ -91,7 +100,6 @@ class TS_Queue
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_mutex;
         size_t m_size;
-        bool m_break;
         
         
         template<class T>
@@ -107,12 +115,13 @@ class TS_Queue
             m_is_not_empty.notify_all();
         }
         
+        
         template<class T = int>
         void waitForEvent(std::unique_lock<std::mutex>& lock, const std::chrono::duration<T>& waitTime)
         {
             auto precond = [&] 
             { 
-                return !(m_break == false && m_queue.empty());
+                return !m_queue.empty();
             };
             
             if (waitTime == std::chrono::duration<T>())
@@ -121,8 +130,6 @@ class TS_Queue
                 m_is_not_empty.wait_for(lock,
                                         waitTime,
                                         precond);   //wait for signal (or timeout) if there is no data 
-            
-            m_break = false;
         }
 };
 
