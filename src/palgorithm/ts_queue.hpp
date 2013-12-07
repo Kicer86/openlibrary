@@ -28,15 +28,13 @@
 #include <boost/optional.hpp>
 
 //based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
-template<class Queue>
+template<typename Type>
 class TS_Queue
 {
     public:
         TS_Queue(size_t max_size): m_queue(), m_item_type(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
         virtual ~TS_Queue() {}
-        
-        typedef typename Queue::value_type PopType;
-        
+                
         //writting
         template<class T>
         void push_back(const T &item)
@@ -46,10 +44,10 @@ class TS_Queue
         
         //reading  
         template<class T = int>
-        boost::optional<PopType> pop_front(const std::chrono::duration<T>& waitTime = std::chrono::duration<T>())
+        boost::optional<Type> pop_front(const std::chrono::duration<T>& waitTime = std::chrono::duration<T>())
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-            boost::optional<PopType> result;
+            boost::optional<Type> result;
             
             waitForEvent(lock, waitTime);
             
@@ -94,7 +92,7 @@ class TS_Queue
         }
         
     private:
-        Queue m_queue;
+        std::deque<Type> m_queue;
         std::deque<int> m_item_type;                //type of item in m_queue; 0 for normal, 1 - break poping, return null item
         std::condition_variable m_is_not_full;
         std::condition_variable m_is_not_empty;

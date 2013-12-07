@@ -13,7 +13,7 @@ TEST_GROUP(TS_QueueShould)
 
 TEST(TS_QueueShould, ReturnAllPassedData)
 {
-    TS_Queue<std::deque<int>> queue(10);
+    TS_Queue<int> queue(10);
     
     queue.push_back(1);
     queue.push_back(2);
@@ -31,7 +31,7 @@ TEST(TS_QueueShould, ReturnAllPassedData)
 
 TEST(TS_QueueShould, DealWithTakingFromEmptyContainer)
 {
-    TS_Queue<std::deque<int>> queue(10);
+    TS_Queue<int> queue(10);
     
     queue.push_back(1);
     
