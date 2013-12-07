@@ -83,7 +83,7 @@ class TS_Queue
             return result;
         }
         
-        void break_popping()
+        void break_popping()                           //pushes an empty item just to stop waiting in pop_back. pop_back will return invalid item
         {
             push_back(T(), Data::ItemType::Empty);
             m_is_not_empty.notify_all();
