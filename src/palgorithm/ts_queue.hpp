@@ -50,24 +50,12 @@ class TS_Queue
         
         //reading  
         template<class T = int>
-        boost::optional<PopType> pop_front(const std::chrono::duration<T> waitTime = std::chrono::duration<T>())
+        boost::optional<PopType> pop_front(const std::chrono::duration<T>& waitTime = std::chrono::duration<T>())
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-            
-            auto precond = [&] 
-            { 
-                return !(m_break == false && m_queue.empty());
-            };
-            
-            if (waitTime == std::chrono::duration<T>())
-                m_is_not_empty.wait(lock, precond);
-            else         
-                m_is_not_empty.wait_for(lock,
-                                        waitTime,
-                                        precond);   //wait for signal (or timeout) if there is no data 
-            
-            m_break = false;
             boost::optional<PopType> result;
+            
+            waitForEvent(lock, waitTime);
             
             if ( m_queue.empty() == false )
             {
@@ -107,6 +95,24 @@ class TS_Queue
         mutable std::mutex m_mutex;
         size_t m_size;
         bool m_break;
+        
+        template<class T = int>
+        void waitForEvent(std::unique_lock<std::mutex>& lock, const std::chrono::duration<T>& waitTime)
+        {
+            auto precond = [&] 
+            { 
+                return !(m_break == false && m_queue.empty());
+            };
+            
+            if (waitTime == std::chrono::duration<T>())
+                m_is_not_empty.wait(lock, precond);
+            else         
+                m_is_not_empty.wait_for(lock,
+                                        waitTime,
+                                        precond);   //wait for signal (or timeout) if there is no data 
+            
+            m_break = false;
+        }
 };
 
 #endif
