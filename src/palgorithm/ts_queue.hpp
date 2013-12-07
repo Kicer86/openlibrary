@@ -32,7 +32,7 @@ template<typename Type>
 class TS_Queue
 {
     public:
-        TS_Queue(size_t max_size): m_queue(), m_item_type(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
+        TS_Queue(size_t max_size): m_queue(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
         virtual ~TS_Queue() {}
                 
         //writting
@@ -53,17 +53,16 @@ class TS_Queue
             
             if ( m_queue.empty() == false )
             {
-                const int type = *(m_item_type.begin());
+                const Data item = *(m_queue.begin());
                 
-                if (type == 0)
-                    result = *(m_queue.begin());
-                else if (type == 1)
+                if (item.type == 0)
+                    result = item.data;
+                else if (item.type == 1)
                 {
                     //do nothing - result is invalid, we just got info that we need to stop waiting
                 }
                 
                 m_queue.pop_front();
-                m_item_type.pop_front();
             
                 m_is_not_full.notify_all();                
             }
@@ -92,8 +91,15 @@ class TS_Queue
         }
         
     private:
-        std::deque<Type> m_queue;
-        std::deque<int> m_item_type;                //type of item in m_queue; 0 for normal, 1 - break poping, return null item
+        struct Data
+        {
+            Data(const Type& d, int t): data(d), type(t) {}
+            
+            Type data;
+            int  type;              //type of item in m_queue; 0 for normal, 1 - break poping, return null item
+        };
+        
+        std::deque<Data> m_queue;
         std::condition_variable m_is_not_full;
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_mutex;
@@ -107,8 +113,7 @@ class TS_Queue
     
             m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
             
-            m_queue.push_back(item);
-            m_item_type.push_back(type);
+            m_queue.push_back(Data(item, type));
     
             m_is_not_empty.notify_all();
         }
