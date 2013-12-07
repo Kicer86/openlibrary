@@ -39,7 +39,7 @@ class TS_Queue
         template<class T>
         void push_back(const T &item)
         {
-            push_back(item, 0);
+            push_back(item, Data::ItemType::Normal);
         }
         
         //reading  
@@ -55,9 +55,9 @@ class TS_Queue
             {
                 const Data item = *(m_queue.begin());
                 
-                if (item.type == 0)
+                if (item.type == Data::ItemType::Normal)
                     result = item.data;
-                else if (item.type == 1)
+                else if (item.type == Data::ItemType::Empty)
                 {
                     //do nothing - result is invalid, we just got info that we need to stop waiting
                 }
@@ -86,17 +86,21 @@ class TS_Queue
         
         void break_popping()
         {
-            push_back(0, 1);
+            push_back(Type(), Data::ItemType::Empty);
             m_is_not_empty.notify_all();
         }
         
     private:
         struct Data
         {
-            Data(const Type& d, int t): data(d), type(t) {}
-            
             Type data;
-            int  type;              //type of item in m_queue; 0 for normal, 1 - break poping, return null item
+            enum class ItemType
+            {
+                Normal,
+                Empty,
+            } type;
+            
+            Data(const Type& d, ItemType t): data(d), type(t) {}
         };
         
         std::deque<Data> m_queue;
@@ -107,13 +111,14 @@ class TS_Queue
         
         
         template<class T>
-        void push_back(const T &item, int type)
+        void push_back(const T &item, typename Data::ItemType type)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
     
             m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
             
-            m_queue.push_back(Data(item, type));
+            Data data(item, type);
+            m_queue.push_back(data);
     
             m_is_not_empty.notify_all();
         }
