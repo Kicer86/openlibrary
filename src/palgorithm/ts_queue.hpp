@@ -28,7 +28,7 @@
 #include <boost/optional.hpp>
 
 //based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
-template<typename Type>
+template<typename T>
 class TS_Queue
 {
     public:
@@ -36,18 +36,17 @@ class TS_Queue
         virtual ~TS_Queue() {}
                 
         //writting
-        template<class T>
         void push_back(const T &item)
         {
             push_back(item, Data::ItemType::Normal);
         }
         
         //reading  
-        template<class T = int>
-        boost::optional<Type> pop_front(const std::chrono::duration<T>& waitTime = std::chrono::duration<T>())
+        template<class TT = int>
+        boost::optional<T> pop_front(const std::chrono::duration<TT>& waitTime = std::chrono::duration<TT>())
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-            boost::optional<Type> result;
+            boost::optional<T> result;
             
             waitForEvent(lock, waitTime);
             
@@ -86,21 +85,21 @@ class TS_Queue
         
         void break_popping()
         {
-            push_back(Type(), Data::ItemType::Empty);
+            push_back(T(), Data::ItemType::Empty);
             m_is_not_empty.notify_all();
         }
         
     private:
         struct Data
         {
-            Type data;
+            T data;
             enum class ItemType
             {
                 Normal,
                 Empty,
             } type;
             
-            Data(const Type& d, ItemType t): data(d), type(t) {}
+            Data(const T& d, ItemType t): data(d), type(t) {}
         };
         
         std::deque<Data> m_queue;
@@ -109,8 +108,6 @@ class TS_Queue
         mutable std::mutex m_mutex;
         size_t m_size;
         
-        
-        template<class T>
         void push_back(const T &item, typename Data::ItemType type)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -122,17 +119,16 @@ class TS_Queue
     
             m_is_not_empty.notify_all();
         }
-        
-        
-        template<class T = int>
-        void waitForEvent(std::unique_lock<std::mutex>& lock, const std::chrono::duration<T>& waitTime)
+                
+        template<class TT = int>
+        void waitForEvent(std::unique_lock<std::mutex>& lock, const std::chrono::duration<TT>& waitTime)
         {
             auto precond = [&] 
             { 
                 return !m_queue.empty();
             };
             
-            if (waitTime == std::chrono::duration<T>())
+            if (waitTime == std::chrono::duration<TT>())
                 m_is_not_empty.wait(lock, precond);
             else         
                 m_is_not_empty.wait_for(lock,
