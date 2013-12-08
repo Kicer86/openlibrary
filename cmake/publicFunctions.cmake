@@ -106,7 +106,7 @@ function(enableCodeCoverage target)
     set(TRUCOV_DIR       ${CMAKE_BINARY_DIR}/code_coverage/trucov)      #dir for trucov's files
    
     #register lcov's global targets
-    if (LCOV AND NOT TARGET lcov_generate)   #register lcov targets only once, for whole binary tree
+    if (LCOV AND NOT TARGET generate_code_coverage)   #register lcov targets only once, for whole binary tree
                
         #init counters
         add_custom_command(OUTPUT ${FLAGS_DIR}/clear
@@ -146,12 +146,12 @@ function(enableCodeCoverage target)
                            COMMENT "generating html with code coverage information"
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                            
-        add_custom_target(lcov_generate
+        add_custom_target(generate_code_coverage
                           DEPENDS ${HTML_OUTPUT_DIR}/index.html
                           COMMENT "generating html data"
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                                                      
-    endif(LCOV AND NOT TARGET lcov_generate)
+    endif(LCOV AND NOT TARGET generate_code_coverage)
     
     #per target build step
     if(LCOV)
