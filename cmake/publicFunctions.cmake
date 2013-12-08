@@ -133,7 +133,7 @@ function(enableCodeCoverage target)
         add_custom_target(_lcov_prepare
                           DEPENDS ${FLAGS_DIR}/test_run
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                          COMMENT "preparing lcov environment")
+                          COMMENT "preparing code coverage environment")
                           
         add_custom_target(_lcov_gather_data                                #target-related targets attach here
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -148,7 +148,7 @@ function(enableCodeCoverage target)
                            
         add_custom_target(lcov_generate
                           DEPENDS ${HTML_OUTPUT_DIR}/index.html
-                          COMMENT "generating lcov data"
+                          COMMENT "generating html data"
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                                                      
     endif(LCOV AND NOT TARGET lcov_generate)
