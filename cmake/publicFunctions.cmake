@@ -137,12 +137,12 @@ function(enableCodeCoverage target)
 
         #here is a gap in relations chain filled by "per target build step"
                           
-        add_custom_target(_lcov_gather_data                                #target-related targets attach here
+        add_custom_target(_cc_gather_data                                  #target-related targets attach here
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "gathering code coverage data")
                                    
         add_custom_command(OUTPUT ${HTML_OUTPUT_DIR}/index.html
-                           DEPENDS _lcov_gather_data
+                           DEPENDS _cc_gather_data
                            COMMAND ${GENHTML} --quiet ${LCOV_DIR}/lcov_*.info --output-directory ${HTML_OUTPUT_DIR}
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${FLAGS_DIR}/clear #not clean anymore
                            COMMENT "generating html with code coverage information"
@@ -170,7 +170,7 @@ function(enableCodeCoverage target)
                           DEPENDS ${LCOV_DIR}/lcov_${target}.info
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
-        add_dependencies(_lcov_gather_data _lcov_${target}_info_gathering)
+        add_dependencies(_cc_gather_data _lcov_${target}_info_gathering)
                           
         get_property(sources TARGET ${target} PROPERTY SOURCES)
         enableCodeCoverageForSources(${target} ${sources})
