@@ -104,11 +104,12 @@ function(enableCodeCoverage target)
                            COMMAND lcov --directory ${CMAKE_BINARY_DIR} --zerocounters
                            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/lcov
                            COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/code_coverage
+                           COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/code_coverage/html
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/lcov/*
-                           COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/code_coverage/index.html  #to force genhtml
+                           COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/code_coverage/html/index.html  #to force genhtml
                            COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/lcov/clear
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                           COMMENT "zeroing lcov counters")
+                           COMMENT "cleaning code coverage data")
                 
         #gather info and generate html
         add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/test_run
@@ -128,14 +129,15 @@ function(enableCodeCoverage target)
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "gathering code coverage data")
                                    
-        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/code_coverage/index.html
+        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/code_coverage/html/index.html
                            DEPENDS _lcov_gather_data
-                           COMMAND ${GENHTML} --quiet ${CMAKE_BINARY_DIR}/lcov/lcov_*.info --output-directory ${CMAKE_BINARY_DIR}/code_coverage
+                           COMMAND ${GENHTML} --quiet ${CMAKE_BINARY_DIR}/lcov/lcov_*.info --output-directory ${CMAKE_BINARY_DIR}/code_coverage/html/
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/lcov/clear #not clean anymore
+                           COMMENT "generating html with code coverage information"
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                            
         add_custom_target(lcov_generate
-                          DEPENDS ${CMAKE_BINARY_DIR}/code_coverage/index.html
+                          DEPENDS ${CMAKE_BINARY_DIR}/code_coverage/html/index.html
                           COMMENT "generating lcov data"
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                                                      
