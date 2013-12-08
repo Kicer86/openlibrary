@@ -178,7 +178,7 @@ function(enableCodeCoverage target)
 
             get_property(sources TARGET ${target} PROPERTY SOURCES)
             enableCodeCoverageForSources(${target} ${sources})
-        endif(LCOV)
+        endif(LCOV AND NOT GCOVR)
 
         #per target build step
         if(TRUCOV)
@@ -189,7 +189,7 @@ function(enableCodeCoverage target)
 
         endif(GCOVR)
 
-    endif(LCOV OR TRUCOV)
+    endif(LCOV OR TRUCOV OR GCOVR)
     
 endfunction(enableCodeCoverage)
 
