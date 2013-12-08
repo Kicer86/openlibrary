@@ -95,19 +95,22 @@ function(enableCodeCoverage target)
     #TODO: some errors
     find_program(LCOV lcov)
     find_program(GENHTML genhtml)
+
+    #constants with paths
+    set(HTML_OUTPUT_DIR ${CMAKE_BINARY_DIR}/code_coverage/html)
+    set(FLAGS_DIR       ${CMAKE_BINARY_DIR}/code_coverage/flags)
+    set(LCOV_DIR        ${CMAKE_BINARY_DIR}/code_coverage/lcov)        #dir for lcov's files
    
     #register lcov's global targets
     if (LCOV AND NOT TARGET lcov_generate)   #register lcov targets only once, for whole binary tree
-
-        #constants with paths
-        set(HTML_OUTPUT_DIR ${CMAKE_BINARY_DIR}/code_coverage/html)
-        set(FLAGS_DIR       ${CMAKE_BINARY_DIR}/code_coverage/flags)
                
         #init counters
         add_custom_command(OUTPUT ${FLAGS_DIR}/clear
                            COMMAND lcov --directory ${CMAKE_BINARY_DIR} --zerocounters
                            COMMAND ${CMAKE_COMMAND} -E make_directory ${FLAGS_DIR}
                            COMMAND ${CMAKE_COMMAND} -E make_directory ${HTML_OUTPUT_DIR}
+                           COMMAND ${CMAKE_COMMAND} -E make_directory ${LCOV_DIR}
+                           COMMAND ${CMAKE_COMMAND} -E remove -f ${LCOV_DIR}/*
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${FLAGS_DIR}/*
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${HTML_OUTPUT_DIR}/index.html  #to force genhtml
                            COMMAND ${CMAKE_COMMAND} -E touch ${FLAGS_DIR}/clear
@@ -134,8 +137,8 @@ function(enableCodeCoverage target)
                                    
         add_custom_command(OUTPUT ${HTML_OUTPUT_DIR}/index.html
                            DEPENDS _lcov_gather_data
-                           COMMAND ${GENHTML} --quiet ${CMAKE_BINARY_DIR}/lcov/lcov_*.info --output-directory ${HTML_OUTPUT_DIR}
-                           COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/lcov/clear #not clean anymore
+                           COMMAND ${GENHTML} --quiet ${LCOV_DIR}/lcov_*.info --output-directory ${HTML_OUTPUT_DIR}
+                           COMMAND ${CMAKE_COMMAND} -E remove -f ${FLAGS_DIR}/clear #not clean anymore
                            COMMENT "generating html with code coverage information"
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
                            
@@ -150,15 +153,15 @@ function(enableCodeCoverage target)
     if(LCOV)
         get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
         get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
-        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
+        add_custom_command(OUTPUT ${LCOV_DIR}/lcov_${target}.info
                            DEPENDS _lcov_prepare
-                           COMMAND ${LCOV} --quiet --capture --directory . --output-file ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
-                           COMMAND ${LCOV} --quiet --remove ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
+                           COMMAND ${LCOV} --quiet --capture --directory . --output-file ${LCOV_DIR}/lcov_${target}.info
+                           COMMAND ${LCOV} --quiet --remove ${LCOV_DIR}/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${LCOV_DIR}/lcov_${target}.info
                            WORKING_DIRECTORY ${LIB_DIR}
                            COMMENT "gathering code coverage data for target ${target}")
                            
         add_custom_target(_lcov_${target}_info_gathering
-                          DEPENDS ${CMAKE_BINARY_DIR}/lcov/lcov_${target}.info
+                          DEPENDS ${LCOV_DIR}/lcov_${target}.info
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
         add_dependencies(_lcov_gather_data _lcov_${target}_info_gathering)
