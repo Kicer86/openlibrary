@@ -93,13 +93,17 @@ function(enableCodeCoverage target)
     #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
    
     #TODO: some errors
-    find_program(LCOV lcov)
+    find_program(LCOV    lcov)
     find_program(GENHTML genhtml)
+    find_program(TRUCOV  trucov)
 
     #constants with paths
-    set(HTML_OUTPUT_DIR ${CMAKE_BINARY_DIR}/code_coverage/html)
-    set(FLAGS_DIR       ${CMAKE_BINARY_DIR}/code_coverage/flags)
-    set(LCOV_DIR        ${CMAKE_BINARY_DIR}/code_coverage/lcov)        #dir for lcov's files
+    set(HTML_OUTPUT_DIR  ${CMAKE_BINARY_DIR}/code_coverage/html)
+    set(GRAPH_OUTPUT_DIR ${CMAKE_BINARY_DIR}/code_coverage/graph)
+
+    set(FLAGS_DIR        ${CMAKE_BINARY_DIR}/code_coverage/flags)
+    set(LCOV_DIR         ${CMAKE_BINARY_DIR}/code_coverage/lcov)        #dir for lcov's files
+    set(TRUCOV_DIR       ${CMAKE_BINARY_DIR}/code_coverage/trucov)      #dir for trucov's files
    
     #register lcov's global targets
     if (LCOV AND NOT TARGET lcov_generate)   #register lcov targets only once, for whole binary tree
