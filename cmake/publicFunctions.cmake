@@ -130,10 +130,12 @@ function(enableCodeCoverage target)
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                            COMMENT "running tests")
                            
-        add_custom_target(_lcov_prepare
+        add_custom_target(_cc_prepare                                      #target-related targes will depend on this
                           DEPENDS ${FLAGS_DIR}/test_run
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "preparing code coverage environment")
+
+        #here is a gap in relations chain filled by "per target build step"
                           
         add_custom_target(_lcov_gather_data                                #target-related targets attach here
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -158,7 +160,7 @@ function(enableCodeCoverage target)
         get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
         get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
         add_custom_command(OUTPUT ${LCOV_DIR}/lcov_${target}.info
-                           DEPENDS _lcov_prepare
+                           DEPENDS _cc_prepare
                            COMMAND ${LCOV} --quiet --capture --directory . --output-file ${LCOV_DIR}/lcov_${target}.info
                            COMMAND ${LCOV} --quiet --remove ${LCOV_DIR}/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${LCOV_DIR}/lcov_${target}.info
                            WORKING_DIRECTORY ${LIB_DIR}
