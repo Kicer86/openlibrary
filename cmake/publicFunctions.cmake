@@ -101,30 +101,30 @@ function(enableCodeCoverage target)
 
         #constants with paths
         set(HTML_OUTPUT_DIR ${CMAKE_BINARY_DIR}/code_coverage/html)
+        set(FLAGS_DIR       ${CMAKE_BINARY_DIR}/code_coverage/flags)
                
         #init counters
-        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/clear 
+        add_custom_command(OUTPUT ${FLAGS_DIR}/clear
                            COMMAND lcov --directory ${CMAKE_BINARY_DIR} --zerocounters
-                           COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/lcov
-                           COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/code_coverage
+                           COMMAND ${CMAKE_COMMAND} -E make_directory ${FLAGS_DIR}
                            COMMAND ${CMAKE_COMMAND} -E make_directory ${HTML_OUTPUT_DIR}
-                           COMMAND ${CMAKE_COMMAND} -E remove -f ${CMAKE_BINARY_DIR}/lcov/*
+                           COMMAND ${CMAKE_COMMAND} -E remove -f ${FLAGS_DIR}/*
                            COMMAND ${CMAKE_COMMAND} -E remove -f ${HTML_OUTPUT_DIR}/index.html  #to force genhtml
-                           COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/lcov/clear
+                           COMMAND ${CMAKE_COMMAND} -E touch ${FLAGS_DIR}/clear
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                            COMMENT "cleaning code coverage data")
                 
         #gather info and generate html
-        add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/lcov/test_run
-                           DEPENDS ${CMAKE_BINARY_DIR}/lcov/clear
+        add_custom_command(OUTPUT ${FLAGS_DIR}/test_run
+                           DEPENDS ${FLAGS_DIR}/clear
                            DEPENDS ${target}
                            COMMAND ctest
-                           COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/lcov/test_run
+                           COMMAND ${CMAKE_COMMAND} -E touch ${FLAGS_DIR}/test_run
                            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                            COMMENT "running tests")
                            
         add_custom_target(_lcov_prepare
-                          DEPENDS ${CMAKE_BINARY_DIR}/lcov/test_run
+                          DEPENDS ${FLAGS_DIR}/test_run
                           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                           COMMENT "preparing lcov environment")
                           
