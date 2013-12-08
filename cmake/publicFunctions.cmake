@@ -157,10 +157,11 @@ function(enableCodeCoverage target)
 
         endif(NOT TARGET generate_code_coverage)
 
+        get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
+        get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
+
         #per target build step
         if(LCOV)
-            get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
-            get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
             add_custom_command(OUTPUT ${LCOV_DIR}/lcov_${target}.info
                                DEPENDS _cc_prepare
                                COMMAND ${LCOV} --quiet --capture --directory . --output-file ${LCOV_DIR}/lcov_${target}.info
@@ -177,6 +178,11 @@ function(enableCodeCoverage target)
             get_property(sources TARGET ${target} PROPERTY SOURCES)
             enableCodeCoverageForSources(${target} ${sources})
         endif(LCOV)
+
+        #per target build step
+        if(TRUCOV)
+
+        endif(TRUCOV)
 
     endif(LCOV OR TRUCOV)
     
