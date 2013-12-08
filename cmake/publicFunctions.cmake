@@ -104,8 +104,9 @@ function(enableCodeCoverage target)
     set(FLAGS_DIR        ${CMAKE_BINARY_DIR}/code_coverage/flags)
     set(LCOV_DIR         ${CMAKE_BINARY_DIR}/code_coverage/lcov)        #dir for lcov's files
     set(TRUCOV_DIR       ${CMAKE_BINARY_DIR}/code_coverage/trucov)      #dir for trucov's files
+    set(GCOVR_DIR        ${CMAKE_BINARY_DIR}/code_coverage/gcovr)       #dir for gcovr's files
    
-    if(LCOV OR TRUCOV)
+    if(LCOV OR TRUCOV OR GCOVR)
 
         #register global targets
         if(NOT TARGET generate_code_coverage)   #register lcov targets only once, for whole binary tree
@@ -161,7 +162,7 @@ function(enableCodeCoverage target)
         get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
 
         #per target build step
-        if(LCOV)
+        if(LCOV AND NOT GCOVR)        #GCovr wins with lcov
             add_custom_command(OUTPUT ${LCOV_DIR}/lcov_${target}.info
                                DEPENDS _cc_prepare
                                COMMAND ${LCOV} --quiet --capture --directory . --output-file ${LCOV_DIR}/lcov_${target}.info
@@ -183,6 +184,10 @@ function(enableCodeCoverage target)
         if(TRUCOV)
 
         endif(TRUCOV)
+
+        if(GCOVR)
+
+        endif(GCOVR)
 
     endif(LCOV OR TRUCOV)
     
