@@ -10,7 +10,7 @@ find_package(OpenMP)
 add_subdirectory(bose-nelson)
 generateswaptables(${CMAKE_CURRENT_BINARY_DIR} swap_tables swap_table_cpp swap_table_hpp)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
+include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
 
 set(LIB_SOURCES
     ${swap_table_cpp}
@@ -30,7 +30,8 @@ set(TEST_SRC
     tests/palgorithm.cpp
     )
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
+#TODO: fix tests problem TEST_SOURCES ${TEST_SRC}. gcov flags ar being added and are ruining linking in external projects
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} )
 turnOnCpp11(${LIB_NAME})
 
 #test targets

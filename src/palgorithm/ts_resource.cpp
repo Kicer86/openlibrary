@@ -3,4 +3,4 @@
 
 #include <iostream>
 
-ThreadSafeResource<std::ostream *> ThreadSafeOut(&std::cout);
+ThreadSafeResource<std::ostream *> ThreadSafeOutput(&std::cout);

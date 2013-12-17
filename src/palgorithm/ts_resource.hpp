@@ -8,6 +8,8 @@
 #include <memory>
 #include <ostream>
 
+#include "palgorithm_exports.hpp"
+
 template<typename T>
 class ThreadSafeResource
 {
@@ -69,6 +71,6 @@ class ThreadSafeResource
         T m_resource;
 };
 
-extern ThreadSafeResource<std::ostream *> ThreadSafeOutput;
+extern ThreadSafeResource<std::ostream *> ThreadSafeOutput PALGORITHM_EXPORTS;
 
 #endif
