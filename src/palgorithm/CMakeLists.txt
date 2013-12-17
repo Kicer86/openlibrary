@@ -20,6 +20,7 @@ set(LIB_HEADERS
     ${swap_table_hpp}
     psort.hpp
     ts_queue.hpp
+    ts_resource.hpp
     private/psort_private.hpp
 )
 
