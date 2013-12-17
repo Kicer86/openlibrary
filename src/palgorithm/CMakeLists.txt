@@ -14,6 +14,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${Boost_
 
 set(LIB_SOURCES
     ${swap_table_cpp}
+    ts_resource.cpp
     )
 
 set(LIB_HEADERS
@@ -30,15 +31,16 @@ set(TEST_SRC
     )
 
 register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
+turnOnCpp11(${LIB_NAME})
 
 #test targets
 addSourceFlags(psort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-add_executable(qsort_tester psort.cpp ${LIB_SOURCES})
+add_executable(qsort_tester psort.cpp ${swap_table_cpp})
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnCpp11(qsort_tester)
 
 #debug targets
-add_executable(opt_test opt_test.cpp ${LIB_SOURCES})
+add_executable(opt_test opt_test.cpp ${swap_table_cpp})
 turnOnCpp11(opt_test)
 
 add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)

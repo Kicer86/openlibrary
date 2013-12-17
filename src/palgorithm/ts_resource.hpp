@@ -6,6 +6,7 @@
 
 #include <mutex>
 #include <memory>
+#include <ostream>
 
 template<typename T>
 class ThreadSafeResource
@@ -48,7 +49,7 @@ class ThreadSafeResource
         friend struct Deleter;
 
         template<typename... Args>
-        ThreadSafeResource(const Args&... args): m_mutex(), m_resource(args...)
+        ThreadSafeResource(Args&... args): m_mutex(), m_resource(args...)
         {
         }
 
@@ -67,5 +68,7 @@ class ThreadSafeResource
         std::mutex m_mutex;
         T m_resource;
 };
+
+extern ThreadSafeResource<std::ostream &> ThreadSafeOutput;
 
 #endif
