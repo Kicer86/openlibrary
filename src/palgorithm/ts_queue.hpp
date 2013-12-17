@@ -34,61 +34,64 @@ class TS_Queue
     public:
         TS_Queue(size_t max_size): m_queue(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
         virtual ~TS_Queue() {}
-                
+
         //writting
         void push_back(const T &item)
         {
             push_back(item, Data::ItemType::Normal);
         }
-        
-        //reading  
+
+        //reading
         template<class TT = int>
         boost::optional<T> pop_front(const std::chrono::duration<TT>& waitTime = std::chrono::duration<TT>())
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             boost::optional<T> result;
-            
+
             waitForEvent(lock, waitTime);
-            
+
             if ( m_queue.empty() == false )
             {
                 const Data item = *(m_queue.begin());
-                
+
                 if (item.type == Data::ItemType::Normal)
+                {
                     result = item.data;
+                    m_queue.pop_front();
+                    m_is_not_full.notify_all();
+                }
                 else if (item.type == Data::ItemType::Empty)
                 {
                     //do nothing - result is invalid, we just got info that we need to stop waiting
+                    assert(m_queue.size() == 1); //this should be last and only item
                 }
-                
-                m_queue.pop_front();
-            
-                m_is_not_full.notify_all();                
             }
-            
+
             return result;
         }
-        
+
         size_t size() const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             const size_t result = m_queue.size();
             return result;
         }
-        
+
         bool empty() const
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             const bool result = m_queue.empty();
             return result;
         }
-        
-        void break_popping()                           //pushes an empty item just to stop waiting in pop_back. pop_back will return invalid item
+
+        // pushes an empty item just to stop waiting in pop_back.
+        // Each pop_back since this function call will return invalid item.
+        void break_popping()
         {
             push_back(T(), Data::ItemType::Empty);
             m_is_not_empty.notify_all();
         }
-        
+
     private:
         struct Data
         {
@@ -98,42 +101,42 @@ class TS_Queue
                 Normal,
                 Empty,
             } type;
-            
+
             Data(const T& d, ItemType t): data(d), type(t) {}
         };
-        
+
         std::deque<Data> m_queue;
         std::condition_variable m_is_not_full;
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_mutex;
         size_t m_size;
-        
+
         void push_back(const T &item, typename Data::ItemType type)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
-    
+
             m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
-            
+
             Data data(item, type);
             m_queue.push_back(data);
-    
+
             m_is_not_empty.notify_all();
         }
-                
+
         template<class TT = int>
         void waitForEvent(std::unique_lock<std::mutex>& lock, const std::chrono::duration<TT>& waitTime)
         {
-            auto precond = [&] 
-            { 
+            auto precond = [&]
+            {
                 return !m_queue.empty();
             };
-            
+
             if (waitTime == std::chrono::duration<TT>())
                 m_is_not_empty.wait(lock, precond);
-            else         
+            else
                 m_is_not_empty.wait_for(lock,
                                         waitTime,
-                                        precond);   //wait for signal (or timeout) if there is no data 
+                                        precond);   //wait for signal (or timeout) if there is no data
         }
 };
 
