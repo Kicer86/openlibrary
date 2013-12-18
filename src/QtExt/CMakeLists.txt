@@ -4,6 +4,10 @@ set(LIB_NAME QtExt)
 project( ${LIB_NAME} )
 cmake_minimum_required(VERSION 2.8)
 
+if(POLICY CMP0020)
+	cmake_policy(SET CMP0020 NEW)
+endif(POLICY CMP0020)
+
 find_package(Qt5Widgets)
 
 if(Qt5Widgets_DIR)
@@ -11,7 +15,6 @@ if(Qt5Widgets_DIR)
 else()
 	set(Qt5 FALSE)
 endif(Qt5Widgets_DIR)
-
 
 if(NOT Qt5)
 	find_package(Qt4 4.6 REQUIRED QtGui QtCore REQUIRED)
