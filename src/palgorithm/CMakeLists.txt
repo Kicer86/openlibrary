@@ -10,16 +10,18 @@ find_package(OpenMP)
 add_subdirectory(bose-nelson)
 generateswaptables(${CMAKE_CURRENT_BINARY_DIR} swap_tables swap_table_cpp swap_table_hpp)
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
+include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src ${Boost_INCLUDE_DIRS})
 
 set(LIB_SOURCES
     ${swap_table_cpp}
+    ts_resource.cpp
     )
 
 set(LIB_HEADERS
     ${swap_table_hpp}
     psort.hpp
     ts_queue.hpp
+    ts_resource.hpp
     private/psort_private.hpp
 )
 
@@ -28,16 +30,18 @@ set(TEST_SRC
     tests/palgorithm.cpp
     )
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
+#TODO: fix tests problem TEST_SOURCES ${TEST_SRC}. gcov flags ar being added and are ruining linking in external projects
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} )
+turnOnCpp11(${LIB_NAME})
 
 #test targets
 addSourceFlags(psort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
-add_executable(qsort_tester psort.cpp ${LIB_SOURCES})
+add_executable(qsort_tester psort.cpp ${swap_table_cpp})
 addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
 turnOnCpp11(qsort_tester)
 
 #debug targets
-add_executable(opt_test opt_test.cpp ${LIB_SOURCES})
+add_executable(opt_test opt_test.cpp ${swap_table_cpp})
 turnOnCpp11(opt_test)
 
 add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)
