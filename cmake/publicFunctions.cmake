@@ -50,7 +50,7 @@ function(turnOnIntelSyntax target)
 endfunction(turnOnIntelSyntax)
 
 
-function(enableCodeCoverageForSources target) #after target go sources
+function(enableCodeCoverageForSources target) #after target sources go
 
     #sources
     foreach(source ${ARGN})
