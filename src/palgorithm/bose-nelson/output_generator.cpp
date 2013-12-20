@@ -45,7 +45,10 @@ void OutputGenerator::generate_hpp(std::ostream &stream, BoseNelsonSortingNetwor
 
 void OutputGenerator::generateVariable(std::ostream &stream, BoseNelsonSortingNetworkGenerator::SwapInstructions &instructions)
 {
-    const int data_size = instructions.size();
+    int data_size = instructions.size();
+	if (data_size == 0)
+		data_size = 1;           //some compiler doesn't allow null indices
+
     stream << "int swap_data_" << m_size << "[" << data_size << "]";
 }
 
