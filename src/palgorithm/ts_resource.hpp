@@ -71,6 +71,6 @@ class ThreadSafeResource
         T m_resource;
 };
 
-extern ThreadSafeResource<std::ostream *> ThreadSafeOutput PALGORITHM_EXPORTS;
+extern PALGORITHM_EXPORTS ThreadSafeResource<std::ostream *> ThreadSafeOutput;
 
 #endif
