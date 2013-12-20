@@ -44,4 +44,6 @@ turnOnCpp11(qsort_tester)
 add_executable(opt_test opt_test.cpp ${swap_table_cpp})
 turnOnCpp11(opt_test)
 
-add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)
+if(NOT WIN32)
+	add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)
+endif(NOT WIN32)
