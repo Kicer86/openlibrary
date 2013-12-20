@@ -127,7 +127,7 @@ function(registerTest libraryName)
         target_link_libraries(${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
-        enableCodeCoverageForSources(${targetName} ${SOURCES})
+        enableCodeCoverageFor(${targetName})
 
         #attach perform${targetName} to 'test' target
         add_dependencies(test perform_${targetName})

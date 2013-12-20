@@ -49,7 +49,36 @@ function(turnOnIntelSyntax target)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnIntelSyntax)
 
+function(enableCodeCoverageFor target)
 
+    #sources
+    foreach(source ${ARGN})
+
+        if(MSVC) #Visual Studio
+
+        else()
+
+            #assumption it's llvm or gcc
+            addFlags(${target} COMPILE_FLAGS "--coverage")
+
+        endif(MSVC)
+
+    endforeach(source ${ARGN})
+
+    #linker
+    if(MSVC) #Visual Studio
+
+    else()
+
+        #assumption it's llvm or gcc
+        addFlags(${target} LINK_FLAGS "--coverage")
+
+    endif(MSVC)
+
+endfunction(enableCodeCoverageFor)
+
+
+#deprecated?
 function(enableCodeCoverageForSources target) #after target sources go
 
     #sources

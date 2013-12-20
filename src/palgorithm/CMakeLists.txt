@@ -30,8 +30,7 @@ set(TEST_SRC
     tests/palgorithm.cpp
     )
 
-#TODO: fix tests problem TEST_SOURCES ${TEST_SRC}. gcov flags ar being added and are ruining linking in external projects
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} )
+register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
 turnOnCpp11(${LIB_NAME})
 
 #test targets
