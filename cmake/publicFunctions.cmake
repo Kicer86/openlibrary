@@ -78,42 +78,6 @@ function(enableCodeCoverageFor target)
 endfunction(enableCodeCoverageFor)
 
 
-#deprecated?
-function(enableCodeCoverageForSources target) #after target sources go
-
-    #sources
-    foreach(source ${ARGN})
-
-        if(CMAKE_COMPILER_IS_GNUCXX)
-            addSourceFlags(${source} COMPILE_FLAGS "--coverage")
-
-        elseif(MSVC) #Visual Studio
-
-        else()
-
-            #assumption it's llvm
-            addSourceFlags(${source} COMPILE_FLAGS "--coverage")
-
-        endif(CMAKE_COMPILER_IS_GNUCXX)
-
-    endforeach(source ${ARGN})
-
-    #linker
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        addFlags(${target} LINK_FLAGS "--coverage")
-
-    elseif(MSVC) #Visual Studio
-
-    else()
-
-        #assumption it's llvm
-        addFlags(${target} LINK_FLAGS "--coverage")
-
-    endif(CMAKE_COMPILER_IS_GNUCXX)
-
-endfunction(enableCodeCoverageForSources)
-
-
 # function registers target which uses 'lcov' tool to generate html with code coverage
 #
 # as arguments use target to be coveraged
@@ -205,8 +169,7 @@ function(enableCodeCoverage target)
 
             add_dependencies(_cc_gather_data _lcov_${target}_info_gathering)
 
-            get_property(sources TARGET ${target} PROPERTY SOURCES)
-            enableCodeCoverageForSources(${target} ${sources})
+            enableCodeCoverageFor(${target})
         endif(LCOV AND NOT GCOVR)
 
         #per target build step
