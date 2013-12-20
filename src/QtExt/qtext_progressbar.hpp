@@ -7,12 +7,12 @@
 
 #include <QProgressBar>
 
-#include "QtExt_exports.hpp"
+#include "QtExt_export.h"
 
 class QProgressBar;
 
 //model
-class QTEXT_EXPORTS QExProgressBarModel: public QObject
+class QTEXT_EXPORT QExProgressBarModel: public QObject
 {
         Q_OBJECT
 
@@ -59,7 +59,7 @@ class QTEXT_EXPORTS QExProgressBarModel: public QObject
 };
 
 //view
-class QTEXT_EXPORTS QExProgressBarView: public QProgressBar
+class QTEXT_EXPORT QExProgressBarView: public QProgressBar
 {
         const QExProgressBarModel *model;
 

@@ -23,14 +23,14 @@
 
 #include <string>
 
-#include "utils_exports.hpp"
+#include "utils_export.h"
 #include "integers.hpp"
 
 namespace OpenLibrary
 {
     namespace Utils
     {
-        struct UTILS_EXPORTS Cpu
+        struct UTILS_EXPORT Cpu
         {
             const std::string m_manufacturer;
             const uint64_t m_features;
@@ -43,7 +43,7 @@ namespace OpenLibrary
             virtual ~Cpu();
         };
 
-        class UTILS_EXPORTS CpuInfo
+        class UTILS_EXPORT CpuInfo
         {
             public:
                 virtual ~CpuInfo();

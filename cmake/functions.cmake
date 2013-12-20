@@ -74,24 +74,19 @@ function(register_library name)
     endif(TEST_SOURCES)
 
     #generate export rules
-    generateExportFile(${LIBRARY_NAME})
+    if(SOURCES)
+        set(header ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}_export.h)
+        generate_export_header(${LIBRARY_NAME} EXPORT_FILE_NAME ${header})
+
+        getHeadersPath(HEADERS_INSTALL_PATH)
+        set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${libraryName})
+
+        install(FILES ${header}
+                DESTINATION ${HEADERS_INSTALL_PATH}
+                PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+    endif(SOURCES)
 
 endfunction(register_library)
-
-
-function(generateExportFile libraryName)
-
-    getExportFile(${libraryName} generatedFile)
-    exportSymbols(${libraryName})
-
-    getHeadersPath(HEADERS_INSTALL_PATH)
-    set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${libraryName})
-
-    install(FILES ${generatedFile}
-            DESTINATION ${HEADERS_INSTALL_PATH}
-            PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-
-endfunction(generateExportFile libraryName)
 
 
 function(getHeadersBasePath path)

@@ -4,12 +4,12 @@
 
 #include <string>
 
-#include "common_exports.hpp"
+#include "common_export.h"
 
 namespace Strings
 {
-    COMMON_EXPORTS std::string *stripQuotas(std::string *s);
-    COMMON_EXPORTS std::string stripBlanks(const std::string &s);
+    COMMON_EXPORT std::string *stripQuotas(std::string *s);
+    COMMON_EXPORT std::string stripBlanks(const std::string &s);
 }
 
 #endif

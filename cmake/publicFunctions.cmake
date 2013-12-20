@@ -29,11 +29,11 @@ function(turnOnCpp11 target)
     if(CMAKE_COMPILER_IS_GNUCXX)
         addFlags(${target} COMPILE_FLAGS "--std=c++11")
     elseif(MSVC) #Visual Studio
-    
+
         #on by default
-        
+
     else()
-    
+
         #assumption it's llvm
         addFlags(${target} COMPILE_FLAGS "-std=c++11")
 
@@ -54,19 +54,19 @@ function(enableCodeCoverageForSources target) #after target go sources
 
     #sources
     foreach(source ${ARGN})
-       
+
         if(CMAKE_COMPILER_IS_GNUCXX)
             addSourceFlags(${source} COMPILE_FLAGS "--coverage")
 
         elseif(MSVC) #Visual Studio
-                    
-        else() 
-        
+
+        else()
+
             #assumption it's llvm
             addSourceFlags(${source} COMPILE_FLAGS "--coverage")
-            
+
         endif(CMAKE_COMPILER_IS_GNUCXX)
-        
+
     endforeach(source ${ARGN})
 
     #linker
@@ -74,9 +74,9 @@ function(enableCodeCoverageForSources target) #after target go sources
         addFlags(${target} LINK_FLAGS "--coverage")
 
     elseif(MSVC) #Visual Studio
-                        
-    else() 
-        
+
+    else()
+
         #assumption it's llvm
         addFlags(${target} LINK_FLAGS "--coverage")
 
@@ -89,9 +89,9 @@ endfunction(enableCodeCoverageForSources)
 #
 # as arguments use target to be coveraged
 function(enableCodeCoverage target)
-    
+
     #TODO: remove cov database files before running tests (gcda gcno) as they may be not up to date with sources
-   
+
     #TODO: some errors
     find_program(LCOV    lcov)
     find_program(GENHTML genhtml)
@@ -105,7 +105,7 @@ function(enableCodeCoverage target)
     set(LCOV_DIR         ${CMAKE_BINARY_DIR}/code_coverage/lcov)        #dir for lcov's files
     set(TRUCOV_DIR       ${CMAKE_BINARY_DIR}/code_coverage/trucov)      #dir for trucov's files
     set(GCOVR_DIR        ${CMAKE_BINARY_DIR}/code_coverage/gcovr)       #dir for gcovr's files
-   
+
     if(LCOV OR TRUCOV OR GCOVR)
 
         #register global targets
@@ -190,13 +190,13 @@ function(enableCodeCoverage target)
         endif(GCOVR)
 
     endif(LCOV OR TRUCOV OR GCOVR)
-    
+
 endfunction(enableCodeCoverage)
 
 
 #Enables gtest for target. 'target' will be linked with GTest's or GMock's main library depending on mode (use value GTEST or GMOCK)
 function(enableGTest target mode)
-        
+
     if("${mode}" STREQUAL "GTEST")
         set(link_library ${GTEST_MAIN_LIBRARY} ${GTEST_LIBRARY})  #in GTest 1.7 main library contains only mian function. Linking against base library is required
     elseif("${mode}" STREQUAL "GMOCK")
@@ -204,17 +204,17 @@ function(enableGTest target mode)
     else()
         message(FATAL_ERROR "For 'mode' argument use 'GTEST' or 'GMOCK'. Currently ${mode} was provided")
     endif()
-    
+
     #prepare test target
     find_package (Threads)
     exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
     add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
-    target_link_libraries(${target}_test 
+    target_link_libraries(${target}_test
                           ${target}                     #library with code and tests
                           ${link_library}               #gmock or gtest library
                           ${CMAKE_THREAD_LIBS_INIT}     #pthreads
                          )
-    
+
     add_test(${target} ${target}_test)
 
 endfunction(enableGTest)
@@ -284,55 +284,3 @@ function(parseArguments)
     endforeach(keyword ${keywords})
 
 endfunction(parseArguments)
-
-
-#function which creates file to by used by sublibraries to export theirs classes and functions
-function(prepareExportFile filePath libraryName)
-
-    file(WRITE ${filePath} "//OpenLibrary's automatically generated file. Do not edit.")
-    string(TOUPPER ${libraryName} LIBRARY_NAME)
-
-    #message(flag test "${MSVC}, ${MSVC_IDE}, ${MSVC60}, ${MSVC70}, ${MSVC71}, ${MSVC80}, ${CMAKE_COMPILER_2005}, ${MSVC90}, ${MSVC10} , ${CMAKE_GENERATOR}, ${WIN32}  ")
-
-    get_target_property(targetType ${libraryName} TYPE)
-
-    if(targetType STREQUAL "SHARED_LIBRARY")
-
-        if(CMAKE_COMPILER_IS_GNUCXX)
-            file(APPEND ${filePath} "
-                #ifdef ${libraryName}_EXPORTS
-                    #define ${LIBRARY_NAME}_EXPORTS __attribute__ ((visibility (\"default\")))
-                #else
-                    #define ${LIBRARY_NAME}_EXPORTS
-                #endif
-                ")
-        else() #Visual Studio
-            file(APPEND ${filePath} "
-                #ifdef ${libraryName}_EXPORTS
-                    #define ${LIBRARY_NAME}_EXPORTS __declspec( dllexport )
-                #else
-                    #define ${LIBRARY_NAME}_EXPORTS __declspec( dllimport )
-                #endif
-                ")
-        endif(CMAKE_COMPILER_IS_GNUCXX)
-
-    else()
-        file(APPEND ${filePath} "\n#define ${LIBRARY_NAME}_EXPORTS\n")
-    endif(targetType STREQUAL "SHARED_LIBRARY")
-
-endfunction(prepareExportFile)
-
-
-function(getExportFile target filePath)
-
-    set(${filePath} ${CMAKE_BINARY_DIR}/${target}_exports.hpp PARENT_SCOPE)  #create all export files ontop of binary dir to make them easy accessible
-
-endfunction(getExportFile)
-
-
-function(exportSymbols target)
-
-    getExportFile(${target} generatedFile)
-    prepareExportFile(${generatedFile} ${target})
-
-endfunction(exportSymbols)
