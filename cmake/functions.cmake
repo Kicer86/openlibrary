@@ -120,17 +120,10 @@ function(registerTest libraryName)
 
         target_link_libraries(${targetName} ${CPPUTEST_LIBRARIES})
 
-        add_custom_target(perform_${targetName}
-                          COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
-                          DEPENDS ${targetName})
-
+        add_test(${targetName}_tests ${targetName})
         target_link_libraries(${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
-        enableCodeCoverageFor(${targetName})
-
-        #attach perform${targetName} to 'test' target
-        add_dependencies(test perform_${targetName})
 
         #extra tools
         if(UNIX)
@@ -148,20 +141,7 @@ function(registerTest libraryName)
 
             endif(valgrindPath)
 
-            #code coverage
-            get_target_property(projSources ${libraryName} SOURCES)
-            get_target_property(libraryFile ${libraryName} LOCATION)
-
-            #run code coverage tool
-            add_custom_target(gcov_${targetName}
-                                COMMAND sh ${CMAKE_SOURCE_DIR}/code_cov.sh
-                                        ${CMAKE_CURRENT_BINARY_DIR}/${targetName}
-                                        ${libraryFile}
-                                        ${projSources} ${SOURCES}
-                                )
-
-            add_dependencies(test_code_coverage gcov_${targetName})
-
+            enableCodeCoverage(${targetName})
 
         endif(UNIX)
 

@@ -6,11 +6,10 @@ include(GenerateExportHeader)
 include(${PROJECT_SOURCE_DIR}/cmake/functions.cmake)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+enable_testing()
+
 #prepare target for running tests
-add_custom_target(test)                    #all internal test targets should attach here
 add_custom_target(valgrind_test)           #all valgrind tests should attach here
-add_custom_target(test_code_coverage       #all code coverage tests should attach here
-                  DEPENDS test)
 
 add_library_path(src/htmlParser htmlParser)
 add_library_path(qextserialport qextserialport EXPERIMENTAL)
