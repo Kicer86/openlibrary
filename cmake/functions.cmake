@@ -9,7 +9,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake)
 function(register_library name)
 
     parseArguments(HEADERS SOURCES LIBRARIES TEST_SOURCES ARGUMENTS ${ARGN})
-    
+
     #SOURCES: list of all cpp files
     #HEADERS: list of headers which are meant to be published
     #LIBRARIES: list of libraries to be linked
@@ -111,12 +111,12 @@ function(registerTest libraryName)
     find_package(CppUTest)
 
     if(CPPUTEST_FOUND)
-    
+
         unset(SOURCES)
-        unset(LIBRARIES)        
+        unset(LIBRARIES)
 
         parseArguments(SOURCES LIBRARIES ARGUMENTS ${ARGN})
-        
+
         set(targetName ${libraryName}Tests)
 
         message("${libraryName}: adding tests - CppUTest package found")
@@ -150,7 +150,7 @@ function(registerTest libraryName)
                                   DEPENDS ${targetName}
                                  )
                 add_dependencies(valgrind_test valgrind_${targetName})
-                
+
             endif(valgrindPath)
 
             #code coverage
@@ -177,9 +177,14 @@ endfunction(registerTest)
 
 function(add_library_path path name)
 
+    set(enable TRUE)
+    if("${ARGN}" STREQUAL "EXPERIMENTAL")
+        set(enable FALSE)
+    endif("${ARGN}" STREQUAL "EXPERIMENTAL")
+
     string(TOUPPER ${name} NAME)
     set(LIB_VARIABLE OPENLIBRARY_${NAME}_BUILD)
-    set(${LIB_VARIABLE} TRUE CACHE BOOL "Build library ${name}")
+    set(${LIB_VARIABLE} ${enable} CACHE BOOL "Build library ${name}")
 
     if(${LIB_VARIABLE})
         add_subdirectory(${path})

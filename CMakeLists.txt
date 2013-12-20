@@ -12,11 +12,11 @@ add_custom_target(test_code_coverage       #all code coeverage tests should atta
                   DEPENDS test)
 
 add_library_path(src/htmlParser htmlParser)
-#add_library_path(qextserialport qextserialport)
-add_library_path(src/router router)
+add_library_path(qextserialport qextserialport EXPERIMENTAL)
+add_library_path(src/router router EXPERIMENTAL)
 add_library_path(src/QtExt QtExt)
 add_library_path(src/utils utils)
-add_library_path(src/math math)
+add_library_path(src/math math EXPERIMENTAL)
 add_library_path(src/palgorithm palgorithm)
 
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
