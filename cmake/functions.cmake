@@ -111,14 +111,15 @@ function(registerTest libraryName)
 
         message("${libraryName}: adding tests - CppUTest package found")
         include_directories(${CPPUTEST_INCLUDE_DIRS})
-        add_executable(${targetName} ${SOURCES})
 
+        add_executable(${targetName} ${SOURCES})                           #create extra test target binary with proper sources
         target_link_libraries(${targetName} ${CPPUTEST_LIBRARIES})
 
         add_test(${targetName}_tests ${targetName})
         target_link_libraries(${targetName} ${LIBRARIES})
 
         turnOnCpp11(${targetName})
+        enableCodeCoverage(${targetName})
 
         #extra tools
         if(UNIX)
@@ -135,8 +136,6 @@ function(registerTest libraryName)
                 add_dependencies(valgrind_test valgrind_${targetName})
 
             endif(valgrindPath)
-
-            enableCodeCoverage(${targetName})
 
         endif(UNIX)
 
