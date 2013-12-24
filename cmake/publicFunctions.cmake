@@ -182,32 +182,6 @@ function(enableCodeCoverage target)
 endfunction(enableCodeCoverage)
 
 
-#Enables gtest for target. 'target' will be linked with GTest's or GMock's main library depending on mode (use value GTEST or GMOCK)
-function(enableGTest target mode)
-
-    if("${mode}" STREQUAL "GTEST")
-        set(link_library ${GTEST_MAIN_LIBRARY} ${GTEST_LIBRARY})  #in GTest 1.7 main library contains only mian function. Linking against base library is required
-    elseif("${mode}" STREQUAL "GMOCK")
-        set(link_library ${GMOCK_MAIN_LIBRARY})
-    else()
-        message(FATAL_ERROR "For 'mode' argument use 'GTEST' or 'GMOCK'. Currently ${mode} was provided")
-    endif()
-
-    #prepare test target
-    find_package(Threads)
-    exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
-    add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
-    target_link_libraries(${target}_test
-                          ${target}                     #library with code and tests
-                          ${link_library}               #gmock or gtest library
-                          ${CMAKE_THREAD_LIBS_INIT}     #pthreads
-                         )
-
-    add_test(${target} ${target}_test)
-
-endfunction(enableGTest)
-
-
 function(hideSymbols target)
 
     if(CMAKE_COMPILER_IS_GNUCXX)
