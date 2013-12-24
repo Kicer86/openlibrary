@@ -52,18 +52,14 @@ endfunction(turnOnIntelSyntax)
 function(enableCodeCoverageFor target)
 
     #sources
-    foreach(source ${ARGN})
+    if(MSVC) #Visual Studio
 
-        if(MSVC) #Visual Studio
+    else()
 
-        else()
+        #assumption it's llvm or gcc
+        addFlags(${target} COMPILE_FLAGS "--coverage")
 
-            #assumption it's llvm or gcc
-            addFlags(${target} COMPILE_FLAGS "--coverage")
-
-        endif(MSVC)
-
-    endforeach(source ${ARGN})
+    endif(MSVC)
 
     #linker
     if(MSVC) #Visual Studio
@@ -198,7 +194,7 @@ function(enableGTest target mode)
     endif()
 
     #prepare test target
-    find_package (Threads)
+    find_package(Threads)
     exec_program(${CMAKE_COMMAND} ARGS -E touch ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
     add_executable(${target}_test ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
     target_link_libraries(${target}_test
