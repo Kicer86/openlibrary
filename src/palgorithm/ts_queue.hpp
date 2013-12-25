@@ -43,14 +43,14 @@ class TS_Queue
 
         //reading
         template<class TT = int>
-        boost::optional<T> pop_front(const std::chrono::duration<TT>& waitTime = std::chrono::duration<TT>())
+        boost::optional<T> pop_front()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             boost::optional<T> result;
 
-            waitForEvent(lock, waitTime);
+            waitForEvent(lock);
 
-            if ( m_queue.empty() == false )
+            if (m_queue.empty() == false)
             {
                 const Data item = *(m_queue.begin());
 
@@ -66,6 +66,8 @@ class TS_Queue
                     assert(m_queue.size() == 1); //this should be last and only item
                 }
             }
+            else
+                assert(!"No data!");    //we were waiting for "is not empty" event, but queue is empty!
 
             return result;
         }
@@ -124,19 +126,14 @@ class TS_Queue
         }
 
         template<class TT = int>
-        void waitForEvent(std::unique_lock<std::mutex>& lock, const std::chrono::duration<TT>& waitTime)
+        void waitForEvent(std::unique_lock<std::mutex>& lock)
         {
             auto precond = [&]
             {
                 return !m_queue.empty();
             };
 
-            if (waitTime == std::chrono::duration<TT>())
-                m_is_not_empty.wait(lock, precond);
-            else
-                m_is_not_empty.wait_for(lock,
-                                        waitTime,
-                                        precond);   //wait for signal (or timeout) if there is no data
+            m_is_not_empty.wait(lock, precond);
         }
 };
 
