@@ -42,9 +42,11 @@ register_library(htmlParser SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} $
 set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 
 #temporary workaround. Definitions should be passed exactly to 'register_library'
+message(WARNING "Remove workaround.")
 if(TARGET htmlParserTests)
     set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 endif(TARGET htmlParserTests)
 
 #c++11 is needed here, turn it on
 turnOnCpp11(htmlParser)
+
