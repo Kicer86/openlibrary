@@ -38,7 +38,7 @@
 int html_parse(HtmlTagList*, yyscan_t);
 int css_parse(CssSPData*, yyscan_t);
 
-#ifndef NDEBUG
+#if defined YYDEBUG && YYDEBUG==1
 extern int html_debug;
 extern int css_debug;
 #endif
@@ -61,7 +61,7 @@ void HtmlParser::parse(const std::string& html)
   //read the html code - each tag will be one field in std::vector
   YY_BUFFER_STATE bp;
 
-#ifndef NDEBUG
+#if defined YYDEBUG && YYDEBUG==1
   html_debug=0;
 #endif
 
@@ -90,7 +90,7 @@ std::vector< HtmlTag* > HtmlParser::findAll(const std::string& query)
   CssSPData cssSPData;
   cssSPData.htmlCode=htmlCode;
 
-#ifndef NDEBUG
+#if defined YYDEBUG && YYDEBUG==1
   css_debug=0;
 #endif
 
@@ -110,3 +110,4 @@ std::vector< HtmlTag* > HtmlParser::findAll(const std::string& query)
 
   return ret;
 }
+
