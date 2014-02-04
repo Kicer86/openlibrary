@@ -30,7 +30,7 @@
 	#define FUNCTION_NAME __FUNCTION__
 #endif
 
-#define debug(l) Debug(FUNCTION_NAME, l)
+#define ol_debug(l) Debug(FUNCTION_NAME, l)
 
 //control macros:
 //DEBUG_QSTRING_SUPPORT - support for QString
