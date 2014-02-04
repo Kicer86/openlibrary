@@ -144,15 +144,15 @@ namespace OpenLibrary
 
                     while (m_openSet.isEmpty() == false)
                     {
-                        debug(DebugLevel::Debug) << "\nopen set: " << m_openSet;
-                        debug(DebugLevel::Debug) << "closed set: " << m_closedSet;
+                        ol_debug(DebugLevel::Debug) << "\nopen set: " << m_openSet;
+                        ol_debug(DebugLevel::Debug) << "closed set: " << m_closedSet;
                         PointT *currentPoint = m_openSet.getBest();
 
-                        debug(DebugLevel::Debug) << "current point: " << *currentPoint;
+                        ol_debug(DebugLevel::Debug) << "current point: " << *currentPoint;
 
                         if ( *currentPoint == *endPoint )
                         {
-                            debug(DebugLevel::Debug) << "\t== end point";
+                            ol_debug(DebugLevel::Debug) << "\t== end point";
                             endPoint->origin = currentPoint->origin;
                             endPoint->f_score = currentPoint->f_score;
                             endPoint->g_score = currentPoint->g_score;
@@ -163,16 +163,16 @@ namespace OpenLibrary
                         m_closedSet.insert(currentPoint);
 
                         const std::vector<PointT *> neighbours = get_neighbours(currentPoint);
-                        debug(DebugLevel::Debug) << "\tneighbours: " << neighbours;
+                        ol_debug(DebugLevel::Debug) << "\tneighbours: " << neighbours;
 
                         for (PointT *neighbour: neighbours)
                         {
                             bool saved = false;
-                            debug(DebugLevel::Debug) << "\tprocessing neigbhbour " << *neighbour;
+                            ol_debug(DebugLevel::Debug) << "\tprocessing neigbhbour " << *neighbour;
 
                             //check if neigbhbour is already processed
                             if (m_closedSet.exists(neighbour))
-                                debug(DebugLevel::Debug) << "\t\tin closed set";
+                                ol_debug(DebugLevel::Debug) << "\t\tin closed set";
                             else
                             {
                                 const GScoreT neighbour_g_score = currentPoint->g_score + distance(currentPoint, neighbour);
@@ -185,7 +185,7 @@ namespace OpenLibrary
                                 {
                                     if (existing != &dummy)  //just update existing point
                                     {
-                                        debug(DebugLevel::Debug) << "\t\tbetter than point already existing in open set. Updating";
+                                        ol_debug(DebugLevel::Debug) << "\t\tbetter than point already existing in open set. Updating";
                                         existing->origin = neighbour->origin;
                                         existing->g_score = neighbour_g_score;
 
@@ -194,7 +194,7 @@ namespace OpenLibrary
                                     }
                                     else
                                     {
-                                        debug(DebugLevel::Debug) << "\t\tnot in open set. Adding";
+                                        ol_debug(DebugLevel::Debug) << "\t\tnot in open set. Adding";
                                         neighbour->g_score = neighbour_g_score;
                                         neighbour->f_score = heuristic_cost_estimate(neighbour, endPoint);
                                         //neighbour->origin already set
@@ -205,7 +205,7 @@ namespace OpenLibrary
                                     }
                                 }
                                 else
-                                    debug(DebugLevel::Debug) << "\t\talready in open set";
+                                    ol_debug(DebugLevel::Debug) << "\t\talready in open set";
                             }
 
                             if (saved == false)

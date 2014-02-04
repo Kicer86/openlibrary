@@ -1,9 +1,9 @@
 %{
   #define YYSTYPE std::string    //kontener na dane leksera
-  
+
   #include <string>
   #include <vector>
-  
+
   #include <debug.hpp>
 
   #include "private/htmltaglist.hpp"
@@ -26,32 +26,32 @@
 %%
 
 "<!--"        { //comment
-                debug(DebugLevel::Debug) << "HL: entering COMMENT";
+                ol_debug(DebugLevel::Debug) << "HL: entering COMMENT";
 
                 BEGIN(COMMENT);
               }
 
 "<!"          { //parameter
-                debug(DebugLevel::Debug) << "HL: entering <!";
-                
+                ol_debug(DebugLevel::Debug) << "HL: entering <!";
+
                 BEGIN(PARAM);
               }
 
 "<%"          { //parameter
-                debug(DebugLevel::Debug) << "HL: entering <%";
+                ol_debug(DebugLevel::Debug) << "HL: entering <%";
 
                 BEGIN(PARAM);
               }
 
 "<"           { //tag
-                debug(DebugLevel::Debug) << "HL: entering TAG";
+                ol_debug(DebugLevel::Debug) << "HL: entering TAG";
 
                 BEGIN(TAG);
                 return yytext[0];
               }
 
 [^<"']*       { //text between tags
-                debug(DebugLevel::Debug) << "HL: got text: " << yytext;
+                ol_debug(DebugLevel::Debug) << "HL: got text: " << yytext;
 
                 *yylval=yytext;
                 return TEXT;
@@ -59,14 +59,14 @@
 
 <*>\n         {}  //eat endl (useless in html)
 <INITIAL,TAG>\"(\\.|[^"])*\"  { //string
-                                debug(DebugLevel::Debug) << "HL: got \"string: " << yytext << " while in INITIAL or TAG";
+                                ol_debug(DebugLevel::Debug) << "HL: got \"string: " << yytext << " while in INITIAL or TAG";
 
                                 *yylval=yytext;
                                 return STRING;
                               }
 
 <INITIAL,TAG>\'(\\.|[^'])*\'  { //string
-                                debug(DebugLevel::Debug) << "HL: got 'string: " << yytext << " while in INITIAL or TAG";
+                                ol_debug(DebugLevel::Debug) << "HL: got 'string: " << yytext << " while in INITIAL or TAG";
 
                                 *yylval=yytext;
                                 return STRING;
@@ -74,7 +74,7 @@
 
 <COMMENT>{
 "-->"   {
-          debug(DebugLevel::Debug) << "HL: leaving COMMENT";
+          ol_debug(DebugLevel::Debug) << "HL: leaving COMMENT";
 
           BEGIN(INITIAL);
         }
@@ -83,7 +83,7 @@
 
 <PARAM>{
 ">"       {
-            debug(DebugLevel::Debug) << "HL: leaving <!";
+            ol_debug(DebugLevel::Debug) << "HL: leaving <!";
 
             BEGIN(INITIAL);
           }
@@ -92,7 +92,7 @@
 
 <PARAM2>{
 "%>"          {
-                debug(DebugLevel::Debug) << "HL: leaving <%";
+                ol_debug(DebugLevel::Debug) << "HL: leaving <%";
 
                 BEGIN(INITIAL);
               }
@@ -101,7 +101,7 @@
 
 <TAG>{
 [[:alnum:]_-]+  { //text
-                  debug(DebugLevel::Debug) << "HL: got " << yytext << " while in TAG";
+                  ol_debug(DebugLevel::Debug) << "HL: got " << yytext << " while in TAG";
 
                   *yylval=yytext;
                   return TEXT;
@@ -110,14 +110,14 @@
 [[:blank:]$]+ {} //remove blanks
 
 ">"           { //tag end - return to main state
-                debug(DebugLevel::Debug) << "HL: leaving TAG";
+                ol_debug(DebugLevel::Debug) << "HL: leaving TAG";
 
                 BEGIN(INITIAL);
                 return yytext[0];
               }
 
 .             { //some character
-                debug(DebugLevel::Debug) << "HL: got character: " << yytext[0] << " while in TAG";
+                ol_debug(DebugLevel::Debug) << "HL: got character: " << yytext[0] << " while in TAG";
 
                 return yytext[0];
               }
