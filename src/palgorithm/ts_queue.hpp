@@ -21,6 +21,8 @@
 #ifndef OPENLIBRARY_PALGORITHM_TS_QUEUE
 #define OPENLIBRARY_PALGORITHM_TS_QUEUE
 
+#include <assert.h>
+
 #include <condition_variable>
 #include <mutex>
 #include <deque>
@@ -117,6 +119,16 @@ class TS_Queue
         {
             std::unique_lock<std::mutex> lock(m_mutex);
 
+            // Rise an assert if client tries to add item after empty item.
+            // Empty item means, queue is going to be closed/destroyed.
+            // See break_popping()
+# ifndef NDEBUG
+            if (m_queue.empty() == false)
+            {
+                const Data _item = m_queue.back();
+                assert(_item.type != Data::ItemType::Empty);  // do not accept items when last item is empty
+            }
+# endif
             m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
 
             Data data(item, type);
