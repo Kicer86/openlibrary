@@ -1,7 +1,7 @@
 
 rozpoznawanie kompilatorów:
 http://www.openguru.com/2009/04/cmake-detecting-platformoperating.html
-http://www.cmake.org/Wiki/CMake_Useful_Variables 
+http://www.cmake.org/Wiki/CMake_Useful_Variables
 
 
 wersje visual studio:
@@ -14,3 +14,7 @@ http://trac.seqan.de/wiki/HowTo/UseC%2B%2B11Standard
 c++11 w komilatorach:
 http://wiki.apache.org/stdcxx/C%2B%2B0xCompilerSupport
 http://msdn.microsoft.com/en-us/library/hh567368.aspx
+
+
+#cmake:
+http://navaneeth.github.io/blog/2013/07/28/building-static-and-shared-libraries-using-cmake/
