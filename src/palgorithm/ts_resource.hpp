@@ -47,7 +47,7 @@ class ThreadSafeResource
             std::unique_lock<std::mutex>* m_lock;
         };
 
-    public:        
+    public:
         struct Accessor
         {
             Accessor(std::mutex& mutex, T& object): m_lock(mutex), m_object(object) {}
@@ -64,19 +64,19 @@ class ThreadSafeResource
 
             virtual ~Accessor()
             {
-                
+
             }
-            
+
             T& get()
             {
                 return m_object;
             }
-            
+
             private:
                 std::unique_lock<std::mutex> m_lock;
                 T& m_object;
         };
-        
+
         friend struct Deleter;
 
         template<typename... Args>
@@ -87,18 +87,18 @@ class ThreadSafeResource
         ThreadSafeResource(const ThreadSafeResource<T> &) = delete;
         ThreadSafeResource<T>& operator=(const ThreadSafeResource<T> &) = delete;
 
-        std::unique_ptr<T, Deleter> get()
+        std::unique_ptr<T, Deleter> __attribute__((deprecated)) get()
         {
             std::unique_lock<std::mutex>* lock = new std::unique_lock<std::mutex>(m_mutex);    //lock on mutex
             std::unique_ptr<T, Deleter> result(&m_resource, Deleter(lock));
 
             return result;             //return resource, but don't release mutex - it will be released when Deleter is called
         }
-        
+
         Accessor lock()
         {
             Accessor accessor(m_mutex, m_resource);
-            
+
             return accessor;
         }
 
