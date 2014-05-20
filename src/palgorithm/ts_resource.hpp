@@ -87,7 +87,7 @@ class ThreadSafeResource
         ThreadSafeResource(const ThreadSafeResource<T> &) = delete;
         ThreadSafeResource<T>& operator=(const ThreadSafeResource<T> &) = delete;
 
-        std::unique_ptr<T, Deleter> __attribute__((deprecated)) get()
+		std::unique_ptr<T, Deleter> PALGORITHM_DEPRECATED get()
         {
             std::unique_lock<std::mutex>* lock = new std::unique_lock<std::mutex>(m_mutex);    //lock on mutex
             std::unique_ptr<T, Deleter> result(&m_resource, Deleter(lock));
