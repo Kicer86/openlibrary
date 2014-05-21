@@ -1,2 +1,0 @@
-atrybuty hidden etc - poszukaæ/czytaæ
-automatyczne xportowanie gupot (cmake ma gotowy modul tworzacy plik exports etc)
