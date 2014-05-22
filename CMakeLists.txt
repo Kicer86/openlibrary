@@ -2,6 +2,13 @@
 project(library)
 cmake_minimum_required(VERSION 2.8)
 
+#prepare paths
+if(WIN32 AND NOT CYGWIN)
+  set(DEF_INSTALL_CMAKE_DIR CMake)
+else()
+  set(DEF_INSTALL_CMAKE_DIR lib/cmake/OpenLibrary)
+endif()
+
 include(GenerateExportHeader)
 include(${PROJECT_SOURCE_DIR}/cmake/functions.cmake)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -23,13 +30,6 @@ set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR})
 register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
-
-#prepare paths
-if(WIN32 AND NOT CYGWIN)
-  set(DEF_INSTALL_CMAKE_DIR CMake)
-else()
-  set(DEF_INSTALL_CMAKE_DIR lib/cmake/OpenLibrary)
-endif()
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)

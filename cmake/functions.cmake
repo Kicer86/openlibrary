@@ -38,7 +38,7 @@ function(register_library name)
                 EXPORT OpenLibrary_${LIBRARY_NAME}Config
                 DESTINATION ${LIB_DESTINATION})
 
-        install(EXPORT OpenLibrary_${LIBRARY_NAME}Config DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/OpenLibrary/private)
+        install(EXPORT OpenLibrary_${LIBRARY_NAME}Config DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private)
 
     endif(SOURCES)
 
