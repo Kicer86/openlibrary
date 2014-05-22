@@ -1,4 +1,6 @@
 
+#http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file
+
 set(OPENLIBRARY_INCLUDES  @HEADERS_INSTALL_BASE_PATH@ @HEADERS_INSTALL_PATH@)
 set(OPENLIBRARY_CMAKE_INCLUDES @OPENLIBRARY_CMAKE_DIR@/publicFunctions.cmake)
 
