@@ -105,6 +105,7 @@ function(registerTest libraryName)
         unset(SOURCES)
         unset(LIBRARIES)
 
+        #TODO: use CMakeParseArguments
         parseArguments(SOURCES LIBRARIES ARGUMENTS ${ARGN})
 
         set(targetName ${libraryName}Tests)

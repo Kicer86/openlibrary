@@ -193,6 +193,7 @@ function(hideSymbols target)
 endfunction(hideSymbols)
 
 
+#TODO: deprecated. Use CMakeParseArguments Module
 #usage:
 #parseArguments( list of keywords_pattern 'ARGUMENTS' list of arguments to be parsed )
 #function parses list of arguments to be parsed and sets a proper keyword variables.
