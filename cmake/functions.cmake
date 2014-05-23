@@ -8,7 +8,7 @@ include(${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake)
 #a library target with given name will be created
 function(register_library name)
 
-    parseArguments(HEADERS SOURCES LIBRARIES OL_LIBRARIES TEST_SOURCES ARGUMENTS ${ARGN})
+    parseArguments(HEADERS SOURCES LIBRARIES TEST_SOURCES ARGUMENTS ${ARGN})
 
     #SOURCES: list of all cpp files
     #HEADERS: list of headers which are meant to be published
@@ -20,12 +20,8 @@ function(register_library name)
     #c/c++ part
     if(SOURCES)
 
-        add_library (${LIBRARY_NAME} OBJECT ${SOURCES})
-        add_library (${LIBRARY_NAME}_static STATIC $<TARGET_OBJECTS:${LIBRARY_NAME}>)
-        add_library (${LIBRARY_NAME}_shared SHARED $<TARGET_OBJECTS:${LIBRARY_NAME}>)
-        
-        target_link_libraries(${LIBRARY_NAME}_static ${LIBRARIES})
-        target_link_libraries(${LIBRARY_NAME}_shared ${LIBRARIES})
+        add_library(${LIBRARY_NAME} SHARED ${SOURCES})
+        target_link_libraries(${LIBRARY_NAME} ${LIBRARIES})
 
         hideSymbols(${LIBRARY_NAME})
 
@@ -38,17 +34,11 @@ function(register_library name)
             set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
         endif(WIN32)
 
-        install(TARGETS ${LIBRARY_NAME}_static
-                EXPORT OpenLibrary_${LIBRARY_NAME}StaticConfig
-                DESTINATION ${LIB_DESTINATION})
-                
-                
-        install(TARGETS ${LIBRARY_NAME}_shared
+        install(TARGETS ${LIBRARY_NAME}
                 EXPORT OpenLibrary_${LIBRARY_NAME}Config
                 DESTINATION ${LIB_DESTINATION})
 
         install(EXPORT OpenLibrary_${LIBRARY_NAME}Config DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private)
-        install(EXPORT OpenLibrary_${LIBRARY_NAME}StaticConfig DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private)
 
     endif(SOURCES)
 
@@ -66,7 +56,7 @@ function(register_library name)
     message("registering ${LIBRARY_NAME} library")
     if(SOURCES)
 
-        get_property(library_location TARGET ${LIBRARY_NAME}_shared PROPERTY LOCATION)              #get library file
+        get_property(library_location TARGET ${LIBRARY_NAME} PROPERTY LOCATION)              #get library file
         get_filename_component(library_file_name ${library_location} NAME)
 
         #create variables for sub-library
@@ -81,7 +71,7 @@ function(register_library name)
     #generate export rules
     if(SOURCES)
         set(header ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}_export.h)
-        generate_export_header(${LIBRARY_NAME}_shared EXPORT_FILE_NAME ${header})
+        generate_export_header(${LIBRARY_NAME} EXPORT_FILE_NAME ${header})
 
         getHeadersPath(HEADERS_INSTALL_PATH)
         set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${libraryName})
