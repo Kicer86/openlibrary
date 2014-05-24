@@ -48,3 +48,12 @@ function(register_target_install_headers)
     message("registering ${LIBRARY_NAME} library")
 
 endfunction(register_target_install_headers)
+
+
+function(register_target_set_version target)
+
+    set_target_properties(${target} PROPERTIES
+                          VERSION ${OPENLIBRARY_VERSION}
+                          SOVERSION ${OPENLIBRARY_MAJOR_VERSION})
+
+endfunction(register_target_set_version)

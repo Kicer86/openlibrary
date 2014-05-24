@@ -14,6 +14,7 @@ function(register_target)
 
     register_target_add_install(${rt_NAME})
     register_target_set_groups(SOURCES ${rt_SOURCES} HEADERS ${rt_HEADERS})
+    register_target_set_version(${rt_NAME})
 
 endfunction()
 
@@ -36,6 +37,7 @@ function(register_library name)
         add_library(${LIBRARY_NAME} SHARED ${SOURCES})
         target_link_libraries(${LIBRARY_NAME} ${LIBRARIES})
 
+        register_target_set_version(${LIBRARY_NAME})
         hideSymbols(${LIBRARY_NAME})
 
         #install files
