@@ -3,6 +3,19 @@
 
 set(OPENLIBRARY_DIR_NAME OpenLibrary)
 include(${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/private_functions.cmake)
+
+function(register_target)
+
+    set(options)
+    set(oneValueArgs NAME)
+    set(multiValueArgs SOURCES HEADERS)
+    cmake_parse_arguments(rt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    register_target_add_install(${rt_NAME})
+    register_target_set_groups(SOURCES ${rt_SOURCES} HEADERS ${rt_HEADERS})
+
+endfunction()
 
 #register library
 #a library target with given name will be created
