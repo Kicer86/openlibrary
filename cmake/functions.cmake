@@ -2,7 +2,7 @@
 #some functions for generation useful stuff (internal use)
 
 set(OPENLIBRARY_DIR_NAME OpenLibrary)
-include(${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/private_functions.cmake)
 
 function(register_target)

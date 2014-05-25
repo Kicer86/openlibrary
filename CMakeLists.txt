@@ -46,7 +46,7 @@ configure_file(cmake/OpenLibraryConfig.cmake.in "${PROJECT_BINARY_DIR}/OpenLibra
 configure_file(cmake/OpenLibraryConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfigVersion.cmake" @ONLY)
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfigVersion.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
-install(FILES ${CMAKE_SOURCE_DIR}/cmake/publicFunctions.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
 
 #degug code
 # get_cmake_property(vars VARIABLES)
