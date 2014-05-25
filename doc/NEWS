@@ -1,13 +1,10 @@
 
-Version 1.1 (in progress)
-- TS_Resource: lock() function added. Deprecating get()
-- Visual Studio build fixes
-
- 
+2013-02-04:
 Version 1.0.1
 - build fixes
 - avoiding possible conflicts of debug() macro. Renamed to ol_debug()
 
  
+2013-12-25:
 Version 1.0
 - base content released
