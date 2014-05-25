@@ -1,5 +1,8 @@
 
-#http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file
+# http://www.cmake.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file
+#
+# About USE_FILE:
+# https://www.mail-archive.com/cmake@cmake.org/msg36579.html
 
 # Compute paths
 get_filename_component(OPENLIBRARY_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
