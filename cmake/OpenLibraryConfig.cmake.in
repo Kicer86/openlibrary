@@ -5,20 +5,24 @@
 get_filename_component(OPENLIBRARY_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 set(OPENLIBRARY_INCLUDES  @HEADERS_INSTALL_BASE_PATH@ @HEADERS_INSTALL_PATH@)
+set(OPENLIBRARY_INCLUDE_DIRS ${OPENLIBRARY_INCLUDES})
 set(OPENLIBRARY_CMAKE_INCLUDES ${OPENLIBRARY_CMAKE_DIR}/publicFunctions.cmake)
+set(OPENLIBRARY_LIBRARIES "")
 
 if(OpenLibrary_FIND_COMPONENTS)
 
     foreach(component ${OpenLibrary_FIND_COMPONENTS})
 
-        if(NOT TARGET ${component})  #does target already exist?
+        if(NOT TARGET @OPENLIBRARY_NAMESPACE@${component})  #does target already exist?
 
             include(${OPENLIBRARY_CMAKE_DIR}/private/OpenLibrary_${component}Config.cmake)
 
             string(TOUPPER ${component} COMPONENT)
-            set(OPENLIBRARY_${COMPONENT}_LIBRARIES ${component})
+            set(OPENLIBRARY_${COMPONENT}_LIBRARIES @OPENLIBRARY_NAMESPACE@${component})
 
-        endif(NOT TARGET ${component})
+        endif(NOT TARGET @OPENLIBRARY_NAMESPACE@${component})
+
+        set(OPENLIBRARY_LIBRARIES ${OPENLIBRARY_LIBRARIES} ${OPENLIBRARY_${COMPONENT}_LIBRARIES})
 
     endforeach(component ${OpenLibrary_FIND_COMPONENTS})
 
