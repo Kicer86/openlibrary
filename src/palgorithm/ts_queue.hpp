@@ -44,7 +44,6 @@ class TS_Queue
         }
 
         //reading
-        template<class TT = int>
         boost::optional<T> pop_front()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
