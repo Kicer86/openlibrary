@@ -34,8 +34,13 @@ template<typename T>
 class TS_Queue
 {
     public:
+        typedef std::chrono::duration<std::chrono::milliseconds> TimeDuration;
+        
         TS_Queue(size_t max_size): m_queue(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
-        virtual ~TS_Queue() {}
+        virtual ~TS_Queue() 
+        {
+            break_popping();
+        }
 
         //writting
         void push_back(const T &item)
@@ -86,13 +91,11 @@ class TS_Queue
             const bool result = m_queue.empty();
             return result;
         }
-
-        // pushes an empty item just to stop waiting in pop_back.
-        // Each pop_back since this function call will return invalid item.
-        void break_popping()
+        
+        //release all threads waiting in pop()
+        void stop()
         {
-            push_back(T(), Data::ItemType::Empty);
-            m_is_not_empty.notify_all();
+            break_popping();
         }
 
     private:
@@ -136,7 +139,6 @@ class TS_Queue
             m_is_not_empty.notify_all();
         }
 
-        template<class TT = int>
         void waitForEvent(std::unique_lock<std::mutex>& lock)
         {
             auto precond = [&]
@@ -146,6 +148,15 @@ class TS_Queue
 
             m_is_not_empty.wait(lock, precond);
         }
+        
+        // pushes an empty item just to stop waiting in pop_back.
+        // Each pop_back since this function call will return invalid item.
+        void break_popping()
+        {
+            push_back(T(), Data::ItemType::Empty);
+            m_is_not_empty.notify_all();
+        }
+        
 };
 
 #endif
