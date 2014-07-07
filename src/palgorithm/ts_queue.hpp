@@ -21,7 +21,7 @@
 #ifndef OPENLIBRARY_PALGORITHM_TS_QUEUE
 #define OPENLIBRARY_PALGORITHM_TS_QUEUE
 
-#include <assert.h>
+#include <cassert>
 
 #include <atomic>
 #include <condition_variable>
@@ -35,14 +35,12 @@ template<typename T>
 class TS_Queue
 {
     public:
-        typedef std::chrono::duration<std::chrono::milliseconds> TimeDuration;
-
         TS_Queue(size_t max_size):
             m_queue(),
             m_is_not_full(),
             m_is_not_empty(),
-            m_mutex(),
-            m_size(max_size),
+            m_queue_mutex(),
+            m_max_size(max_size),
             m_threadsWaiting4Data(0),
             m_stopped(false)
         {
@@ -52,6 +50,9 @@ class TS_Queue
         virtual ~TS_Queue()
         {
             stop();
+
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
+            assert(m_queue.empty());
         }
 
         //writting
@@ -59,9 +60,9 @@ class TS_Queue
         {
             enable_work();
 
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
 
-            m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
+            m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
             m_queue.push_back(item);
             m_is_not_empty.notify_all();
         }
@@ -69,7 +70,7 @@ class TS_Queue
         //reading
         boost::optional<T> pop_front()
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
             boost::optional<T> result;
 
             wait_for_data(lock);
@@ -86,14 +87,14 @@ class TS_Queue
 
         size_t size() const
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
             const size_t result = m_queue.size();
             return result;
         }
 
         bool empty() const
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
             const bool result = m_queue.empty();
             return result;
         }
@@ -112,7 +113,7 @@ class TS_Queue
 
         void waitForData() const
         {
-            std::unique_lock<std::mutex> lock(m_mutex);
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
             boost::optional<T> result;
 
             wait_for_data(lock);
@@ -122,8 +123,8 @@ class TS_Queue
         std::deque<T> m_queue;
         std::condition_variable m_is_not_full;
         std::condition_variable m_is_not_empty;
-        mutable std::mutex m_mutex;
-        size_t m_size;
+        mutable std::mutex m_queue_mutex;
+        size_t m_max_size;
         std::atomic_int m_threadsWaiting4Data;
         std::atomic_bool m_stopped;
 
