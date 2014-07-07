@@ -111,7 +111,7 @@ class TS_Queue
             return m_threadsWaiting4Data;
         }
 
-        void waitForData() const
+        void waitForData()
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
             boost::optional<T> result;
