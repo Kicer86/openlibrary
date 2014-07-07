@@ -36,7 +36,17 @@ class TS_Queue
     public:
         typedef std::chrono::duration<std::chrono::milliseconds> TimeDuration;
         
-        TS_Queue(size_t max_size): m_queue(), m_is_not_full(), m_is_not_empty(), m_mutex(), m_size(max_size) {}
+        TS_Queue(size_t max_size): 
+            m_queue(), 
+            m_is_not_full(), 
+            m_is_not_empty(), 
+            m_mutex(), 
+            m_size(max_size),
+            m_threadsWaiting4Data(0) 
+        {
+            
+        }
+        
         virtual ~TS_Queue() 
         {
             break_popping();
@@ -97,6 +107,11 @@ class TS_Queue
         {
             break_popping();
         }
+        
+        int threadsWaiting4Data() const
+        {
+            return m_threadsWaiting4Data;
+        }
 
     private:
         struct Data
@@ -116,6 +131,7 @@ class TS_Queue
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_mutex;
         size_t m_size;
+        int m_threadsWaiting4Data;
 
         void push_back(const T &item, typename Data::ItemType type)
         {
@@ -141,12 +157,15 @@ class TS_Queue
 
         void waitForEvent(std::unique_lock<std::mutex>& lock)
         {
+            ++m_threadsWaiting4Data;
+            
             auto precond = [&]
             {
                 return !m_queue.empty();
             };
 
             m_is_not_empty.wait(lock, precond);
+            --m_threadsWaiting4Data;
         }
         
         // pushes an empty item just to stop waiting in pop_back.
