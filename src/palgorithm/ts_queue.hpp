@@ -23,9 +23,10 @@
 
 #include <assert.h>
 
+#include <atomic>
 #include <condition_variable>
-#include <mutex>
 #include <deque>
+#include <mutex>
 
 #include <boost/optional.hpp>
 
@@ -35,27 +36,34 @@ class TS_Queue
 {
     public:
         typedef std::chrono::duration<std::chrono::milliseconds> TimeDuration;
-        
-        TS_Queue(size_t max_size): 
-            m_queue(), 
-            m_is_not_full(), 
-            m_is_not_empty(), 
-            m_mutex(), 
+
+        TS_Queue(size_t max_size):
+            m_queue(),
+            m_is_not_full(),
+            m_is_not_empty(),
+            m_mutex(),
             m_size(max_size),
-            m_threadsWaiting4Data(0) 
+            m_threadsWaiting4Data(0),
+            m_stopped(false)
         {
-            
+
         }
-        
-        virtual ~TS_Queue() 
+
+        virtual ~TS_Queue()
         {
-            break_popping();
+            stop();
         }
 
         //writting
         void push_back(const T &item)
         {
-            push_back(item, Data::ItemType::Normal);
+            enable_work();
+
+            std::unique_lock<std::mutex> lock(m_mutex);
+
+            m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
+            m_queue.push_back(item);
+            m_is_not_empty.notify_all();
         }
 
         //reading
@@ -64,26 +72,14 @@ class TS_Queue
             std::unique_lock<std::mutex> lock(m_mutex);
             boost::optional<T> result;
 
-            waitForEvent(lock);
+            wait_for_data(lock);
 
             if (m_queue.empty() == false)
             {
-                const Data item = *(m_queue.begin());
-
-                if (item.type == Data::ItemType::Normal)
-                {
-                    result = item.data;
-                    m_queue.pop_front();
-                    m_is_not_full.notify_all();
-                }
-                else if (item.type == Data::ItemType::Empty)
-                {
-                    //do nothing - result is invalid, we just got info that we need to stop waiting
-                    assert(m_queue.size() == 1); //this should be last and only item
-                }
+                result = *(m_queue.begin());
+                m_queue.pop_front();
+                m_is_not_full.notify_all();
             }
-            else
-                assert(!"No data!");    //we were waiting for "is not empty" event, but queue is empty!
 
             return result;
         }
@@ -101,81 +97,54 @@ class TS_Queue
             const bool result = m_queue.empty();
             return result;
         }
-        
+
         //release all threads waiting in pop()
         void stop()
         {
-            break_popping();
+            m_stopped = true;
+            m_is_not_empty.notify_all();
         }
-        
+
         int threadsWaiting4Data() const
         {
             return m_threadsWaiting4Data;
         }
 
-    private:
-        struct Data
+        void waitForData() const
         {
-            T data;
-            enum class ItemType
-            {
-                Normal,
-                Empty,
-            } type;
+            std::unique_lock<std::mutex> lock(m_mutex);
+            boost::optional<T> result;
 
-            Data(const T& d, ItemType t): data(d), type(t) {}
-        };
+            wait_for_data(lock);
+        }
 
-        std::deque<Data> m_queue;
+    private:
+        std::deque<T> m_queue;
         std::condition_variable m_is_not_full;
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_mutex;
         size_t m_size;
-        int m_threadsWaiting4Data;
+        std::atomic_int m_threadsWaiting4Data;
+        std::atomic_bool m_stopped;
 
-        void push_back(const T &item, typename Data::ItemType type)
-        {
-            std::unique_lock<std::mutex> lock(m_mutex);
-
-            // Rise an assert if client tries to add item after empty item.
-            // Empty item means, queue is going to be closed/destroyed.
-            // See break_popping()
-# ifndef NDEBUG
-            if (m_queue.empty() == false)
-            {
-                const Data _item = m_queue.back();
-                assert(_item.type != Data::ItemType::Empty);  // do not accept items when last item is empty
-            }
-# endif
-            m_is_not_full.wait(lock, [&] { return m_queue.size() < m_size; } );  //wait for conditional_variable if there is no place in queue
-
-            Data data(item, type);
-            m_queue.push_back(data);
-
-            m_is_not_empty.notify_all();
-        }
-
-        void waitForEvent(std::unique_lock<std::mutex>& lock)
+        void wait_for_data(std::unique_lock<std::mutex>& lock)
         {
             ++m_threadsWaiting4Data;
-            
+
             auto precond = [&]
             {
-                return !m_queue.empty();
+                const bool condition = m_stopped == false && m_queue.empty();
+                return !condition;
             };
 
             m_is_not_empty.wait(lock, precond);
             --m_threadsWaiting4Data;
         }
-        
-        // pushes an empty item just to stop waiting in pop_back.
-        // Each pop_back since this function call will return invalid item.
-        void break_popping()
+
+        void enable_work()
         {
-            push_back(T(), Data::ItemType::Empty);
-            m_is_not_empty.notify_all();
+            m_stopped = false;
         }
-        
 };
 
 #endif
