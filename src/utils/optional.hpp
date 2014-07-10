@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef OPTIONAL_HPP
-#define OPTIONAL_HPP
+#ifndef OPENLIBRARY_UTILS_OPTIONAL_HPP
+#define OPENLIBRARY_UTILS_OPTIONAL_HPP
 
 template<typename T>
 class Optional
@@ -79,4 +79,4 @@ class Optional
         bool m_present;
 };
 
-#endif // OPTIONAL_HPP
+#endif // OPENLIBRARY_UTILS_OPTIONAL_HPP
