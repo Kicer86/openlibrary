@@ -14,6 +14,7 @@ set(LIB_HEADERS
     anonymous_ptr.hpp
     data_ptr.hpp
     cpuinfo.hpp
+    optional.hpp
 )
 
 set(TEST_SRC
