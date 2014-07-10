@@ -28,7 +28,7 @@
 #include <deque>
 #include <mutex>
 
-#include <boost/optional.hpp>
+#include "utils/optional.hpp"
 
 //based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
 template<typename T>
@@ -68,10 +68,10 @@ class TS_Queue
         }
 
         //reading
-        boost::optional<T> pop_front()
+        Optional<T> pop_front()
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
-            boost::optional<T> result;
+            Optional<T> result;
 
             wait_for_data(lock);
 
@@ -114,7 +114,7 @@ class TS_Queue
         void waitForData()
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
-            boost::optional<T> result;
+            Optional<T> result;
 
             wait_for_data(lock);
         }

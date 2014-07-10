@@ -18,8 +18,8 @@ TEST(TS_QueueShould, ReturnAllPassedData)
     queue.push_back(1);
     queue.push_back(2);
 
-    boost::optional<int> i1 = queue.pop_front();
-    boost::optional<int> i2 = queue.pop_front();
+    Optional<int> i1 = queue.pop_front();
+    Optional<int> i2 = queue.pop_front();
 
     CHECK_EQUAL(false, !i1);
     CHECK_EQUAL(false, !i2);
@@ -35,7 +35,7 @@ TEST(TS_QueueShould, DealWithTakingFromEmptyContainer)
 
     queue.push_back(1);
 
-    boost::optional<int> i1 = queue.pop_front();
+    Optional<int> i1 = queue.pop_front();
 
     i1 = queue.pop_front();
 
