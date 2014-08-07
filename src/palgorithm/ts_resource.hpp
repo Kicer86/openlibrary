@@ -87,6 +87,16 @@ class ThreadSafeResource
                 return &m_object;
             }
 
+            T& operator*()
+            {
+                return m_object;
+            }
+
+            const T& operator*() const
+            {
+                return m_object;
+            }
+
             private:
                 std::unique_lock<std::mutex> m_lock;
                 T& m_object;
