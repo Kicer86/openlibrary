@@ -41,7 +41,6 @@ class TS_Queue
             m_is_not_empty(),
             m_queue_mutex(),
             m_max_size(max_size),
-            m_threadsWaiting4Data(0),
             m_stopped(false)
         {
 
@@ -105,12 +104,7 @@ class TS_Queue
             m_stopped = true;
             m_is_not_empty.notify_all();
         }
-
-        int threadsWaiting4Data() const
-        {
-            return m_threadsWaiting4Data;
-        }
-
+		
         void waitForData()
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
@@ -125,13 +119,10 @@ class TS_Queue
         std::condition_variable m_is_not_empty;
         mutable std::mutex m_queue_mutex;
         size_t m_max_size;
-        std::atomic_int m_threadsWaiting4Data;
-        std::atomic_bool m_stopped;
+        std::atomic<bool> m_stopped;
 
         void wait_for_data(std::unique_lock<std::mutex>& lock)
         {
-            ++m_threadsWaiting4Data;
-
             auto precond = [&]
             {
                 const bool condition = m_stopped == false && m_queue.empty();
@@ -139,7 +130,6 @@ class TS_Queue
             };
 
             m_is_not_empty.wait(lock, precond);
-            --m_threadsWaiting4Data;
         }
 
         void enable_work()
