@@ -1,3 +1,4 @@
 /build*
 /*.txt.user
 /doc/private
+/src/router/doc
