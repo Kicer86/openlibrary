@@ -1,5 +1,0 @@
-http://pl.wikipedia.org/wiki/A*
-http://en.wikipedia.org/wiki/A*_search_algorithm
-http://harablog.wordpress.com/2011/09/07/jump-point-search/
-http://www.policyalmanac.org/games/aStarTutorial.htm
-http://www.heyes-jones.com/astar.html
