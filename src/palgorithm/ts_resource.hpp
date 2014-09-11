@@ -80,7 +80,8 @@ class ThreadSafeResource
 
             virtual ~Accessor()
             {
-                m_lock.unlock();
+                if (m_lock)
+                    m_lock.unlock();
 
                 if (m_notify != nullptr)
                     m_notify->unlocked();
