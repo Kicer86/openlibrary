@@ -48,11 +48,17 @@ class ThreadSafeResource
         };
 
     public:
+        struct INotify
+        {
+            virtual void unlocked() = 0;
+        };
+
         struct Accessor
         {
-            Accessor(std::mutex& mutex, T* object): m_lock(mutex), m_object(object) {}
+            Accessor(std::mutex& mutex, T* object): m_lock(mutex), m_object(object), m_notify(nullptr) {}
             Accessor(Accessor&& other): m_lock(std::move(other.m_lock)),
-                                        m_object(other.m_object)
+                                        m_object(other.m_object),
+                                        m_notify(other.m_notify)
             {
                 other.m_object = nullptr;
                 other.m_notify = nullptr;
@@ -64,6 +70,7 @@ class ThreadSafeResource
             {
                 m_lock = std::move(other.m_lock);
                 m_object = other.m_object;
+                m_notify = other.m_notify;
 
                 other.m_object = nullptr;
                 other.m_notify = nullptr;
@@ -73,6 +80,10 @@ class ThreadSafeResource
 
             virtual ~Accessor()
             {
+                m_lock.unlock();
+
+                if (m_notify != nullptr)
+                    m_notify->unlocked();
             }
 
             T& get()
@@ -106,8 +117,15 @@ class ThreadSafeResource
             }
 
             private:
+                friend class ThreadSafeResource;
                 std::unique_lock<std::mutex> m_lock;
                 T* m_object;
+                INotify* m_notify;
+
+                void set(INotify* notify)
+                {
+                    m_notify = notify;
+                }
         };
 
         friend struct Deleter;
@@ -123,6 +141,15 @@ class ThreadSafeResource
         Accessor lock()
         {
             Accessor accessor(m_mutex, &m_resource);
+
+            return accessor;
+        }
+
+        //behaves as lock() but sends notification when object is being unlocked
+        Accessor lock(INotify* notify)
+        {
+            Accessor accessor = lock();
+            accessor.set(notify);
 
             return accessor;
         }
