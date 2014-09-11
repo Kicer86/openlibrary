@@ -2,6 +2,7 @@
 Version 1.1 (in progress)
 - TS_Resource:
     * lock() function added.
+    * notification system introduced
     * removing get()
     * introducing operator->()
 - TS_Queue:
@@ -14,3 +15,7 @@ Version 1.1 (in progress)
     * OPENLIBRARY_CMAKE_INCLUDES renamed to OPENLIBRARY_USE_FILE
     * OPENLIBRARY_INCLUDE_DIRS and OPENLIBRARY_LIBRARIES variables added.
     * OpenLibraryVersion.cmake introduced. find_package() can be used with version now.
+
+TODO:
+- Remove current system of sublibraries management. Each library should be free to build itself as it wish.
+- Move TS_Queue and TS_Resource to new lib: putils
