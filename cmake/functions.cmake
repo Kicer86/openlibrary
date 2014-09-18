@@ -12,9 +12,11 @@ function(register_target)
     set(multiValueArgs SOURCES HEADERS)
     cmake_parse_arguments(rt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-    register_target_add_install(${rt_NAME})
+    register_target_install_lib(${rt_NAME})
+    register_target_install_headers(${rt_NAME} ${rt_HEADERS})
     register_target_set_groups(SOURCES ${rt_SOURCES} HEADERS ${rt_HEADERS})
     register_target_set_version(${rt_NAME})
+    hideSymbols(${rt_NAME})
 
 endfunction()
 

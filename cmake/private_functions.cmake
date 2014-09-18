@@ -1,6 +1,6 @@
 
-#private funcitons used by register_target()
-function(register_target_add_install name)
+#private functions used by register_target()
+function(register_target_install_lib name)
 
     set(LIBRARY_NAME ${name})
 
@@ -17,9 +17,11 @@ function(register_target_add_install name)
             EXPORT OpenLibrary_${LIBRARY_NAME}Config
             DESTINATION ${LIB_DESTINATION})
 
-    install(EXPORT OpenLibrary_${LIBRARY_NAME}Config DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private)
+    install(EXPORT OpenLibrary_${LIBRARY_NAME}Config
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private
+            NAMESPACE ${OPENLIBRARY_NAMESPACE})
 
-endfunction(register_target_add_install)
+endfunction(register_target_install_lib)
 
 
 function(register_target_set_groups)
@@ -35,7 +37,10 @@ function(register_target_set_groups)
 endfunction(register_target_set_groups)
 
 
-function(register_target_install_headers)
+function(register_target_install_headers name)
+
+    set(LIBRARY_NAME ${name})
+    set(HEADERS ${ARGN})
 
     getHeadersPath(HEADERS_INSTALL_PATH)
     set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${LIBRARY_NAME})
