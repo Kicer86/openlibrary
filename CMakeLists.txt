@@ -7,7 +7,7 @@ set(OPENLIBRARY_MINOR_VERSION 1)
 set(OPENLIBRARY_PATCH_VERSION 0)
 set(OPENLIBRARY_VERSION
   ${OPENLIBRARY_MAJOR_VERSION}.${OPENLIBRARY_MINOR_VERSION}.${OPENLIBRARY_PATCH_VERSION})
-set(OPENLIBRARY_NAMESPACE OpenLibrary_)
+set(OPENLIBRARY_NAMESPACE OpenLibrary::)
 
 #prepare paths
 if(WIN32 AND NOT CYGWIN)
@@ -32,6 +32,7 @@ add_library_path(src/QtExt QtExt)
 add_library_path(src/utils utils)
 add_library_path(src/math math EXPERIMENTAL)
 add_library_path(src/palgorithm palgorithm)
+add_library_path(src/putils putils)
 
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
