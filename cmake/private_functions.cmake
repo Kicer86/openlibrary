@@ -62,3 +62,21 @@ function(register_target_set_version target)
                           SOVERSION ${OPENLIBRARY_MAJOR_VERSION})
 
 endfunction(register_target_set_version)
+
+
+#target and sources as arguments
+function(register_target_export_header target)
+
+    if(ARGN)
+        set(header ${CMAKE_BINARY_DIR}/${target}_export.h)
+        generate_export_header(${target} EXPORT_FILE_NAME ${header})
+
+        getHeadersPath(HEADERS_INSTALL_PATH)
+        set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${target})
+
+        install(FILES ${header}
+                DESTINATION ${HEADERS_INSTALL_PATH}
+                PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+    endif(ARGN)
+
+endfunction(register_target_export_header)

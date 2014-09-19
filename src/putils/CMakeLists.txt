@@ -18,7 +18,7 @@ set(LIB_HEADERS
 set(TEST_SRC
     )
 
-add_library(${LIB_NAME} ${LIB_SOURCES} ${LIB_HEADERS})
+add_library(${LIB_NAME} SHARED ${LIB_SOURCES} ${LIB_HEADERS})
 turnOnCpp11(${LIB_NAME})
 
 register_target(NAME ${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})

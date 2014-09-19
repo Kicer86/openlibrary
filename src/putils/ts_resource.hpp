@@ -8,7 +8,7 @@
 #include <memory>
 #include <ostream>
 
-#include "palgorithm_export.h"
+#include "putils_export.h"
 
 template<typename T>
 class ThreadSafeResource
@@ -160,6 +160,6 @@ class ThreadSafeResource
         T m_resource;
 };
 
-extern PALGORITHM_EXPORT ThreadSafeResource<std::ostream *> ThreadSafeOutput;
+extern PUTILS_EXPORT ThreadSafeResource<std::ostream *> ThreadSafeOutput;
 
 #endif

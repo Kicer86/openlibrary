@@ -16,7 +16,7 @@ function(register_target)
     register_target_install_headers(${rt_NAME} ${rt_HEADERS})
     register_target_set_groups(SOURCES ${rt_SOURCES} HEADERS ${rt_HEADERS})
     register_target_set_version(${rt_NAME})
-    hideSymbols(${rt_NAME})
+    register_target_export_header(${rt_NAME} ${rt_SOURCES})
 
 endfunction()
 
