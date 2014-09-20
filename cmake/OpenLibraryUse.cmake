@@ -184,11 +184,8 @@ endfunction(enableCodeCoverage)
 
 function(hideSymbols target)
 
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        addFlags(${target} COMPILE_FLAGS "-fvisibility=hidden -fvisibility-inlines-hidden")
-    else() #Visual Studio
-
-    endif(CMAKE_COMPILER_IS_GNUCXX)
+    set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                               VISIBILITY_INLINES_HIDDEN 1)
 
 endfunction(hideSymbols)
 
