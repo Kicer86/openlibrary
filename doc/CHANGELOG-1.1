@@ -18,6 +18,7 @@ Version 1.1 (in progress)
     * OPENLIBRARY_CMAKE_INCLUDES renamed to OPENLIBRARY_USE_FILE
     * OPENLIBRARY_INCLUDE_DIRS and OPENLIBRARY_LIBRARIES variables added.
     * OpenLibraryVersion.cmake introduced. find_package() can be used with version now.
+    * removing old methods of package registration. Now each library defines itself as it wish and then just registers final target with register_target()
 
 TODO:
 - Remove current system of sublibraries management. Each library should be free to build itself as it wish.
