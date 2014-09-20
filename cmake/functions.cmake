@@ -18,6 +18,8 @@ function(register_target)
     register_target_set_version(${rt_NAME})
     register_target_export_header(${rt_NAME} ${rt_SOURCES})
 
+    hideSymbols(${rt_NAME})
+
 endfunction()
 
 #register library
