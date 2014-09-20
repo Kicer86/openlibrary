@@ -39,7 +39,8 @@ add_library_path(src/putils putils)
 set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR})
-register_library(common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
+add_library(common SHARED src/str_op.cpp ${LIBRARY_HEADERS})
+register_target(NAME common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)

@@ -33,20 +33,19 @@ bison_target(cssBison private/css.y ${CMAKE_CURRENT_BINARY_DIR}/css.tab.cc)
 add_flex_bison_dependency(htmlFlex htmlBison)
 add_flex_bison_dependency(cssFlex cssBison)
 
-register_library(htmlParser SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_cssFlex_OUTPUTS} ${BISON_htmlBison_OUTPUTS} ${BISON_cssBison_OUTPUTS}
-                            HEADERS ${HTMLPARSER_HEADERS}
-                            LIBRARIES ${FLEX_LIBRARIES} common
-                            TEST_SOURCES ${TEST_SRS})
+add_library(htmlParser SHARED ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_cssFlex_OUTPUTS} ${BISON_htmlBison_OUTPUTS} ${BISON_cssBison_OUTPUTS} ${HTMLPARSER_HEADERS})
+target_link_libraries(htmlParser ${FLEX_LIBRARIES} common)
 
 #enable debug info when building debug
 set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 
-#temporary workaround. Definitions should be passed exactly to 'register_library'
-message(WARNING "Remove workaround.")
-if(TARGET htmlParserTests)
-    set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
-endif(TARGET htmlParserTests)
+#if(TARGET htmlParserTests)
+#    set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
+#endif(TARGET htmlParserTests)
 
 #c++11 is needed here, turn it on
 turnOnCpp11(htmlParser)
 
+register_target(NAME htmlParser
+                SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_cssFlex_OUTPUTS} ${BISON_htmlBison_OUTPUTS} ${BISON_cssBison_OUTPUTS}
+                HEADERS ${HTMLPARSER_HEADERS})

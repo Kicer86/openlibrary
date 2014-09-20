@@ -1,7 +1,5 @@
 
-set(LIB_NAME palgorithm)
-
-project( ${LIB_NAME} )
+project( palgorithm )
 cmake_minimum_required(VERSION 2.8)
 
 find_package(Boost REQUIRED)
@@ -27,11 +25,10 @@ set(TEST_SRC
     tests/palgorithm.cpp
     )
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
-turnOnCpp11(${LIB_NAME})
+add_library(palgorithm SHARED ${LIB_SOURCES} ${LIB_HEADERS})
+turnOnCpp11(palgorithm)
 
 #test targets
-
 if(NOT WIN32)
 	addSourceFlags(psort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
 	add_executable(qsort_tester psort.cpp ${swap_table_cpp})
@@ -44,3 +41,5 @@ if(NOT WIN32)
 
 	add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)
 endif(NOT WIN32)
+
+register_target(NAME palgorithm SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})

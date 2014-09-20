@@ -1,7 +1,5 @@
 
-set(LIB_NAME utils)
-
-project( ${LIB_NAME} )
+project( utils )
 cmake_minimum_required(VERSION 2.8)
 
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src)
@@ -24,4 +22,8 @@ set(TEST_SRC
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-register_library(${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS} TEST_SOURCES ${TEST_SRC})
+add_library(utils ${LIB_SOURCES} ${LIB_HEADERS})
+
+register_target(NAME utils
+                SOURCES {LIB_SOURCES}
+                HEADERS ${LIB_HEADERS})
