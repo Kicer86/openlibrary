@@ -41,7 +41,7 @@
  * Use TS_Queue::push_back() for writing objects, and TS_Queue::pop_front() for reading objects.
  * TS_Queue has it maximum capacity defined on construction. When TS_Queue is full any attempt of pushing data will cause in wait operation.
  * 
- * Thread which destroys TS_Queue will be suspended until TS_Queue becomes empty.
+ * Thread which destroys TS_Queue will be suspended until TS_Queue becomes empty. No pushes are allowed at that time.
  * 
  * based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
  */
@@ -74,16 +74,21 @@ class TS_Queue
         }
 
         //! Write data to TS_Queue.
-        /*! When queue is full, current thread will be suspended until some data is consumed by reader(s). */
+        /*! When queue is full, current thread will be suspended until some data is consumed by reader(s). 
+         *  No writes are allowed when TS_Queue is being destroyed.
+         */ 
         void push_back(const T &item)
         {
-            enable_work();
+            assert(m_stopped == false);
 
-            std::unique_lock<std::mutex> lock(m_queue_mutex);
+            if (m_stopped == false)
+            {
+                std::unique_lock<std::mutex> lock(m_queue_mutex);
 
-            m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
-            m_queue.push_back(item);
-            m_is_not_empty.notify_all();
+                m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
+                m_queue.push_back(item);
+                m_is_not_empty.notify_all();
+            }
         }
 
         //! Get data.
@@ -124,7 +129,8 @@ class TS_Queue
             return result;
         }
 
-        //! Release all threads waiting in TS_Queue::pop()
+        //! Release all threads waiting in TS_Queue::pop(). 
+        /*! No writes allowed since this moment. */
         void stop()
         {
             m_stopped = true;
@@ -159,10 +165,6 @@ class TS_Queue
             m_is_not_empty.wait(lock, precond);
         }
 
-        void enable_work()
-        {
-            m_stopped = false;
-        }
 };
 
 #endif
