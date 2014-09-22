@@ -30,11 +30,28 @@
 
 #include "utils/optional.hpp"
 
-//based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
+//! Thread safe queue
+
+/*!
+ * TS_Queue is a thread safe queue based on std::deque.
+ * It differs however from default containers: TS_Queue is meant to be used as a pipe. 
+ * There is one side where one or many threads can safely write and there is other side from where one 
+ * or many threads can read.
+ * 
+ * Use TS_Queue::push_back() for writing objects, and TS_Queue::pop_front() for reading objects.
+ * TS_Queue has it maximum capacity defined on construction. When TS_Queue is full any attempt of pushing data will cause in wait operation.
+ * 
+ * Thread which destroys TS_Queue will be suspended until TS_Queue becomes empty.
+ * 
+ * based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
+ */
+
 template<typename T>
 class TS_Queue
 {
     public:
+        //! Constructor.
+        //! @arg max_size maximum size of queue. When TS_Queue exceeds defined size, any write will cause writting thread to wait
         TS_Queue(size_t max_size):
             m_queue(),
             m_is_not_full(),
@@ -46,6 +63,8 @@ class TS_Queue
 
         }
 
+        //! Destructor.
+        /*! Thread destroing TS_Queue will be suspended until TS_Queue becomes empty. */
         virtual ~TS_Queue()
         {
             stop();
@@ -54,7 +73,8 @@ class TS_Queue
             assert(m_queue.empty());
         }
 
-        //writting
+        //! Write data to TS_Queue.
+        /*! When queue is full, current thread will be suspended until some data is consumed by reader(s). */
         void push_back(const T &item)
         {
             enable_work();
@@ -66,7 +86,11 @@ class TS_Queue
             m_is_not_empty.notify_all();
         }
 
-        //reading
+        //! Get data.
+        /*! When there is no data in queue, current thread will wait until data appear.
+         * Returned type is Optional which can be empty in one situation: 
+         * when thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
+         */        
         Optional<T> pop_front()
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
@@ -84,6 +108,7 @@ class TS_Queue
             return result;
         }
 
+        //! Take objects count.
         size_t size() const
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
@@ -91,6 +116,7 @@ class TS_Queue
             return result;
         }
 
+        //! Check if TS_Queue is empty
         bool empty() const
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
@@ -98,13 +124,14 @@ class TS_Queue
             return result;
         }
 
-        //release all threads waiting in pop()
+        //! Release all threads waiting in TS_Queue::pop()
         void stop()
         {
             m_stopped = true;
             m_is_not_empty.notify_all();
         }
-		
+
+        //! Wait until data is available.
         void waitForData()
         {
             std::unique_lock<std::mutex> lock(m_queue_mutex);
