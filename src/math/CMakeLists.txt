@@ -1,7 +1,5 @@
 
-set(LIB_NAME math)
-
-project(${LIB_NAME})
+project(math)
 
 cmake_minimum_required( VERSION 2.6 )
 
@@ -20,7 +18,8 @@ set(TEST_SRC
     tests/math_tests.cpp
     )
 
-
 include_directories(${CMAKE_SOURCE_DIR}/src)
-register_library(${LIB_NAME} SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS} TEST_SOURCES ${TEST_SOURCES})
-turnOnCpp11(${LIB_NAME})
+
+add_library(math SHARED ${MATH_SRC} ${MATH_HEADERS})
+register_target(NAME math SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
+turnOnCpp11(math)
