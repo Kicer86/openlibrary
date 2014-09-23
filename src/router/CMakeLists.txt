@@ -1,7 +1,5 @@
 
-set( LIB_NAME router )
-
-project( ${LIB_NAME} )
+project( router )
 
 cmake_minimum_required( VERSION 2.6 )
 
@@ -17,7 +15,7 @@ set(router_HPP
     A_star/std_types.hpp
 )
 
-register_library(${LIB_NAME} HEADERS ${router_HPP})
+register_target(NAME router HEADERS ${router_HPP})
 
 #visualizer
 include_directories(${QT_INCLUDES} ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} .)
