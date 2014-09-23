@@ -12,14 +12,18 @@ function(register_target_install_lib name)
         set(RUNTIME_TYPE LIBRARY)
         set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
     endif(WIN32)
+    
+    if(TARGET ${LIBRARY_NAME})     #target may not exist if there are no sources (just headers)
 
-    install(TARGETS ${LIBRARY_NAME}
-            EXPORT OpenLibrary_${LIBRARY_NAME}Config
-            DESTINATION ${LIB_DESTINATION})
+        install(TARGETS ${LIBRARY_NAME}
+                EXPORT OpenLibrary_${LIBRARY_NAME}Config
+                DESTINATION ${LIB_DESTINATION})
 
-    install(EXPORT OpenLibrary_${LIBRARY_NAME}Config
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private
-            NAMESPACE ${OPENLIBRARY_NAMESPACE})
+        install(EXPORT OpenLibrary_${LIBRARY_NAME}Config
+                DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private
+                NAMESPACE ${OPENLIBRARY_NAMESPACE})
+                
+    endif(TARGET ${LIBRARY_NAME})
 
 endfunction(register_target_install_lib)
 
@@ -57,9 +61,13 @@ endfunction(register_target_install_headers)
 
 function(register_target_set_version target)
 
-    set_target_properties(${target} PROPERTIES
-                          VERSION ${OPENLIBRARY_VERSION}
-                          SOVERSION ${OPENLIBRARY_MAJOR_VERSION})
+    if(TARGET ${target})
+
+        set_target_properties(${target} PROPERTIES
+                            VERSION ${OPENLIBRARY_VERSION}
+                            SOVERSION ${OPENLIBRARY_MAJOR_VERSION})
+                            
+    endif(TARGET ${target})                        
 
 endfunction(register_target_set_version)
 

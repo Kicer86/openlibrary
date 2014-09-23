@@ -184,7 +184,11 @@ endfunction(enableCodeCoverage)
 
 function(hideSymbols target)
 
-    set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
-                                               VISIBILITY_INLINES_HIDDEN 1)
+    if(TARGET ${target})
+    
+        set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                                   VISIBILITY_INLINES_HIDDEN 1)
+                                                   
+    endif(TARGET ${target})
 
 endfunction(hideSymbols)
