@@ -1,0 +1,7 @@
+
+#ifndef OPENLIBRARY_SETTINGS_HPP
+#define OPENLIBRARY_SETTINGS_HPP
+
+#define OL_NAMESPACE ol
+
+#endif
