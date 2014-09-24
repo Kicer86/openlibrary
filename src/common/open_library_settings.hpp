@@ -2,6 +2,6 @@
 #ifndef OPENLIBRARY_SETTINGS_HPP
 #define OPENLIBRARY_SETTINGS_HPP
 
-#define OL_NAMESPACE ol
+#define OPENLIBRARY_NAMESPACE namespace ol
 
 #endif
