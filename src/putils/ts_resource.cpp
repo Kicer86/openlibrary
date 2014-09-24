@@ -3,4 +3,9 @@
 
 #include <iostream>
 
-ThreadSafeResource<std::ostream *> ThreadSafeOutput(&std::cout);
+namespace OL_NAMESPACE
+{
+
+    ThreadSafeResource<std::ostream *> ThreadSafeOutput(&std::cout);
+    
+}
