@@ -1,7 +1,0 @@
-
-#ifndef OPENLIBRARY_SETTINGS_HPP
-#define OPENLIBRARY_SETTINGS_HPP
-
-#define OPENLIBRARY_NAMESPACE namespace ol
-
-#endif

@@ -12,7 +12,6 @@ set(LIB_HEADERS
     debug.hpp 
     std_macros.hpp 
     str_op.hpp 
-    open_library_settings.hpp
 )
 
 set(TEST_SRC
