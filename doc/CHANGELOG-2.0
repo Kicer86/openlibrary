@@ -1,5 +1,5 @@
 
-Version 1.1 (in progress)
+Version 2.0 (in progress)
 - New library introduced: putils
     * TS_Resource moved to putils
     * TS_Queue moved to putils
@@ -14,6 +14,7 @@ Version 1.1 (in progress)
     * Introducing threadsWaiting4Data() and waitForData()
 - Visual Studio build fixes.
 - OpenLibrary shared libraries versioning.
+- OPENLIBRARY_NAMESPACE introduced. Now all libraries will use this macro for main namespace
 - cleanups in cmake files:
     * OPENLIBRARY_CMAKE_INCLUDES renamed to OPENLIBRARY_USE_FILE
     * OPENLIBRARY_INCLUDE_DIRS and OPENLIBRARY_LIBRARIES variables added.
