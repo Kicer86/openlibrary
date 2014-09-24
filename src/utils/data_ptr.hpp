@@ -23,26 +23,42 @@ namespace OpenLibrary_CopyPtr
 }
 
 
-//data pointer
-//data_ptr can be used for storing class' private data which on class copy should also be copied.
-//operator= of data_ptr and copy constructor of data_ptr are calling copy constructor of encapsulated type.
+//! Copyable data smart pointer.
+
+//! When data_ptr is copied, it makes a copy of hold object. So it behaves similarly std::shared_ptr, 
+//! but instead of pointing to the same data a copy of data occurs.
+//! data_ptr can be used for storing class' private data which on class copy should also be copied.
+//! operator= of data_ptr and copy constructor of data_ptr are calling copy constructor of encapsulated type.
 template<class T>
 class data_ptr
 {
     public:
-        typedef void (*Deleter)(T *);
-        typedef void (*Copier)(T* &, const T *);
+        typedef void (*Deleter)(T *);                             //!< deleter for hold object
+        typedef void (*Copier)(T* &, const T *);                  //!< interface of copying function
 
+        //! Constructor.
+        /** Constructs data_ptr object and stores pointer to object of type T inside. data_ptr takes ownership over passed pointer.
+          * @arg d object deleter. A function which takes pointer to T as parameter. Responsibility of deleter is to delete owned pointer when data_ptr is destroyed.
+          * @arg c object copier. A function of type data_ptr::Copier. It is called on data_ptr copy. Its responsibility is to create new instance of T and initialize it with data from copied data_ptr. 
+          */
         data_ptr(T *ptr = nullptr, Deleter d = &OpenLibrary_CopyPtr::deleter, Copier c = &OpenLibrary_CopyPtr::copier): m_ptr(ptr), m_deleter(d), m_copier(c)
         {
 
         }
 
+        //! Copy constructor
+        /** Makes copy of data_ptr. 
+         *  Object kept in data_ptr will be copied too.
+         */
         data_ptr(const data_ptr<T> &other): m_ptr(0), m_deleter(nullptr), m_copier(nullptr)
         {
             copy(other);
         }
         
+        //! Move constructor.
+        /** Moves data from one data_ptr to another.
+         *  No copies are made. Source data_ptr becomes empty.
+         */
         data_ptr(data_ptr<T> &&other): m_ptr(0), m_deleter(nullptr), m_copier(nullptr)
         {
             move(other);
