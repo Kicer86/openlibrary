@@ -16,8 +16,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../debug.hpp"
-#include "../str_op.hpp"
+#include <common/debug.hpp>
+#include <common/str_op.hpp>
+
 #include "htmltaglist.hpp"
 #include "searchlist.hpp"
 

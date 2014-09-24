@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../str_op.hpp"
+#include <common/str_op.hpp>
 #include "htmltag.hpp"
 
 struct HtmlTag::Data
