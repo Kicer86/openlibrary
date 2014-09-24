@@ -23,7 +23,7 @@
 
 #include <common/integers.hpp>
 
-namespace OpenLibrary
+namespace ol
 {
     namespace Math
     {

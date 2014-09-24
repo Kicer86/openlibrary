@@ -11,20 +11,20 @@ template<class ArrayIterator>
 void sort(ArrayIterator first, ArrayIterator last)
 {
     const int cores = omp_get_num_procs();
-    OpenLibrary::Private::quick_sort(first, last, cores);
+    ol::Private::quick_sort(first, last, cores);
 }
 
 template<class ArrayIterator>
 void merge_sort(ArrayIterator first, ArrayIterator last)
 {
     const int cores = omp_get_num_procs();
-    OpenLibrary::Private::merge_sort(first, last, cores);
+    ol::Private::merge_sort(first, last, cores);
 }
 
 template<class ArrayIterator>
 void fast_sort(ArrayIterator first, ArrayIterator last)
 {
-    OpenLibrary::Private::fast_sort(first, last);
+    ol::Private::fast_sort(first, last);
 }
 
 #endif 

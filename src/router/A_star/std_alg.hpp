@@ -11,7 +11,8 @@
 #include "base.hpp"
 #include "std_types.hpp"
 
-namespace OpenLibrary
+
+namespace ol
 {
     namespace Router
     {

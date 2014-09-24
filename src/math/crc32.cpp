@@ -19,7 +19,7 @@
 
 #include "crc32.hpp"
 
-namespace OpenLibrary
+namespace ol
 {
 
     namespace Math

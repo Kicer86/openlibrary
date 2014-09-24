@@ -19,7 +19,7 @@
 
 #include "cpuinfo.hpp"
 
-namespace OpenLibrary
+namespace ol
 {
     namespace Utils
     {

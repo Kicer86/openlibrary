@@ -23,7 +23,7 @@
 
 #include <common/integers.hpp>
 
-namespace OpenLibrary
+namespace ol
 {
 
     namespace Math
@@ -46,6 +46,7 @@ namespace OpenLibrary
                 Crc32Impl *m_impl;
         };
     }
+    
 }
 
 #endif

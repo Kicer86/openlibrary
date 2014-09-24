@@ -24,7 +24,7 @@
 
 #include "math.hpp"
 
-namespace OpenLibrary
+namespace ol
 {
     namespace Math
     {

@@ -9,7 +9,7 @@
 
 #include "swap_tables.hpp"
 
-namespace OpenLibrary
+namespace ol
 {
     namespace Private
     {

@@ -7,7 +7,7 @@
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-    using namespace OpenLibrary::Router;
+    using namespace ol::Router;
     typedef Point<int, double> PointT;
     typedef Coordinates<int> CoordinatesT;
     //typedef OpenSet<PointT> OpenSetT;

@@ -8,11 +8,9 @@
 #include <memory>
 #include <ostream>
 
-#include <common/open_library_settings.hpp>
-
 #include "putils_export.h"
 
-namespace OL_NAMESPACE
+namespace ol
 {
 
     //! Thread safe wrapper for objects.

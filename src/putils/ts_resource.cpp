@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace OL_NAMESPACE
+namespace ol
 {
 
     ThreadSafeResource<std::ostream *> ThreadSafeOutput(&std::cout);

@@ -16,7 +16,7 @@
 	#define constexpr const
 #endif
 
-namespace OpenLibrary
+namespace ol
 {
     namespace Router
     {

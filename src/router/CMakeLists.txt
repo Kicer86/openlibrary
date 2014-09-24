@@ -5,6 +5,8 @@ cmake_minimum_required( VERSION 2.6 )
 
 include(${CMAKE_SOURCE_DIR}/cmake/functions.cmake)
 
+include_directories(${CMAKE_SOURCE_DIR}/src)
+
 set(routerDemo_SRCS
     main.cpp
    )

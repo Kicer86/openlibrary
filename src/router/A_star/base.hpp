@@ -14,11 +14,12 @@
 #include <iostream>
 
 #define DEBUG_DISABLE_OUTPUT
-#include "../debug.hpp"
+#include <common/debug.hpp>
 
 #include "traits.hpp"
 
-namespace OpenLibrary
+
+namespace ol
 {
     namespace Router
     {

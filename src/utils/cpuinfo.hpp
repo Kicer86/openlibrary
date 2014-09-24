@@ -26,7 +26,7 @@
 #include "utils_export.h"
 #include <common/integers.hpp>
 
-namespace OpenLibrary
+namespace ol
 {
     namespace Utils
     {

@@ -28,11 +28,9 @@
 #include <deque>
 #include <mutex>
 
-#include <common/open_library_settings.hpp>
-
 #include "utils/optional.hpp"
 
-namespace OL_NAMESPACE
+namespace ol
 {
     //! Thread safe queue
 
