@@ -1,7 +1,5 @@
 
-set(LIB_NAME putils)
-
-project( ${LIB_NAME} )
+project(putils)
 cmake_minimum_required(VERSION 2.8)
 
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src )
@@ -18,7 +16,7 @@ set(LIB_HEADERS
 set(TEST_SRC
     )
 
-add_library(${LIB_NAME} SHARED ${LIB_SOURCES} ${LIB_HEADERS})
-turnOnCpp11(${LIB_NAME})
+add_library(putils SHARED ${LIB_SOURCES} ${LIB_HEADERS})
+turnOnCpp11(putils)
 
-register_target(NAME ${LIB_NAME} SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})
+register_target(NAME putils SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})
