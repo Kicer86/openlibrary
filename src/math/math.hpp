@@ -21,7 +21,7 @@
 #ifndef OPENLIBRARY_MATH_HPP
 #define OPENLIBRARY_MATH_HPP
 
-#include "integers.hpp"
+#include <common/integers.hpp>
 
 namespace OpenLibrary
 {

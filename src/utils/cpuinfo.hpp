@@ -24,7 +24,7 @@
 #include <string>
 
 #include "utils_export.h"
-#include "integers.hpp"
+#include <common/integers.hpp>
 
 namespace OpenLibrary
 {

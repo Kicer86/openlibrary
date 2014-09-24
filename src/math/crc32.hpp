@@ -21,7 +21,7 @@
 #ifndef OPENLIBRARY_CRC32_HPP
 #define OPENLIBRARY_CRC32_HPP
 
-#include <integers.hpp>
+#include <common/integers.hpp>
 
 namespace OpenLibrary
 {

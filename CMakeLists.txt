@@ -36,11 +36,11 @@ add_library_path(src/math math EXPERIMENTAL)
 add_library_path(src/palgorithm palgorithm)
 add_library_path(src/putils putils)
 
-set(LIBRARY_HEADERS src/debug.hpp src/std_macros.hpp src/str_op.hpp src/open_library_settings.hpp)
+set(LIBRARY_HEADERS src/common/debug.hpp src/common/std_macros.hpp src/common/str_op.hpp src/common/open_library_settings.hpp)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR})
-add_library(common SHARED src/str_op.cpp ${LIBRARY_HEADERS})
-register_target(NAME common HEADERS ${LIBRARY_HEADERS} SOURCES src/str_op.cpp)
+add_library(common SHARED src/common/str_op.cpp ${LIBRARY_HEADERS})
+register_target(NAME common HEADERS ${LIBRARY_HEADERS} SOURCES src/common/str_op.cpp)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)

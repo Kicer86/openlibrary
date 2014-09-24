@@ -4,7 +4,7 @@
   #include <string>
   #include <vector>
 
-  #include <debug.hpp>
+  #include <common/debug.hpp>
 
   #include "private/htmltaglist.hpp"
   #include "html.tab.hh"         //include bison's definitions
