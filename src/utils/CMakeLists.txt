@@ -22,7 +22,7 @@ set(TEST_SRC
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-add_library(utils ${LIB_SOURCES} ${LIB_HEADERS})
+add_library(utils SHARED ${LIB_SOURCES} ${LIB_HEADERS})
 
 register_target(NAME utils
                 SOURCES {LIB_SOURCES}
