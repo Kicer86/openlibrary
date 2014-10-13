@@ -37,7 +37,7 @@ add_library(htmlParser SHARED ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_
 target_link_libraries(htmlParser ${FLEX_LIBRARIES} common)
 
 #enable debug info when building debug
-set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
+set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS $<$<CONFIG:Debug>:YYDEBUG=1>)
 
 #if(TARGET htmlParserTests)
 #    set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
