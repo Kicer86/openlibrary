@@ -20,7 +20,3 @@ Version 2.0 (in progress)
     * OPENLIBRARY_INCLUDE_DIRS and OPENLIBRARY_LIBRARIES variables added.
     * OpenLibraryVersion.cmake introduced. find_package() can be used with version now.
     * removing old methods of package registration. Now each library defines itself as it wish and then just registers final target with register_target()
-
-TODO:
-- introduce debug/release versions in parallel?
-- make sure libraries without target (no sources, just headers) are working fine (can be find with find_package in projects using them)
