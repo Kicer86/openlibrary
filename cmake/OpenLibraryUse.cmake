@@ -147,16 +147,13 @@ function(enableCodeCoverage target)
 
         endif(NOT TARGET generate_code_coverage)
 
-        get_property(LIB_LOCATION TARGET ${target} PROPERTY LOCATION)
-        get_filename_component(LIB_DIR ${LIB_LOCATION} PATH)
-
         #per target build step
         if(LCOV AND NOT GCOVR)        #GCovr wins with lcov
             add_custom_command(OUTPUT ${LCOV_DIR}/lcov_${target}.info
                                DEPENDS _cc_prepare
                                COMMAND ${LCOV} --quiet --capture --directory . --output-file ${LCOV_DIR}/lcov_${target}.info
                                COMMAND ${LCOV} --quiet --remove ${LCOV_DIR}/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${LCOV_DIR}/lcov_${target}.info
-                               WORKING_DIRECTORY ${LIB_DIR}
+                               WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>
                                COMMENT "gathering code coverage data for target ${target}")
 
             add_custom_target(_lcov_${target}_info_gathering
@@ -185,10 +182,10 @@ endfunction(enableCodeCoverage)
 function(hideSymbols target)
 
     if(TARGET ${target})
-    
+
         set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
                                                    VISIBILITY_INLINES_HIDDEN 1)
-                                                   
+
     endif(TARGET ${target})
 
 endfunction(hideSymbols)
