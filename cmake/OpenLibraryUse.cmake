@@ -153,7 +153,7 @@ function(enableCodeCoverage target)
                                DEPENDS _cc_prepare
                                COMMAND ${LCOV} --quiet --capture --directory . --output-file ${LCOV_DIR}/lcov_${target}.info
                                COMMAND ${LCOV} --quiet --remove ${LCOV_DIR}/lcov_${target}.info '/usr/include/*' '/usr/lib/*' -o ${LCOV_DIR}/lcov_${target}.info
-                               WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>
+                               #WORKING_DIRECTORY $<TARGET_FILE_DIR:${target}>
                                COMMENT "gathering code coverage data for target ${target}")
 
             add_custom_target(_lcov_${target}_info_gathering
