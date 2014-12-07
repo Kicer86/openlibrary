@@ -49,6 +49,7 @@ function(turnOnIntelSyntax target)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnIntelSyntax)
 
+
 function(turnOnCodeCoverage target)
 
     #sources
@@ -72,6 +73,18 @@ function(turnOnCodeCoverage target)
     endif(MSVC)
 
 endfunction(turnOnCodeCoverage)
+
+
+function(hideSymbols target)
+
+    if(TARGET ${target})
+
+        set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                                   VISIBILITY_INLINES_HIDDEN 1)
+
+    endif(TARGET ${target})
+
+endfunction(hideSymbols)
 
 
 # function registers target which uses 'lcov' tool to generate html with code coverage
@@ -177,15 +190,3 @@ function(enableCodeCoverage target)
     endif(LCOV OR TRUCOV OR GCOVR)
 
 endfunction(enableCodeCoverage)
-
-
-function(hideSymbols target)
-
-    if(TARGET ${target})
-
-        set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
-                                                   VISIBILITY_INLINES_HIDDEN 1)
-
-    endif(TARGET ${target})
-
-endfunction(hideSymbols)
