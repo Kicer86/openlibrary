@@ -49,7 +49,7 @@ function(turnOnIntelSyntax target)
     endif(CMAKE_COMPILER_IS_GNUCXX)
 endfunction(turnOnIntelSyntax)
 
-function(enableCodeCoverageFor target)
+function(turnOnCodeCoverage target)
 
     #sources
     if(MSVC) #Visual Studio
@@ -71,7 +71,7 @@ function(enableCodeCoverageFor target)
 
     endif(MSVC)
 
-endfunction(enableCodeCoverageFor)
+endfunction(turnOnCodeCoverage)
 
 
 # function registers target which uses 'lcov' tool to generate html with code coverage
@@ -162,7 +162,7 @@ function(enableCodeCoverage target)
 
             add_dependencies(_cc_gather_data _lcov_${target}_info_gathering)
 
-            enableCodeCoverageFor(${target})
+            turnOnCodeCoverage(${target})
         endif(LCOV AND NOT GCOVR)
 
         #per target build step
