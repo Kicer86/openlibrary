@@ -64,6 +64,7 @@ namespace ol
             //! Notification interface
             struct INotify
             {
+                virtual ~INotify() {}
                 virtual void unlocked() = 0;                       //!< Called when Accessor is being destructed and resource is unlocked.
             };
 
