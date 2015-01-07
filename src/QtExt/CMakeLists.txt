@@ -23,8 +23,6 @@ set(LIB_HEADERS
 qt5_wrap_cpp(LIB_MOCFILES ${LIB_HEADERS})
 
 add_library(QtExt SHARED ${LIB_SRC} ${LIB_MOCFILES} ${LIB_HEADERS})
-turnOnCpp11(QtExt)
-
 target_link_libraries(QtExt Qt5::Widgets)
 
 register_target(NAME QtExt

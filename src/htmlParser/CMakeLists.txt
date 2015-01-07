@@ -43,9 +43,6 @@ set_target_properties(htmlParser PROPERTIES COMPILE_DEFINITIONS $<$<CONFIG:Debug
 #    set_target_properties(htmlParserTests PROPERTIES COMPILE_DEFINITIONS_DEBUG YYDEBUG=1)
 #endif(TARGET htmlParserTests)
 
-#c++11 is needed here, turn it on
-turnOnCpp11(htmlParser)
-
 register_target(NAME htmlParser
                 SOURCES ${HTMLPARSER_SRC} ${FLEX_htmlFlex_OUTPUTS} ${FLEX_cssFlex_OUTPUTS} ${BISON_htmlBison_OUTPUTS} ${BISON_cssBison_OUTPUTS}
                 HEADERS ${HTMLPARSER_HEADERS})

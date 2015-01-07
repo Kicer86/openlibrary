@@ -14,7 +14,6 @@ set(HEADERS
 )
 
 add_executable(bose-nelson ${SRC})
-turnOnCpp11(bose-nelson)
 
 function(generateSwapTables directory baseFileName cpp_file hpp_file)       #cpp_file and hpp_file will be returned
     

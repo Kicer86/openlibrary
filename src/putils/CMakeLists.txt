@@ -17,6 +17,5 @@ set(TEST_SRC
     )
 
 add_library(putils SHARED ${LIB_SOURCES} ${LIB_HEADERS})
-turnOnCpp11(putils)
 
 register_target(NAME putils SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})

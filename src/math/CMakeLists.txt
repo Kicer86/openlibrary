@@ -22,4 +22,3 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 add_library(math SHARED ${MATH_SRC} ${MATH_HEADERS})
 register_target(NAME math SOURCES ${MATH_SRC} HEADERS ${MATH_HEADERS})
-turnOnCpp11(math)

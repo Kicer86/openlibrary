@@ -25,21 +25,6 @@ function(addSourceFlags source propertyName flags)
 endfunction(addSourceFlags)
 
 #functions providing platform independed compiler switches
-function(turnOnCpp11 target)
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        addFlags(${target} COMPILE_FLAGS "--std=c++11")
-    elseif(MSVC) #Visual Studio
-
-        #on by default
-
-    else()
-
-        #assumption it's llvm
-        addFlags(${target} COMPILE_FLAGS "-std=c++11")
-
-    endif(CMAKE_COMPILER_IS_GNUCXX)
-endfunction(turnOnCpp11)
-
 
 function(turnOnIntelSyntax target)
     if(CMAKE_COMPILER_IS_GNUCXX)

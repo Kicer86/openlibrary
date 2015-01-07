@@ -2,6 +2,9 @@
 project(openlibrary)
 cmake_minimum_required(VERSION 2.8)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(BUILD_SHARED_LIB TRUE CACHE BOOL "Global flag to cause add_library to create shared libraries if on.")
 
 set(OPENLIBRARY_MAJOR_VERSION 2)

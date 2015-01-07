@@ -18,6 +18,5 @@ set(TEST_SRC
     )
 
 add_library(common SHARED ${LIB_SOURCES} ${LIB_HEADERS})
-turnOnCpp11(common)
 
 register_target(NAME common SOURCES ${LIB_SOURCES} HEADERS ${LIB_HEADERS})

@@ -26,18 +26,15 @@ set(TEST_SRC
     )
 
 add_library(palgorithm SHARED ${LIB_SOURCES} ${LIB_HEADERS})
-turnOnCpp11(palgorithm)
 
 #test targets
 if(NOT WIN32)
 	addSourceFlags(psort.cpp COMPILE_FLAGS ${OpenMP_CXX_FLAGS})
 	add_executable(qsort_tester psort.cpp ${swap_table_cpp})
 	addFlags(qsort_tester LINK_FLAGS ${OpenMP_CXX_FLAGS})
-	turnOnCpp11(qsort_tester)
 
 	#debug targets
 	add_executable(opt_test opt_test.cpp ${swap_table_cpp})
-	turnOnCpp11(opt_test)
 
 	add_custom_target(dump ALL objdump -d -M intel opt_test > opt_test.txt DEPENDS opt_test)
 endif(NOT WIN32)
