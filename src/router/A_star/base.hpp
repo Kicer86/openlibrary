@@ -13,9 +13,6 @@
 #include <vector>
 #include <iostream>
 
-#define DEBUG_DISABLE_OUTPUT
-#include <common/debug.hpp>
-
 #include "traits.hpp"
 
 
