@@ -16,56 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <common/debug.hpp>
+#include <common/str_op.hpp>
 
 #include "htmltaglist.hpp"
 #include "searchlist.hpp"
-
-namespace
-{
-    std::string *stripQuotas(std::string *s)
-    {
-        std::string &str=*s;         //str and s are now the same
-
-        if (str.empty()==false &&
-            str[0]==str[str.length()-1] &&
-            (str[0]=='"' || str[0]=='\'')
-            )
-        {
-            str.erase(0, 1);               //remove 1st " or '
-            str.erase(str.length()-1, 1);  //remove last one
-        }
-
-        return &str;
-    }
-
-    std::string stripBlanks(const std::string &s)
-    {
-        std::string str=s;
-
-        //from the begining
-        int len=str.length();
-        int l=0;
-
-        while (l<len && str[l]<=32)
-            l++;
-
-        if (l)
-            str.erase(0, l);
-
-        //from the end
-        len=str.length();
-        int p=len-1;
-        while (p>=0 && str[p]<=32)
-            p--;
-
-        p++;
-        if (p<len)
-            str.erase(p);  //remove them all from the end
-
-        return str;
-    }
-}
-
 
 SearchList::SearchList(): m_elements()
 {}
@@ -74,14 +29,22 @@ void SearchList::setResults(const SearchList& list)
 {
     m_elements.clear(); //remove current elements
 
+    ol_debug(DebugLevel::Debug) << "after filtration:";
+
     for (auto &item: list.getList())
+    {
         m_elements.push_back(item);                       //copy all values
+
+        ol_debug(DebugLevel::Debug) << *( item );
+    }
 }
 
 
 void SearchList::init(const HtmlTagList* tagList, const std::string& id)
 {
     //get search results
+    ol_debug(DebugLevel::Debug) << "creating SearchList with \"" << id << "\" as primary filter";
+
     SearchList ret;
     const HtmlTagList::HtmlTags &listOfTags = tagList->getHtmlTags();
 
@@ -95,6 +58,7 @@ void SearchList::init(const HtmlTagList* tagList, const std::string& id)
 
 void SearchList::findDescendant(const std::string& id)
 {
+    ol_debug(DebugLevel::Debug) << "adding filter 'descentant': \"" << id << '"';
     SearchList newResuls;                //new list of valid tags after filtration below
 
     for (SearchListElement element: m_elements)    //element is now copy of iterator on HtmlTagList (for accessing descentants etc)
@@ -126,6 +90,8 @@ void SearchList::findDescendant(const std::string& id)
 
 void SearchList::withAttr(const std::string& name)
 {
+    ol_debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << '"';
+
     SearchList newResuls;                //new list of valid tags after filtration below
 
     for (SearchListElement element: m_elements)
@@ -144,6 +110,7 @@ void SearchList::withAttr(const std::string& name, const std::string& val)
     std::string value(val);   //make a writable copy
     Strings::stripQuotas(&value);
 
+    ol_debug(DebugLevel::Debug) << "adding filter 'attribute': \"" << name << "\" equal to \"" << value << '"';
     SearchList newResuls;                //new list of valid tags after filtration below
 
     for (SearchListElement element: m_elements)
