@@ -22,7 +22,7 @@ function(register_target_install_lib name)
         install(EXPORT OpenLibrary_${LIBRARY_NAME}Config
                 DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private
                 NAMESPACE ${OPENLIBRARY_NAMESPACE})
-                
+
     endif(TARGET ${LIBRARY_NAME})
 
 endfunction(register_target_install_lib)
@@ -75,7 +75,7 @@ endfunction(register_target_set_version)
 #target and sources as arguments
 function(register_target_export_header target)
 
-    if(ARGN)
+    if(ARGN AND TARGET ${target})
         set(header ${CMAKE_BINARY_DIR}/${target}_export.h)
         generate_export_header(${target} EXPORT_FILE_NAME ${header})
 
@@ -85,6 +85,6 @@ function(register_target_export_header target)
         install(FILES ${header}
                 DESTINATION ${HEADERS_INSTALL_PATH}
                 PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
-    endif(ARGN)
+    endif()
 
 endfunction(register_target_export_header)

@@ -32,12 +32,12 @@ enable_testing()
 add_custom_target(valgrind_test)           #all valgrind tests should attach here
 
 add_library_path(src/htmlParser htmlParser)
-add_library_path(qextserialport qextserialport EXPERIMENTAL)
+#add_library_path(qextserialport qextserialport EXPERIMENTAL)
 add_library_path(src/router router EXPERIMENTAL)
 add_library_path(src/QtExt QtExt)
 add_library_path(src/utils utils)
-add_library_path(src/math math EXPERIMENTAL)
-add_library_path(src/palgorithm palgorithm)
+#add_library_path(src/math math EXPERIMENTAL)
+#add_library_path(src/palgorithm palgorithm)
 add_library_path(src/putils putils)
 add_library_path(src/common common)
 

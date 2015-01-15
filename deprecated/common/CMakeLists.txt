@@ -9,7 +9,8 @@ set(LIB_SOURCES
     )
 
 set(LIB_HEADERS
-    debug.hpp
+    debug.hpp 
+    std_macros.hpp 
     str_op.hpp 
 )
 

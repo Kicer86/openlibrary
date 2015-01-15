@@ -34,56 +34,6 @@ function(getHeadersPath path)
 endfunction(getHeadersPath)
 
 
-#register test program. provide library name and sources as parameters
-function(registerTest libraryName)
-
-    find_package(CppUTest)
-
-    if(CPPUTEST_FOUND)
-
-        unset(SOURCES)
-        unset(LIBRARIES)
-
-        #TODO: use CMakeParseArguments
-        parseArguments(SOURCES LIBRARIES ARGUMENTS ${ARGN})
-
-        set(targetName ${libraryName}Tests)
-
-        message("${libraryName}: adding tests - CppUTest package found")
-        include_directories(${CPPUTEST_INCLUDE_DIRS})
-
-        add_executable(${targetName} ${SOURCES})                           #create extra test target binary with proper sources
-        target_link_libraries(${targetName} ${CPPUTEST_LIBRARIES})
-
-        add_test(${targetName}_tests ${targetName})
-        target_link_libraries(${targetName} ${LIBRARIES})
-
-        turnOnCpp11(${targetName})
-        enableCodeCoverage(${targetName})
-
-        #extra tools
-        if(UNIX)
-
-            #create valgrind tests
-            find_program(valgrindPath valgrind)
-
-            if(valgrindPath)
-
-                add_custom_target(valgrind_${targetName}
-                                  COMMAND ${valgrindPath} --error-exitcode=255 ${CMAKE_CURRENT_BINARY_DIR}/${targetName} &> /dev/null\; if [ $$? -eq 255 ]\; then echo "valgrind problems when running ${CMAKE_CURRENT_BINARY_DIR}/${targetName}" \; exit 1\; else echo "running valgrind for ${targetName}: OK" \; exit 0\; fi
-                                  DEPENDS ${targetName}
-                                 )
-                add_dependencies(valgrind_test valgrind_${targetName})
-
-            endif(valgrindPath)
-
-        endif(UNIX)
-
-    endif(CPPUTEST_FOUND)
-
-endfunction(registerTest)
-
-
 function(add_library_path path name)
 
     set(enable TRUE)
