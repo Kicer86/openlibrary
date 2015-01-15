@@ -23,6 +23,11 @@ function(register_target_install_lib name)
                 DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private
                 NAMESPACE ${OPENLIBRARY_NAMESPACE})
 
+     else()
+
+        configure_file(${CMAKE_SOURCE_DIR}/cmake/OpenLibrary_HeadersLibConfig.cmake.in ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake @ONLY)
+        install(FILES ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private)
+
     endif(TARGET ${LIBRARY_NAME})
 
 endfunction(register_target_install_lib)
