@@ -26,7 +26,7 @@ if(OpenLibrary_FIND_COMPONENTS)
         endif(NOT TARGET @OPENLIBRARY_NAMESPACE@${component})
 
         #make sure there is anything to be linked
-        if(TARGET OPENLIBRARY_${COMPONENT}_LIBRARIES)
+        if(TARGET ${OPENLIBRARY_${COMPONENT}_LIBRARIES})
             set(OPENLIBRARY_LIBRARIES ${OPENLIBRARY_LIBRARIES} ${OPENLIBRARY_${COMPONENT}_LIBRARIES})
         endif()
 
