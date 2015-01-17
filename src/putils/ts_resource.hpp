@@ -197,8 +197,6 @@ namespace ol
             T m_resource;
     };
 
-    extern PUTILS_EXPORT ThreadSafeResource<std::ostream *> ThreadSafeOutput;
-
 }
 
 #endif
