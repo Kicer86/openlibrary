@@ -27,6 +27,7 @@ class Optional
         Optional(): m_data(), m_present(false) {}
         Optional(const Optional<T>& other): m_data(other.m_data), m_present(other.m_present) {}
         Optional(const T& data): m_data(data), m_present(true) {}
+        Optional(Optional<T>&& other): m_data(std::move(other.m_data)), m_present(other.m_present) {}
 
         Optional<T>& operator=(const Optional<T>& other)
         {
@@ -39,6 +40,14 @@ class Optional
         Optional<T>& operator=(const T& data)
         {
             m_data = data;
+            m_present = true;
+
+            return *this;
+        }
+
+        Optional<T>& operator=(T&& data)
+        {
+            m_data = std::move(data);
             m_present = true;
 
             return *this;
