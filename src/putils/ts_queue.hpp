@@ -93,6 +93,9 @@ namespace ol
                 }
             }
 
+            //! Write data to TS_Queue.
+            /*! Behaves as push_back(const T &), but uses move semantics
+             */
             void push_back(T&& item)
             {
                 assert(m_stopped == false);
