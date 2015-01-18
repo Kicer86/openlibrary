@@ -121,12 +121,12 @@ namespace ol
 
                 if (m_queue.empty() == false)
                 {
-                    result = *(m_queue.begin());
+                    result = std::move( *(m_queue.begin()) );
                     m_queue.pop_front();
                     m_is_not_full.notify_all();
                 }
 
-                return result;
+                return std::move(result);
             }
 
             //! Take objects count.
