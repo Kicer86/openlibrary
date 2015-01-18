@@ -93,6 +93,20 @@ namespace ol
                 }
             }
 
+            void push_back(T&& item)
+            {
+                assert(m_stopped == false);
+
+                if (m_stopped == false)
+                {
+                    std::unique_lock<std::mutex> lock(m_queue_mutex);
+
+                    m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
+                    m_queue.push_back(std::move(item));
+                    m_is_not_empty.notify_all();
+                }
+            }
+
             //! Get data.
             /*! When there is no data in queue, current thread will wait until data appear.
             * Returned type is Optional which can be empty in one situation: 
