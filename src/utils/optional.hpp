@@ -68,6 +68,11 @@ class Optional
             return m_data;
         }
 
+        T& operator*()
+        {
+            return m_data;
+        }
+
         bool operator!() const
         {
             return !m_present;
