@@ -4,3 +4,6 @@ Open Library is available under LGPLv3 license.
 available unusual make targets:
 test - runs test
 autogenerate - regenerate platform independend files
+
+Documentation can be found at:
+http://kicer86.github.io/openlibrary/
