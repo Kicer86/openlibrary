@@ -71,7 +71,7 @@ class HTMLPARSER_EXPORT HtmlTag
 
   private:
     struct Data;
-    data_ptr<Data> m_data;
+    ol::data_ptr<Data> m_data;
 };
 
 #endif // HTMLTAG_HPP
