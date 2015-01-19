@@ -8,8 +8,6 @@
 #include <memory>
 #include <ostream>
 
-#include "putils_export.h"
-
 namespace ol
 {
 
