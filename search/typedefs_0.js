@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['copier',['Copier',['../classdata__ptr.html#a622a73a787a574a314b81fe1260c980c',1,'data_ptr']]]
+  ['copier',['Copier',['../d1/da1/classol_1_1data__ptr.html#aa5a02d64230a7250df85fd54c3ecc5b6',1,'ol::data_ptr']]]
 ];
