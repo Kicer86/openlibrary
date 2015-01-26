@@ -194,10 +194,11 @@ namespace ol
             //! Checks if resource is locked (at this moment)
             bool is_locked()
             {
-                std::unique_lock<std::mutex> l(m_mutex);
-                const bool locked = l.try_lock();
+                const bool locked = m_mutex.try_lock();
+                if (locked)
+                    m_mutex.unlock();
 
-                return locked;
+                return !locked;
             }
 
         private:
