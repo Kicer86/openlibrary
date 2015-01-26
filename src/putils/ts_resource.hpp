@@ -190,6 +190,16 @@ namespace ol
                 return accessor;
             }
 
+
+            //! Checks if resource is locked (at this moment)
+            bool is_locked()
+            {
+                std::unique_lock<std::mutex> l(m_mutex);
+                const bool locked = l.try_lock();
+
+                return locked;
+            }
+
         private:
             std::mutex m_mutex;
             T m_resource;
