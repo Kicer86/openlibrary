@@ -4,6 +4,7 @@ find_package(GMock REQUIRED)
 find_package(GTest REQUIRED)
 
 include_directories(SYSTEM ${GMOCK_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS})
+include_directories(${CMAKE_SOURCE_DIR}/src/putils)
 
 set(SRC
         ts_resource_tests.cpp

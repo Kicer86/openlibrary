@@ -58,6 +58,8 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake DESTINATION ${OPENL
 # endforeach()
 
 if(BUILD_TESTS)
+    add_subdirectory(tests)
+    
     add_custom_target(RunUnitTests ALL
                       COMMAND ctest
                       DEPENDS putils_tests)

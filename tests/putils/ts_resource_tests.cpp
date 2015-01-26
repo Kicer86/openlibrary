@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "../ts_resource.hpp"
+#include "ts_resource.hpp"
 
 TEST(TSResourceTest, CanBeConstructed)
 {
