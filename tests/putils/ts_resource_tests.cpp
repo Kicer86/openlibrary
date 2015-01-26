@@ -60,3 +60,17 @@ TEST(TSResourceTest, LocksResourceForOneThread)
     EXPECT_EQ(false, result2);
     EXPECT_EQ(2, *res.lock());
 }
+
+
+TEST(TSResourceTest, DoesntFailWhenDestroyedWhileBeingLocked)
+{
+    EXPECT_NO_THROW(
+    {
+        ol::ThreadSafeResource<int>* res = new ol::ThreadSafeResource<int>(1);
+
+        auto resource = res->lock();
+        delete res;
+
+        *resource = 3;
+    });
+}
