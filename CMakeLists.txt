@@ -6,8 +6,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 11)
 
-set(BUILD_SHARED_LIB TRUE CACHE BOOL "Global flag to cause add_library to create shared libraries if on.")
-
 set(OPENLIBRARY_MAJOR_VERSION 2)
 set(OPENLIBRARY_MINOR_VERSION 0)
 set(OPENLIBRARY_PATCH_VERSION 0)
@@ -57,3 +55,8 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake DESTINATION ${OPENL
 # foreach(var ${vars})
 #     message("${var} = ${${var}} ")
 # endforeach()
+
+
+add_custom_target(RunUnitTests ALL
+                      COMMAND ctest
+                      DEPENDS putils_tests)
