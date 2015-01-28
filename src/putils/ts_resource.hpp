@@ -23,41 +23,6 @@ namespace ol
     template<typename T>
     class ThreadSafeResource
     {
-
-            struct Deleter
-            {
-                Deleter(std::unique_lock<std::mutex>* lock): m_lock(lock) {}
-                Deleter(Deleter&& other): m_lock(nullptr)
-                {
-                    m_lock = other.m_lock;
-                    other.m_lock = nullptr;
-                }
-
-                Deleter(const Deleter &) = delete;
-                Deleter& operator=(const Deleter &) = delete;
-                Deleter& operator=(Deleter&& other)
-                {
-                    m_lock = other.m_lock;
-                    other.m_lock = nullptr;
-
-                    return *this;
-                }
-
-                virtual ~Deleter()
-                {
-                    assert(m_lock == nullptr);
-                }
-
-                void operator() (T *)
-                {
-                    //do not delete resource - delete lock instead, it will lock resource inside of ThreadSafeResource again
-
-                    delete m_lock, m_lock = nullptr;     //mutex will be free again
-                }
-
-                std::unique_lock<std::mutex>* m_lock;
-            };
-
         public:
             //! Notification interface
             struct INotify
