@@ -2,7 +2,7 @@
 #ifndef OPENLIBRARY_PALGORITHM_TS_RESOURCE
 #define OPENLIBRARY_PALGORITHM_TS_RESOURCE
 
-#include <assert.h>
+#include <cassert>
 
 #include <mutex>
 #include <memory>
@@ -166,6 +166,12 @@ namespace ol
             template<typename... Args>
             ThreadSafeResource(const Args&... args): m_mutex(), m_resource(args...)
             {
+            }
+
+            ~ThreadSafeResource()
+            {
+                // point of this lock is te be sure resource is not used (no live Accessors exist)
+                std::unique_lock<std::mutex> lock(m_mutex);
             }
 
             ThreadSafeResource(const ThreadSafeResource<T> &) = delete;
