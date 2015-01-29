@@ -8,6 +8,12 @@
 
 #include "ts_resource.hpp"
 
+struct NotificationMock: ol::ThreadSafeResource<int>::INotify
+{
+    MOCK_METHOD0(unlocked, void());
+};
+
+
 TEST(TSResourceTest, CanBeConstructed)
 {
     EXPECT_NO_THROW(
@@ -67,17 +73,14 @@ TEST(TSResourceTest, LocksResourceForOneThread)
     EXPECT_EQ(2, *res.lock());
 }
 
-/*
-TEST(TSResourceTest, DoesntFailWhenDestroyedWhileBeingLocked)
+
+TEST(TSResourceTest, IfNotificationIsCalledWhenResourceIsReleased)
 {
-    EXPECT_THROW(
+    ol::ThreadSafeResource<int> res(1);
+    NotificationMock notification;
+
+    EXPECT_CALL(notification, unlocked()).Times(1);
     {
-        ol::ThreadSafeResource<int>* res = new ol::ThreadSafeResource<int>(1);
-
-        auto resource = res->lock();
-        delete res;
-
-        *resource = 3;
-    }, int);
+        res.lock(&notification);
+    }
 }
-*/
