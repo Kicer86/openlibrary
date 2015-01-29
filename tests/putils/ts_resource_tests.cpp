@@ -44,27 +44,33 @@ TEST(TSResourceTest, LocksResourceForOneThread)
 
         state = 2;                            //state #2 - trying to lock by second thread
 
-        result1 = res.is_locked();
+        {
+            auto ac1 = res.try_lock();
+            result1 = ac1.is_valid();
+        }
 
         state = 3;                            //state #3 - tell thread #1 to unlock
 
         while(state == 3);
 
-        result2 = res.is_locked();
+        {
+            auto ac2 = res.try_lock();
+            result2 = ac2.is_valid();
+        }
     });
 
     t1.join();
     t2.join();
 
-    EXPECT_EQ(true, result1);
-    EXPECT_EQ(false, result2);
+    EXPECT_EQ(false, result1);
+    EXPECT_EQ(true, result2);
     EXPECT_EQ(2, *res.lock());
 }
 
-
+/*
 TEST(TSResourceTest, DoesntFailWhenDestroyedWhileBeingLocked)
 {
-    EXPECT_NO_THROW(
+    EXPECT_THROW(
     {
         ol::ThreadSafeResource<int>* res = new ol::ThreadSafeResource<int>(1);
 
@@ -72,5 +78,6 @@ TEST(TSResourceTest, DoesntFailWhenDestroyedWhileBeingLocked)
         delete res;
 
         *resource = 3;
-    });
+    }, int);
 }
+*/
