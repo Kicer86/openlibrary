@@ -6,14 +6,14 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 11)
 
-set(BUILD_SHARED_LIB TRUE CACHE BOOL "Global flag to cause add_library to create shared libraries if on.")
-
 set(OPENLIBRARY_MAJOR_VERSION 2)
 set(OPENLIBRARY_MINOR_VERSION 0)
 set(OPENLIBRARY_PATCH_VERSION 0)
 set(OPENLIBRARY_VERSION
   ${OPENLIBRARY_MAJOR_VERSION}.${OPENLIBRARY_MINOR_VERSION}.${OPENLIBRARY_PATCH_VERSION})
 set(OPENLIBRARY_NAMESPACE OpenLibrary::)
+
+option(BUILD_TESTS "Build tests. Set to ON to build tests")
 
 #prepare paths
 if(WIN32 AND NOT CYGWIN)
@@ -26,10 +26,9 @@ include(GenerateExportHeader)
 include(${PROJECT_SOURCE_DIR}/cmake/functions.cmake)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
-enable_testing()
-
-#prepare target for running tests
-add_custom_target(valgrind_test)           #all valgrind tests should attach here
+if(BUILD_TESTS)
+    enable_testing()
+endif()
 
 add_library_path(src/htmlParser htmlParser)
 #add_library_path(qextserialport qextserialport EXPERIMENTAL)
@@ -57,3 +56,11 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake DESTINATION ${OPENL
 # foreach(var ${vars})
 #     message("${var} = ${${var}} ")
 # endforeach()
+
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+    
+    add_custom_target(RunUnitTests ALL
+                      COMMAND ctest
+                      DEPENDS putils_tests)
+endif()

@@ -2,7 +2,7 @@
 #ifndef OPENLIBRARY_PALGORITHM_TS_RESOURCE
 #define OPENLIBRARY_PALGORITHM_TS_RESOURCE
 
-#include <assert.h>
+#include <cassert>
 
 #include <mutex>
 #include <memory>
@@ -23,41 +23,6 @@ namespace ol
     template<typename T>
     class ThreadSafeResource
     {
-
-            struct Deleter
-            {
-                Deleter(std::unique_lock<std::mutex>* lock): m_lock(lock) {}
-                Deleter(Deleter&& other): m_lock(nullptr)
-                {
-                    m_lock = other.m_lock;
-                    other.m_lock = nullptr;
-                }
-
-                Deleter(const Deleter &) = delete;
-                Deleter& operator=(const Deleter &) = delete;
-                Deleter& operator=(Deleter&& other)
-                {
-                    m_lock = other.m_lock;
-                    other.m_lock = nullptr;
-
-                    return *this;
-                }
-
-                virtual ~Deleter()
-                {
-                    assert(m_lock == nullptr);
-                }
-
-                void operator() (T *)
-                {
-                    //do not delete resource - delete lock instead, it will lock resource inside of ThreadSafeResource again
-
-                    delete m_lock, m_lock = nullptr;     //mutex will be free again
-                }
-
-                std::unique_lock<std::mutex>* m_lock;
-            };
-
         public:
             //! Notification interface
             struct INotify
@@ -74,7 +39,11 @@ namespace ol
             */
             struct Accessor
             {
+                //! Constructor
+                //! Constructs an Accessor which is temporary owner of locked resource. Until Accessor is destructed resource is locked and can be accessed safely by Accessor's client
                 Accessor(std::mutex& mutex, T* object): m_lock(mutex), m_object(object), m_notify(nullptr) {}
+
+                //! Move Constructor
                 Accessor(Accessor&& other): m_lock(std::move(other.m_lock)),
                                             m_object(other.m_object),
                                             m_notify(other.m_notify)
@@ -83,8 +52,17 @@ namespace ol
                     other.m_notify = nullptr;
                 }
 
+                //! Constructor
+                //! Constructs an invalid Accessor. is_valid() will return false.
+                Accessor(): m_lock(), m_object(nullptr), m_notify(nullptr) {}
+
+                //! Constructor
+                Accessor(std::unique_lock<std::mutex>&& lock, T* object): m_lock(std::move(lock)), m_object(object), m_notify(nullptr) {}
                 Accessor(const Accessor &) = delete;
+
                 Accessor& operator=(const Accessor &) = delete;
+
+                //! Move operator
                 Accessor& operator=(Accessor&& other)
                 {
                     m_lock = std::move(other.m_lock);
@@ -147,6 +125,14 @@ namespace ol
                     return *m_object;
                 }
 
+                //! Check if Accessor is valid.
+                /*! Returns true when Accessor holds resource. Otherwise returns false.
+                    Only default constructor Accessor() makes it invalid. All other constructors will create a valid Accessor object. */
+                bool is_valid() const
+                {
+                    return m_object != nullptr;
+                }
+
                 private:
                     friend class ThreadSafeResource;
                     std::unique_lock<std::mutex> m_lock;
@@ -159,13 +145,19 @@ namespace ol
                     }
             };
 
-            friend struct Deleter;
-
             //! Contructor
             /*! Constructs ThreadSafeResource together with locked resource. */
             template<typename... Args>
             ThreadSafeResource(const Args&... args): m_mutex(), m_resource(args...)
             {
+            }
+
+            //! Destructor
+            //! Destructs resource object. If it is still locked by some Accessor, destructor will wait until resource is released.
+            ~ThreadSafeResource()
+            {
+                // point of this lock is te be sure resource is not used (no live Accessors exist)
+                std::unique_lock<std::mutex> lock(m_mutex);
             }
 
             ThreadSafeResource(const ThreadSafeResource<T> &) = delete;
@@ -188,6 +180,21 @@ namespace ol
                 accessor.set(notify);
 
                 return accessor;
+            }
+
+
+            //! Tries to lock resource.
+            //! Invalid Accessor will be returned when lock failed.
+            Accessor try_lock()
+            {
+                std::unique_lock<std::mutex> l(m_mutex, std::defer_lock);
+                const bool locked = l.try_lock();
+                Accessor result;
+
+                if (locked)
+                    result = Accessor(std::move(l), &m_resource);
+
+                return result;
             }
 
         private:
