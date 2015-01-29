@@ -157,7 +157,7 @@ namespace ol
             ~ThreadSafeResource()
             {
                 // point of this lock is te be sure resource is not used (no live Accessors exist)
-                std::unique_lock<std::mutex> lock(m_mutex);
+                std::unique_lock<std::mutex> l(m_mutex);
             }
 
             ThreadSafeResource(const ThreadSafeResource<T> &) = delete;
