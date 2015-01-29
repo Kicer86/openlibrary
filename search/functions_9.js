@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['unlocked',['unlocked',['../dc/d13/structol_1_1_thread_safe_resource_1_1_i_notify.html#a131d38cfc6c53250d011278e56124fd8',1,'ol::ThreadSafeResource::INotify']]]
+  ['size',['size',['../d2/d36/classol_1_1_t_s___queue.html#a91a74a0b77fc46b9cca4e3eb1b1802e0',1,'ol::TS_Queue']]],
+  ['stop',['stop',['../d2/d36/classol_1_1_t_s___queue.html#a13ca1f0531408de7df95b098a001800e',1,'ol::TS_Queue']]]
 ];
