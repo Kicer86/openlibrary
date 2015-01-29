@@ -39,7 +39,11 @@ namespace ol
             */
             struct Accessor
             {
+                //! Constructor
+                //! Constructs an Accessor which is temporary owner of locked resource. Until Accessor is destructed resource is locked and can be accessed safely by Accessor's client
                 Accessor(std::mutex& mutex, T* object): m_lock(mutex), m_object(object), m_notify(nullptr) {}
+
+                //! Move Constructor
                 Accessor(Accessor&& other): m_lock(std::move(other.m_lock)),
                                             m_object(other.m_object),
                                             m_notify(other.m_notify)
@@ -48,11 +52,17 @@ namespace ol
                     other.m_notify = nullptr;
                 }
 
+                //! Constructor
+                //! Constructs an invalid Accessor. is_valid() will return false.
                 Accessor(): m_lock(), m_object(nullptr), m_notify(nullptr) {}
-                Accessor(std::unique_lock<std::mutex>&& lock, T* object): m_lock(std::move(lock)), m_object(object), m_notify(nullptr) {}
 
+                //! Constructor
+                Accessor(std::unique_lock<std::mutex>&& lock, T* object): m_lock(std::move(lock)), m_object(object), m_notify(nullptr) {}
                 Accessor(const Accessor &) = delete;
+
                 Accessor& operator=(const Accessor &) = delete;
+
+                //! Move operator
                 Accessor& operator=(Accessor&& other)
                 {
                     m_lock = std::move(other.m_lock);
@@ -115,6 +125,9 @@ namespace ol
                     return *m_object;
                 }
 
+                //! Check if Accessor is valid.
+                /*! Returns true when Accessor holds resource. Otherwise returns false.
+                    Only default constructor Accessor() makes it invalid. All other constructors will create a valid Accessor object. */
                 bool is_valid() const
                 {
                     return m_object != nullptr;
@@ -131,8 +144,6 @@ namespace ol
                         m_notify = notify;
                     }
             };
-
-            friend struct Deleter;
 
             //! Contructor
             /*! Constructs ThreadSafeResource together with locked resource. */
