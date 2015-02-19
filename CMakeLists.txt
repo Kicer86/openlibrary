@@ -30,7 +30,7 @@ if(BUILD_TESTS)
     enable_testing()
 endif()
 
-add_library_path(src/htmlParser htmlParser)
+add_library_path(src/htmlParser htmlParser EXPERIMENTAL)
 #add_library_path(qextserialport qextserialport EXPERIMENTAL)
 add_library_path(src/router router EXPERIMENTAL)
 add_library_path(src/QtExt QtExt EXPERIMENTAL)
