@@ -210,7 +210,7 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 <div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="../../dd/d29/classol_1_1_thread_safe_resource.html#a5c5098c84a6c37a159a6be17c2fcb924">  157</a></span>&#160;            <a class="code" href="../../dd/d29/classol_1_1_thread_safe_resource.html#a5c5098c84a6c37a159a6be17c2fcb924">~ThreadSafeResource</a>()</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;            {</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                <span class="comment">// point of this lock is te be sure resource is not used (no live Accessors exist)</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                std::unique_lock&lt;std::mutex&gt; <a class="code" href="../../dd/d29/classol_1_1_thread_safe_resource.html#a00362adb08d107012538e5646dea86bd">lock</a>(m_mutex);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                std::unique_lock&lt;std::mutex&gt; l(m_mutex);</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            }</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            <a class="code" href="../../dd/d29/classol_1_1_thread_safe_resource.html#a361e242405e1e32ea14f5235691b9e3a">ThreadSafeResource</a>(<span class="keyword">const</span> <a class="code" href="../../dd/d29/classol_1_1_thread_safe_resource.html">ThreadSafeResource&lt;T&gt;</a> &amp;) = <span class="keyword">delete</span>;</div>
@@ -260,7 +260,7 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 <div class="ttc" id="classol_1_1_thread_safe_resource_html"><div class="ttname"><a href="../../dd/d29/classol_1_1_thread_safe_resource.html">ol::ThreadSafeResource</a></div><div class="ttdoc">Thread safe wrapper for objects. </div><div class="ttdef"><b>Definition:</b> ts_resource.hpp:24</div></div>
 <div class="ttc" id="structol_1_1_thread_safe_resource_1_1_accessor_html_a150c70aac8de8293ad48a2a5f981a011"><div class="ttname"><a href="../../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a150c70aac8de8293ad48a2a5f981a011">ol::ThreadSafeResource::Accessor::Accessor</a></div><div class="ttdeci">Accessor()</div><div class="ttdef"><b>Definition:</b> ts_resource.hpp:57</div></div>
 <div class="ttc" id="structol_1_1_thread_safe_resource_1_1_accessor_html_a03811ec80a13e786dc7c6e0c0543a9b6"><div class="ttname"><a href="../../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a03811ec80a13e786dc7c6e0c0543a9b6">ol::ThreadSafeResource::Accessor::operator*</a></div><div class="ttdeci">T &amp; operator*()</div><div class="ttdoc">get reference to resource </div><div class="ttdef"><b>Definition:</b> ts_resource.hpp:117</div></div>
-<div class="ttc" id="namespaceol_html"><div class="ttname"><a href="../../d1/de7/namespaceol.html">ol</a></div><div class="ttdef"><b>Definition:</b> ts_queue.hpp:33</div></div>
+<div class="ttc" id="namespaceol_html"><div class="ttname"><a href="../../d1/de7/namespaceol.html">ol</a></div><div class="ttdef"><b>Definition:</b> debug.hpp:45</div></div>
 <div class="ttc" id="classol_1_1_thread_safe_resource_html_a00362adb08d107012538e5646dea86bd"><div class="ttname"><a href="../../dd/d29/classol_1_1_thread_safe_resource.html#a00362adb08d107012538e5646dea86bd">ol::ThreadSafeResource::lock</a></div><div class="ttdeci">Accessor lock()</div><div class="ttdef"><b>Definition:</b> ts_resource.hpp:168</div></div>
 <div class="ttc" id="structol_1_1_thread_safe_resource_1_1_accessor_html_a4a7427693ebbfa1fd6f85a6770cb27d0"><div class="ttname"><a href="../../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a4a7427693ebbfa1fd6f85a6770cb27d0">ol::ThreadSafeResource::Accessor::operator*</a></div><div class="ttdeci">const T &amp; operator*() const </div><div class="ttdoc">get reference to const resource </div><div class="ttdef"><b>Definition:</b> ts_resource.hpp:123</div></div>
 <div class="ttc" id="structol_1_1_thread_safe_resource_1_1_i_notify_html_a131d38cfc6c53250d011278e56124fd8"><div class="ttname"><a href="../../dc/d13/structol_1_1_thread_safe_resource_1_1_i_notify.html#a131d38cfc6c53250d011278e56124fd8">ol::ThreadSafeResource::INotify::unlocked</a></div><div class="ttdeci">virtual void unlocked()=0</div><div class="ttdoc">Called when Accessor is being destructed and resource is unlocked. </div></div>
@@ -276,7 +276,7 @@ var searchBox = new SearchBox("searchBox", "../../search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 29 2015 21:28:30 for OpenLibrary by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 19 2015 23:10:41 for OpenLibrary by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

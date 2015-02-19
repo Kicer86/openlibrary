@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['openset',['OpenSet',['../d3/da9/classol_1_1_router_1_1_open_set.html',1,'ol::Router']]],
-  ['openset_3c_20pointt_2c_20sortingcontainer_3c_20pointt_20_3e_20_3e',['OpenSet&lt; PointT, SortingContainer&lt; PointT &gt; &gt;',['../d3/da9/classol_1_1_router_1_1_open_set.html',1,'ol::Router']]],
-  ['operator_2a',['operator*',['../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a03811ec80a13e786dc7c6e0c0543a9b6',1,'ol::ThreadSafeResource::Accessor::operator*()'],['../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a4a7427693ebbfa1fd6f85a6770cb27d0',1,'ol::ThreadSafeResource::Accessor::operator*() const ']]],
-  ['operator_2d_3e',['operator-&gt;',['../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a215840662837ef7a0319db45d7e81c83',1,'ol::ThreadSafeResource::Accessor::operator-&gt;()'],['../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a06510f65c5403f9405374ad83ad68a0c',1,'ol::ThreadSafeResource::Accessor::operator-&gt;() const ']]],
-  ['operator_3d',['operator=',['../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#a9da8c52a6e614f778545cc4d17f6a9e0',1,'ol::ThreadSafeResource::Accessor']]],
-  ['optional',['Optional',['../da/dc3/classol_1_1_optional.html',1,'ol']]]
+  ['point',['Point',['../da/d9b/structol_1_1_router_1_1_point.html',1,'ol::Router']]],
+  ['pop_5ffront',['pop_front',['../d2/d36/classol_1_1_t_s___queue.html#a11eab37d87f9b83f5a8c59c42b29fed1',1,'ol::TS_Queue']]],
+  ['push_5fback',['push_back',['../d2/d36/classol_1_1_t_s___queue.html#a39419363454c3bdbf2b7ecd69cce77e8',1,'ol::TS_Queue::push_back(const T &amp;item)'],['../d2/d36/classol_1_1_t_s___queue.html#a982c2dd46e1b22aa921972b8cd71913c',1,'ol::TS_Queue::push_back(T &amp;&amp;item)']]]
 ];

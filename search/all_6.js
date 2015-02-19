@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['inotify',['INotify',['../dc/d13/structol_1_1_thread_safe_resource_1_1_i_notify.html',1,'ol::ThreadSafeResource']]],
-  ['is_5fvalid',['is_valid',['../d3/d77/structol_1_1_thread_safe_resource_1_1_accessor.html#ad9114fdc4c1427b149efca4ec2c2049d',1,'ol::ThreadSafeResource::Accessor']]]
+  ['lock',['lock',['../dd/d29/classol_1_1_thread_safe_resource.html#a00362adb08d107012538e5646dea86bd',1,'ol::ThreadSafeResource::lock()'],['../dd/d29/classol_1_1_thread_safe_resource.html#af03d423be280e71266c7d15dd3cc5f85',1,'ol::ThreadSafeResource::lock(INotify *notify)']]]
 ];
