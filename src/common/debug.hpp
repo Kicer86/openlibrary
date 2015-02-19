@@ -41,87 +41,90 @@
 #include <QString>
 #endif
 
-namespace DebugLevel
+
+namespace ol
 {
-    enum Level
+
+    enum class Level
     {
         Debug,
         Info,
         Warning,
         Error
     };
-}
 
-class Debug
-{
-        std::stringstream data;
-        DebugLevel::Level level;
 
-        bool enableOutput() const
-        {
-            //debugging off?
-#ifdef DEBUG_DISABLE_OUTPUT
-            return false;
-#else
-    #ifdef NDEBUG
-            if (level == DebugLevel::Debug)      //no output if NDEBUG was defined and output level==DEBUG
+    class Debug
+    {
+            std::stringstream data;
+            Level level;
+
+            bool enableOutput() const
+            {
+                //debugging off?
+    #ifdef DEBUG_DISABLE_OUTPUT
                 return false;
+    #else
+        #ifdef NDEBUG
+                if (level == Level::Debug)      //no output if NDEBUG was defined and output level==DEBUG
+                    return false;
+        #endif
+                return true;
     #endif
-            return true;
-#endif
-        }
+            }
 
-    public:
-        Debug(const char *f_name, DebugLevel::Level l = DebugLevel::Info): data(), level(l)
-        {
-#ifdef DEBUG_VERBOSE
-            if (enableOutput())
-                data << f_name << ": ";
-#else
-            if (enableOutput())
-                (void) f_name;
-#endif
-        }
+        public:
+            Debug(const char *f_name, DebugLevel::Level l = Level::Info): data(), level(l)
+            {
+    #ifdef DEBUG_VERBOSE
+                if (enableOutput())
+                    data << f_name << ": ";
+    #else
+                if (enableOutput())
+                    (void) f_name;
+    #endif
+            }
 
-        ~Debug()
-        {
-            if (enableOutput())
-                std::clog << data.str() << std::endl;
-        }
+            ~Debug()
+            {
+                if (enableOutput())
+                    std::clog << data.str() << std::endl;
+            }
 
-        template <typename T> Debug& operator<<(const T &arg)
-        {
-            if (enableOutput())
-                data << arg;
+            template <typename T> Debug& operator<<(const T &arg)
+            {
+                if (enableOutput())
+                    data << arg;
 
-            return *this;
-        }
+                return *this;
+            }
 
-        template <typename T> Debug& operator<<(const std::vector<T *> &v)
-        {
-            if (enableOutput())
-                for(T* item: v)
-                    data << *item << "; ";
+            template <typename T> Debug& operator<<(const std::vector<T *> &v)
+            {
+                if (enableOutput())
+                    for(T* item: v)
+                        data << *item << "; ";
 
-            return *this;
-        }
+                return *this;
+            }
 
-        template <typename T> Debug& operator<<(const std::vector<T> &v)
-        {
-            if (enableOutput())
-                for(T& item: v)
-                    data << item << "; ";
+            template <typename T> Debug& operator<<(const std::vector<T> &v)
+            {
+                if (enableOutput())
+                    for(T& item: v)
+                        data << item << "; ";
 
-            return *this;
-        }
+                return *this;
+            }
 
-#ifdef DEBUG_QSTRING_SUPPORT
-        Debug& operator<<(const QString &arg)
-        {
-            return (*this) << arg.toLocal8Bit().data();
-        }
-#endif
-};
+    #ifdef DEBUG_QSTRING_SUPPORT
+            Debug& operator<<(const QString &arg)
+            {
+                return (*this) << arg.toLocal8Bit().data();
+            }
+    #endif
+    };
 
+}
 
 #endif // DEBUG_HPP
