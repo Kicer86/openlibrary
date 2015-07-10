@@ -89,7 +89,7 @@ namespace ol
 
                     m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
                     m_queue.push_back(item);
-                    m_is_not_empty.notify_all();
+                    m_is_not_empty.notify_one();
                 }
             }
 
@@ -106,7 +106,7 @@ namespace ol
 
                     m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
                     m_queue.push_back(std::move(item));
-                    m_is_not_empty.notify_all();
+                    m_is_not_empty.notify_one();
                 }
             }
 
@@ -126,7 +126,7 @@ namespace ol
                 {
                     result = std::move( *(m_queue.begin()) );
                     m_queue.pop_front();
-                    m_is_not_full.notify_all();
+                    m_is_not_full.notify_one();
                 }
 
                 return std::move(result);
