@@ -157,7 +157,7 @@ namespace ol
             }
 
             //! Wait until data is available.
-            void waitForData()
+            void wait_for_data()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
                 Optional<T> result;
