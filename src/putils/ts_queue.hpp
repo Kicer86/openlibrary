@@ -131,6 +131,29 @@ namespace ol
 
                 return std::move(result);
             }
+            
+            //! Get data.
+            /*! When there is no data in queue, current thread will wait until data appear for @arg timeout milliseconds.
+            * Returned type is Optional which can be empty in two situations: 
+            * - thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
+            * - timeout occured
+            */        
+            Optional<T> pop_for(const std::chrono::milliseconds& timeout)
+            {
+                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                Optional<T> result;
+
+                const bool status = wait_for_data(lock, timeout);
+
+                if (status && m_queue.empty() == false)
+                {
+                    result = std::move( *(m_queue.begin()) );
+                    m_queue.pop_front();
+                    m_is_not_full.notify_one();
+                }
+
+                return std::move(result);
+            }
 
             //! Take objects count.
             size_t size() const
@@ -184,6 +207,18 @@ namespace ol
                 m_is_not_empty.wait(lock, precond);
             }
 
+            bool wait_for_data(std::unique_lock<std::mutex>& lock, const std::chrono::milliseconds& timeout)
+            {
+                auto precond = [&]
+                {
+                    const bool condition = m_stopped == false && m_queue.empty();
+                    return !condition;
+                };
+
+                const bool status = m_is_not_empty.wait_for(lock, timeout, precond);
+                
+                return status;
+            }
     };
 
 }
