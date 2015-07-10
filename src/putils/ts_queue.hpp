@@ -78,8 +78,8 @@ namespace ol
             //! Write data to TS_Queue.
             /*! When queue is full, current thread will be suspended until some data is consumed by reader(s). 
             *  No writes are allowed when TS_Queue is being destroyed.
-            */ 
-            void push_back(const T &item)
+            */             
+            void push(const T &item)
             {
                 assert(m_stopped == false);
 
@@ -92,11 +92,17 @@ namespace ol
                     m_is_not_empty.notify_one();
                 }
             }
+            
+            [[deprecated]]
+            void push_front(const T &item)
+            {
+                push(item);
+            }
 
             //! Write data to TS_Queue.
             /*! Behaves as push_back(const T &), but uses move semantics
              */
-            void push_back(T&& item)
+            void push(T&& item)
             {
                 assert(m_stopped == false);
 
@@ -108,6 +114,12 @@ namespace ol
                     m_queue.push_back(std::move(item));
                     m_is_not_empty.notify_one();
                 }
+            }
+            
+            [[deprecated]]
+            void push_back(T&& item)
+            {
+                push(std::move(item));
             }
 
             //! Get data.
