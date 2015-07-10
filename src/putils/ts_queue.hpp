@@ -114,8 +114,9 @@ namespace ol
             /*! When there is no data in queue, current thread will wait until data appear.
             * Returned type is Optional which can be empty in one situation: 
             * when thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
-            */        
-            Optional<T> pop_front()
+            */       
+            
+            Optional<T> pop()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
                 Optional<T> result;
@@ -130,6 +131,12 @@ namespace ol
                 }
 
                 return std::move(result);
+            }
+            
+            [[deprecated]]
+            Optional<T> pop_front()
+            {
+                return pop();
             }
             
             //! Get data.
