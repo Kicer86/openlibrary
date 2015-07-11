@@ -78,8 +78,8 @@ namespace ol
             //! Write data to TS_Queue.
             /*! When queue is full, current thread will be suspended until some data is consumed by reader(s). 
             *  No writes are allowed when TS_Queue is being destroyed.
-            */ 
-            void push_back(const T &item)
+            */             
+            void push(const T &item)
             {
                 assert(m_stopped == false);
 
@@ -89,14 +89,20 @@ namespace ol
 
                     m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
                     m_queue.push_back(item);
-                    m_is_not_empty.notify_all();
+                    m_is_not_empty.notify_one();
                 }
+            }
+            
+            [[deprecated]]
+            void push_front(const T &item)
+            {
+                push(item);
             }
 
             //! Write data to TS_Queue.
             /*! Behaves as push_back(const T &), but uses move semantics
              */
-            void push_back(T&& item)
+            void push(T&& item)
             {
                 assert(m_stopped == false);
 
@@ -106,16 +112,23 @@ namespace ol
 
                     m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
                     m_queue.push_back(std::move(item));
-                    m_is_not_empty.notify_all();
+                    m_is_not_empty.notify_one();
                 }
+            }
+            
+            [[deprecated]]
+            void push_back(T&& item)
+            {
+                push(std::move(item));
             }
 
             //! Get data.
             /*! When there is no data in queue, current thread will wait until data appear.
             * Returned type is Optional which can be empty in one situation: 
             * when thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
-            */        
-            Optional<T> pop_front()
+            */       
+            
+            Optional<T> pop()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
                 Optional<T> result;
@@ -126,7 +139,36 @@ namespace ol
                 {
                     result = std::move( *(m_queue.begin()) );
                     m_queue.pop_front();
-                    m_is_not_full.notify_all();
+                    m_is_not_full.notify_one();
+                }
+
+                return std::move(result);
+            }
+            
+            [[deprecated]]
+            Optional<T> pop_front()
+            {
+                return pop();
+            }
+            
+            //! Get data.
+            /*! When there is no data in queue, current thread will wait until data appear for @arg timeout milliseconds.
+            * Returned type is Optional which can be empty in two situations: 
+            * - thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
+            * - timeout occured
+            */        
+            Optional<T> pop_for(const std::chrono::milliseconds& timeout)
+            {
+                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                Optional<T> result;
+
+                const bool status = wait_for_data(lock, timeout);
+
+                if (status && m_queue.empty() == false)
+                {
+                    result = std::move( *(m_queue.begin()) );
+                    m_queue.pop_front();
+                    m_is_not_full.notify_one();
                 }
 
                 return std::move(result);
@@ -157,7 +199,7 @@ namespace ol
             }
 
             //! Wait until data is available.
-            void waitForData()
+            void wait_for_data()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
                 Optional<T> result;
@@ -184,6 +226,18 @@ namespace ol
                 m_is_not_empty.wait(lock, precond);
             }
 
+            bool wait_for_data(std::unique_lock<std::mutex>& lock, const std::chrono::milliseconds& timeout)
+            {
+                auto precond = [&]
+                {
+                    const bool condition = m_stopped == false && m_queue.empty();
+                    return !condition;
+                };
+
+                const bool status = m_is_not_empty.wait_for(lock, timeout, precond);
+                
+                return status;
+            }
     };
 
 }
