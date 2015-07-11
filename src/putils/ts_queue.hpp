@@ -100,7 +100,7 @@ namespace ol
             }
 
             //! Write data to TS_Queue.
-            /*! Behaves as push_back(const T &), but uses move semantics
+            /*! Behaves as TS_Queue::push(const T &), but uses move semantics
              */
             void push(T&& item)
             {
@@ -152,10 +152,11 @@ namespace ol
             }
             
             //! Get data.
-            /*! When there is no data in queue, current thread will wait until data appear for @arg timeout milliseconds.
-            * Returned type is Optional which can be empty in two situations: 
+            /*! When there is no data in queue, current thread will wait until data appear.
+            * @arg timeout - defines how long pop_for will wait for new data.
+            * \return Optional which can be empty in two situations:
             * - thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
-            * - timeout occured
+            * - timeout occured.
             */        
             Optional<T> pop_for(const std::chrono::milliseconds& timeout)
             {
