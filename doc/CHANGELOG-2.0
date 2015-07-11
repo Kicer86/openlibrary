@@ -1,5 +1,5 @@
 
-Version 2.0 (in progress)
+Version 2.0
 - New library introduced: putils
     * TS_Resource moved to putils
     * TS_Queue moved to putils
