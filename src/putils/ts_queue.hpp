@@ -191,7 +191,15 @@ namespace ol
                 return result;
             }
 
-            //! Release all threads waiting in TS_Queue::pop(). 
+
+            //! Clears queue's content
+            void clear()
+            {
+                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                m_queue.clear();
+            }
+
+            //! Release all threads waiting in TS_Queue::pop().
             /*! No writes allowed since this moment. */
             void stop()
             {
