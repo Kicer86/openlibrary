@@ -53,7 +53,7 @@ namespace ol
     {
         public:
             //! Constructor.
-            //! @arg max_size maximum size of queue. When TS_Queue exceeds defined size, any write will cause writting thread to wait
+            //! @arg max_size maximum size of queue. When TS_Queue exceeds defined size, any write will cause writting thread to wait. Use 0 for no limits.
             TS_Queue(size_t max_size):
                 m_queue(),
                 m_is_not_full(),
@@ -110,12 +110,12 @@ namespace ol
                 {
                     std::unique_lock<std::mutex> lock(m_queue_mutex);
 
-                    m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
+                    m_is_not_full.wait(lock, [&] { return m_max_size == 0 || m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
                     m_queue.push_back(std::move(item));
                     m_is_not_empty.notify_one();
                 }
             }
-            
+
             [[deprecated]]
             void push_back(T&& item)
             {
