@@ -36,15 +36,15 @@ namespace ol
 
     /*!
     * TS_Queue is a thread safe queue based on std::deque.
-    * It differs however from default containers: TS_Queue is meant to be used as a pipe. 
-    * There is one side where one or many threads can safely write and there is other side from where one 
+    * It differs however from default containers: TS_Queue is meant to be used as a pipe.
+    * There is one side where one or many threads can safely write and there is other side from where one
     * or many threads can read.
-    * 
+    *
     * Use TS_Queue::push_back() for writing objects, and TS_Queue::pop_front() for reading objects.
     * TS_Queue has it maximum capacity defined on construction. When TS_Queue is full any attempt of pushing data will cause in wait operation.
-    * 
+    *
     * Thread which destroys TS_Queue will be suspended until TS_Queue becomes empty. No pushes are allowed at that time.
-    * 
+    *
     * based on: http://en.wikipedia.org/wiki/Producer-consumer_problem
     */
 
@@ -53,7 +53,7 @@ namespace ol
     {
         public:
             //! Constructor.
-            //! @arg max_size maximum size of queue. When TS_Queue exceeds defined size, any write will cause writting thread to wait
+            //! @arg max_size maximum size of queue. When TS_Queue exceeds defined size, any write will cause writting thread to wait. Use 0 for no limits.
             TS_Queue(size_t max_size):
                 m_queue(),
                 m_is_not_full(),
@@ -76,9 +76,9 @@ namespace ol
             }
 
             //! Write data to TS_Queue.
-            /*! When queue is full, current thread will be suspended until some data is consumed by reader(s). 
+            /*! When queue is full, current thread will be suspended until some data is consumed by reader(s).
             *  No writes are allowed when TS_Queue is being destroyed.
-            */             
+            */
             void push(const T &item)
             {
                 assert(m_stopped == false);
@@ -92,7 +92,7 @@ namespace ol
                     m_is_not_empty.notify_one();
                 }
             }
-            
+
             [[deprecated]]
             void push_front(const T &item)
             {
@@ -110,12 +110,12 @@ namespace ol
                 {
                     std::unique_lock<std::mutex> lock(m_queue_mutex);
 
-                    m_is_not_full.wait(lock, [&] { return m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
+                    m_is_not_full.wait(lock, [&] { return m_max_size == 0 || m_queue.size() < m_max_size; } );  //wait for conditional_variable if there is no place in queue
                     m_queue.push_back(std::move(item));
                     m_is_not_empty.notify_one();
                 }
             }
-            
+
             [[deprecated]]
             void push_back(T&& item)
             {
@@ -124,10 +124,10 @@ namespace ol
 
             //! Get data.
             /*! When there is no data in queue, current thread will wait until data appear.
-            * Returned type is Optional which can be empty in one situation: 
+            * Returned type is Optional which can be empty in one situation:
             * when thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
-            */       
-            
+            */
+
             Optional<T> pop()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
@@ -144,20 +144,20 @@ namespace ol
 
                 return std::move(result);
             }
-            
+
             [[deprecated]]
             Optional<T> pop_front()
             {
                 return pop();
             }
-            
+
             //! Get data.
             /*! When there is no data in queue, current thread will wait until data appear.
             * @arg timeout - defines how long pop_for will wait for new data.
             * \return Optional which can be empty in two situations:
             * - thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
             * - timeout occured.
-            */        
+            */
             Optional<T> pop_for(const std::chrono::milliseconds& timeout)
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
@@ -191,7 +191,15 @@ namespace ol
                 return result;
             }
 
-            //! Release all threads waiting in TS_Queue::pop(). 
+
+            //! Clears queue's content
+            void clear()
+            {
+                std::unique_lock<std::mutex> lock(m_queue_mutex);
+                m_queue.clear();
+            }
+
+            //! Release all threads waiting in TS_Queue::pop().
             /*! No writes allowed since this moment. */
             void stop()
             {
@@ -203,7 +211,6 @@ namespace ol
             void wait_for_data()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
-                Optional<T> result;
 
                 wait_for_data(lock);
             }
@@ -236,7 +243,7 @@ namespace ol
                 };
 
                 const bool status = m_is_not_empty.wait_for(lock, timeout, precond);
-                
+
                 return status;
             }
     };
