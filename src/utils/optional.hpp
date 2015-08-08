@@ -40,6 +40,14 @@ namespace ol
                 return *this;
             }
 
+            Optional<T>& operator=(Optional<T>&& other)
+            {
+                m_data = std::move(other.m_data);
+                m_present = std::move(other.m_present);
+
+                return *this;
+            }
+
             Optional<T>& operator=(const T& data)
             {
                 m_data = data;
