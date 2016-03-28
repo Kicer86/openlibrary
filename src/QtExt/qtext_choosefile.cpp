@@ -11,7 +11,10 @@ QtExtChooseFile::QtExtChooseFile(const QString& title,
                                  const QString& button,
                                  const std::function<QString()>& dialogCallback,
                                  QWidget* p):
-    QWidget(p)
+    QWidget(p),
+    m_button(nullptr),
+    m_lineEdit(nullptr),
+    m_dialogCallback(dialogCallback)
 {
     QHBoxLayout* l = new QHBoxLayout(this);
     QLabel* label = new QLabel(title);
