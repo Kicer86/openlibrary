@@ -26,6 +26,7 @@ QtExtChooseFile::QtExtChooseFile(const QString& title,
     l->addWidget(m_button);
 
     connect(m_button, &QPushButton::clicked, this, &QtExtChooseFile::buttonClicked);
+    connect(m_lineEdit, &QLineEdit::textChanged, this, &QtExtChooseFile::valueChanged);
 }
 
 
@@ -39,11 +40,7 @@ void QtExtChooseFile::buttonClicked() const
 {
     const QString value = m_dialogCallback();
     if (value.isEmpty() == false)
-    {
         m_lineEdit->setText(value);
-
-        emit valueChanged();
-    }
 }
 
 
