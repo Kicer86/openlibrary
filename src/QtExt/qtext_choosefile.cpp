@@ -1,6 +1,8 @@
 
 #include "qtext_choosefile.hpp"
 
+#include <QCompleter>
+#include <QFileSystemModel>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
@@ -24,6 +26,12 @@ QtExtChooseFile::QtExtChooseFile(const QString& title,
     l->addWidget(label);
     l->addWidget(m_lineEdit);
     l->addWidget(m_button);
+
+    QCompleter *completer = new QCompleter(this);
+    QFileSystemModel* model = new QFileSystemModel(completer);
+    model->setRootPath(QDir::homePath());
+    completer->setModel(model);
+    m_lineEdit->setCompleter(completer);
 
     connect(m_button, &QPushButton::clicked, this, &QtExtChooseFile::buttonClicked);
     connect(m_lineEdit, &QLineEdit::textChanged, this, &QtExtChooseFile::valueChanged);
