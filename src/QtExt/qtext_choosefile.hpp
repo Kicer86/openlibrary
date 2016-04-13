@@ -2,47 +2,35 @@
 #ifndef QTEXT_CHOOSE_FILE
 #define QTEXT_CHOOSE_FILE
 
-#include <QObject>
+#include <QWidget>
+
+#include <functional>
 
 #include "QtExt_export.h"
 
-class QAbstractButton;
+class QPushButton;
 class QLineEdit;
-class QFileDialog;
 
-class QtExtChooseFileDialog: public QObject
-{
-    public:
-        virtual int exec() = 0;
-        virtual QString result() const = 0;
-};
-
-
-class QTEXT_EXPORT QtExtChooseFile: public QObject
+class QTEXT_EXPORT QtExtChooseFile: public QWidget
 {
         Q_OBJECT
 
-        QAbstractButton *button;
-        QLineEdit *lineEdit;
-        QObject *dialog;
-
-        const enum Type
-        {
-            T_QFileDialog,
-            T_QtExtChooseFileDialog
-        } type;
+        QPushButton* m_button;
+        QLineEdit*   m_lineEdit;
+        std::function<QString()> m_dialogCallback;
 
     private slots:
         void buttonClicked() const;
 
     public:
-        QtExtChooseFile(QAbstractButton *, QLineEdit *, QFileDialog *);     //object takes ownership over dialog (will delete it)
-        QtExtChooseFile(QAbstractButton *, QLineEdit *, QtExtChooseFileDialog *);
+        QtExtChooseFile(const QString &, const QString &, const std::function<QString()> &, QWidget * = nullptr);
         QtExtChooseFile(const QtExtChooseFile &) = delete;
 
         virtual ~QtExtChooseFile();
 
         QtExtChooseFile& operator=(const QtExtChooseFile &) = delete;
+
+        QString text() const;
 
     signals:
         void valueChanged() const;

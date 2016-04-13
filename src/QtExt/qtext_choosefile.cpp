@@ -1,67 +1,58 @@
 
 #include "qtext_choosefile.hpp"
 
-#include <QFileDialog>
-#include <QAbstractButton>
+#include <QCompleter>
+#include <QFileSystemModel>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QLineEdit>
+#include <QPushButton>
 
 
-QtExtChooseFile::QtExtChooseFile(QAbstractButton *b, QLineEdit *l, QFileDialog *d):
-    button(b), lineEdit(l), dialog(d), type(T_QFileDialog)
+QtExtChooseFile::QtExtChooseFile(const QString& title,
+                                 const QString& button,
+                                 const std::function<QString()>& dialogCallback,
+                                 QWidget* p):
+    QWidget(p),
+    m_button(nullptr),
+    m_lineEdit(nullptr),
+    m_dialogCallback(dialogCallback)
 {
-    //wait for button click
-    connect(button, SIGNAL(clicked()), this, SLOT(buttonClicked()));
-}
+    QHBoxLayout* l = new QHBoxLayout(this);
+    QLabel* label = new QLabel(title);
+    m_lineEdit = new QLineEdit;
+    m_button = new QPushButton(button);
 
+    l->addWidget(label);
+    l->addWidget(m_lineEdit);
+    l->addWidget(m_button);
 
-QtExtChooseFile::QtExtChooseFile(QAbstractButton *b, QLineEdit *l, QtExtChooseFileDialog *d):
-    button(b), lineEdit(l), dialog(d), type(T_QtExtChooseFileDialog)
-{
-    //wait for button click
-    connect(button, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    QCompleter *completer = new QCompleter(this);
+    QFileSystemModel* model = new QFileSystemModel(completer);
+    model->setRootPath(QDir::homePath());
+    completer->setModel(model);
+    m_lineEdit->setCompleter(completer);
+
+    connect(m_button, &QPushButton::clicked, this, &QtExtChooseFile::buttonClicked);
+    connect(m_lineEdit, &QLineEdit::textChanged, this, &QtExtChooseFile::valueChanged);
 }
 
 
 QtExtChooseFile::~QtExtChooseFile()
 {
-    delete dialog;
+
 }
 
 
 void QtExtChooseFile::buttonClicked() const
 {
-    //open dialog
-    switch(type)
-    {
-        case T_QFileDialog:
-        {
-            QFileDialog *dlg = static_cast<QFileDialog *>(dialog);
-            if (dlg->exec() == QDialog::Accepted)
-            {
-                //write new value to edit line
-                const QStringList resultList = dlg->selectedFiles();
+    const QString value = m_dialogCallback();
+    if (value.isEmpty() == false)
+        m_lineEdit->setText(value);
+}
 
-                const QString &result = resultList.join("; ");
 
-                lineEdit->setText(result);
-
-                emit valueChanged();
-            }
-            break;
-        }
-
-        case T_QtExtChooseFileDialog:
-        {
-            QtExtChooseFileDialog *dlg = static_cast<QtExtChooseFileDialog *>(dialog);
-            if (dlg->exec() == QDialog::Accepted)
-            {
-                //write new value to edit line
-                const QString result = dlg->result();
-                lineEdit->setText(result);
-
-                emit valueChanged();
-            }
-            break;
-        }
-    }
+QString QtExtChooseFile::text() const
+{
+    return m_lineEdit->text();
 }
