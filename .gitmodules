@@ -1,4 +1,4 @@
 [submodule "doc/documentation"]
 	path = doc/documentation
-	url = git@github.com:Kicer86/openlibrary.git
+	url = https://github.com/Kicer86/openlibrary.git
 	branch = gh-pages
