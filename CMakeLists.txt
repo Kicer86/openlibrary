@@ -18,8 +18,10 @@ option(BUILD_TESTS "Build tests. Set to ON to build tests")
 #prepare paths
 if(WIN32 AND NOT CYGWIN)
   set(DEF_INSTALL_CMAKE_DIR CMake)
+  set(GLOBAL_CMAKE_DIR CMake)
 else()
   set(DEF_INSTALL_CMAKE_DIR lib/cmake/OpenLibrary)
+  set(GLOBAL_CMAKE_DIR lib/cmake)
 endif()
 
 include(GenerateExportHeader)
@@ -49,6 +51,8 @@ configure_file(cmake/OpenLibraryConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/Op
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
 install(FILES ${PROJECT_BINARY_DIR}/OpenLibraryConfigVersion.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
 install(FILES ${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake DESTINATION ${OPENLIBRARY_CMAKE_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/cmake/FindGMock.cmake DESTINATION ${GLOBAL_CMAKE_DIR})
+install(FILES ${CMAKE_SOURCE_DIR}/cmake/FindGTest.cmake DESTINATION ${GLOBAL_CMAKE_DIR})
 
 #degug code
 # get_cmake_property(vars VARIABLES)
@@ -59,7 +63,7 @@ install(FILES ${CMAKE_SOURCE_DIR}/cmake/OpenLibraryUse.cmake DESTINATION ${OPENL
 
 if(BUILD_TESTS)
     add_subdirectory(tests)
-    
+
     add_custom_target(RunUnitTests ALL
                       COMMAND ctest
                       DEPENDS putils_tests)
