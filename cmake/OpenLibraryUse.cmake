@@ -1,6 +1,8 @@
 
 #some functions for generation useful stuff (public use)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}/modules)
+
 #add flags to target
 function(addFlags target propertyName flags)
     get_target_property(current_properties ${target} ${propertyName})
