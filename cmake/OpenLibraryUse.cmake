@@ -64,14 +64,14 @@ function(hideSymbols target)
 
     if(TARGET ${target})
 
-		get_target_property(target_type ${target} TYPE)
+        get_target_property(target_type ${target} TYPE)
 
-		if(NOT target_type STREQUAL "STATIC_LIBRARY")
+        if(NOT target_type STREQUAL "STATIC_LIBRARY")
 
-			set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
-													   VISIBILITY_INLINES_HIDDEN 1)
+            set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                            VISIBILITY_INLINES_HIDDEN 1)
 
-		endif()
+        endif()
 
     endif(TARGET ${target})
 
