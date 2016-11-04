@@ -1,6 +1,8 @@
 
 #some functions for generation useful stuff (public use)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}/modules)
+
 #add flags to target
 function(addFlags target propertyName flags)
     get_target_property(current_properties ${target} ${propertyName})
@@ -64,15 +66,15 @@ function(hideSymbols target)
 
     if(TARGET ${target})
 
-		get_target_property(target_type ${target} TYPE)
-	
-		if(NOT target_type STREQUAL "STATIC_LIBRARY")
-		
-			set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
-													   VISIBILITY_INLINES_HIDDEN 1)
-													   
-		endif()
-	  
+        get_target_property(target_type ${target} TYPE)
+
+        if(NOT target_type STREQUAL "STATIC_LIBRARY")
+
+            set_target_properties(${target} PROPERTIES CXX_VISIBILITY_PRESET hidden
+                                            VISIBILITY_INLINES_HIDDEN 1)
+
+        endif()
+
     endif(TARGET ${target})
 
 endfunction(hideSymbols)
