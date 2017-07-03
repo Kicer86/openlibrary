@@ -19,10 +19,13 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
         QLineEdit*   m_lineEdit;
         std::function<QString()> m_dialogCallback;
 
+        void setup(const QString &, const QString &, const std::function<QString()> &);
+
     private slots:
         void buttonClicked() const;
 
     public:
+        QtExtChooseFile(const QString& button_caption, const std::function<QString()>& result_callback, QWidget* parent = nullptr);
         QtExtChooseFile(const QString& label, const QString& button_caption, const std::function<QString()>& result_callback, QWidget* parent = nullptr);
         QtExtChooseFile(const QtExtChooseFile &) = delete;
 
