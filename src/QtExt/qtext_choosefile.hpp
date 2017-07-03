@@ -25,6 +25,10 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
 
         QtExtChooseFile& operator=(const QtExtChooseFile &) = delete;
 
+        void setLabel(const QString &);
+        void setButton(const QString &);
+        void setCallback(const std::function<QString()>&);
+
         QString text() const;
 
     signals:

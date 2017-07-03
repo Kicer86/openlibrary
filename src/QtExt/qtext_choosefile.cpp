@@ -50,6 +50,21 @@ QtExtChooseFile::~QtExtChooseFile()
 }
 
 
+void QtExtChooseFile::setLabel(const QString&)
+{
+}
+
+
+void QtExtChooseFile::setButton(const QString&)
+{
+}
+
+
+void QtExtChooseFile::setCallback(const std::function<QString ()>&)
+{
+}
+
+
 QString QtExtChooseFile::text() const
 {
     return m_lineEdit->text();
