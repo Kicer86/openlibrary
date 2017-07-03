@@ -40,6 +40,20 @@ QtExtChooseFile::~QtExtChooseFile()
 }
 
 
+QString QtExtChooseFile::text() const
+{
+    return m_lineEdit->text();
+}
+
+
+void QtExtChooseFile::buttonClicked() const
+{
+    const QString value = m_dialogCallback();
+    if (value.isEmpty() == false)
+        m_lineEdit->setText(value);
+}
+
+
 void QtExtChooseFile::setup(const QString& title, const QString& button, const std::function<QString ()>& dialogCallback)
 {
     QHBoxLayout* l = new QHBoxLayout(this);
@@ -63,16 +77,3 @@ void QtExtChooseFile::setup(const QString& title, const QString& button, const s
     connect(m_lineEdit, &QLineEdit::textChanged, this, &QtExtChooseFile::valueChanged);
 }
 
-
-void QtExtChooseFile::buttonClicked() const
-{
-    const QString value = m_dialogCallback();
-    if (value.isEmpty() == false)
-        m_lineEdit->setText(value);
-}
-
-
-QString QtExtChooseFile::text() const
-{
-    return m_lineEdit->text();
-}

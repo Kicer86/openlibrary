@@ -15,15 +15,6 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
 {
         Q_OBJECT
 
-        QPushButton* m_button;
-        QLineEdit*   m_lineEdit;
-        std::function<QString()> m_dialogCallback;
-
-        void setup(const QString &, const QString &, const std::function<QString()> &);
-
-    private slots:
-        void buttonClicked() const;
-
     public:
         QtExtChooseFile(const QString& button_caption, const std::function<QString()>& result_callback, QWidget* parent = nullptr);
         QtExtChooseFile(const QString& label, const QString& button_caption, const std::function<QString()>& result_callback, QWidget* parent = nullptr);
@@ -37,6 +28,14 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
 
     signals:
         void valueChanged() const;
+
+    private:
+        QPushButton* m_button;
+        QLineEdit*   m_lineEdit;
+        std::function<QString()> m_dialogCallback;
+
+        void buttonClicked() const;
+        void setup(const QString &, const QString &, const std::function<QString()> &);
 };
 
 #endif
