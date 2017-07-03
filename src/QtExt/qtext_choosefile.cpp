@@ -9,6 +9,16 @@
 #include <QPushButton>
 
 
+QtExtChooseFile::QtExtChooseFile(QWidget* p):
+    QWidget(p),
+    m_button(nullptr),
+    m_lineEdit(nullptr),
+    m_dialogCallback()
+{
+    setup("", "", std::function<QString ()>());
+}
+
+
 QtExtChooseFile::QtExtChooseFile(const QString& button,
                                  const std::function<QString ()>& dialogCallback,
                                  QWidget* p):
@@ -57,13 +67,11 @@ void QtExtChooseFile::buttonClicked() const
 void QtExtChooseFile::setup(const QString& title, const QString& button, const std::function<QString ()>& dialogCallback)
 {
     QHBoxLayout* l = new QHBoxLayout(this);
-    QLabel* label = title.isEmpty()? nullptr: new QLabel(title);
+    QLabel* label = new QLabel(title);
     m_lineEdit = new QLineEdit;
     m_button = new QPushButton(button);
 
-    if (label != nullptr)
-        l->addWidget(label);
-
+    l->addWidget(label);
     l->addWidget(m_lineEdit);
     l->addWidget(m_button);
 
@@ -76,4 +84,3 @@ void QtExtChooseFile::setup(const QString& title, const QString& button, const s
     connect(m_button, &QPushButton::clicked, this, &QtExtChooseFile::buttonClicked);
     connect(m_lineEdit, &QLineEdit::textChanged, this, &QtExtChooseFile::valueChanged);
 }
-
