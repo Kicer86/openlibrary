@@ -23,7 +23,7 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
         void buttonClicked() const;
 
     public:
-        QtExtChooseFile(const QString &, const QString &, const std::function<QString()> &, QWidget * = nullptr);
+        QtExtChooseFile(const QString& label, const QString& button_caption, const std::function<QString()>& result_callback, QWidget* parent = nullptr);
         QtExtChooseFile(const QtExtChooseFile &) = delete;
 
         virtual ~QtExtChooseFile();
