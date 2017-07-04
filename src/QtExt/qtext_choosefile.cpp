@@ -22,12 +22,9 @@ QtExtChooseFile::QtExtChooseFile(QWidget* p):
 QtExtChooseFile::QtExtChooseFile(const QString& button,
                                  const std::function<QString ()>& dialogCallback,
                                  QWidget* p):
-    QWidget(p),
-    m_button(nullptr),
-    m_lineEdit(nullptr),
-    m_dialogCallback()
+    QtExtChooseFile("", button, dialogCallback, p)
 {
-    setup("", button, dialogCallback);
+
 }
 
 
