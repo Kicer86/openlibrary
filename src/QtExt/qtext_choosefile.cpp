@@ -9,13 +9,9 @@
 #include <QPushButton>
 
 
-QtExtChooseFile::QtExtChooseFile(QWidget* p):
-    QWidget(p),
-    m_button(nullptr),
-    m_lineEdit(nullptr),
-    m_dialogCallback()
+QtExtChooseFile::QtExtChooseFile(QWidget* p): QtExtChooseFile("", "", std::function<QString ()>(), p)
 {
-    setup("", "", std::function<QString ()>());
+
 }
 
 
