@@ -47,6 +47,9 @@ QtExtChooseFile::~QtExtChooseFile()
 void QtExtChooseFile::setLabel(const QString& label)
 {
     m_label->setText(label);
+
+    if (label.isEmpty())
+        m_label->setVisible(false);
 }
 
 
