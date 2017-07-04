@@ -9,7 +9,7 @@
 #include <QPushButton>
 
 
-QtExtChooseFile::QtExtChooseFile(QWidget* p): QtExtChooseFile("", "", std::function<QString ()>(), p)
+QtExtChooseFile::QtExtChooseFile(QWidget* p): QtExtChooseFile("", "...", std::function<QString ()>(), p)
 {
 
 }
