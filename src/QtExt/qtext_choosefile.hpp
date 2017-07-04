@@ -28,9 +28,11 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
 
         void setLabel(const QString &);
         void setButton(const QString &);
-        void setCallback(const std::function<QString()>&);
+        void setDialogCallback(const std::function<QString()>&);
+        void setValue(const QString &);
 
         QString text() const;
+        QString value() const;    // aliast to text()
 
     signals:
         void valueChanged() const;

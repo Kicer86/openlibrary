@@ -59,13 +59,25 @@ void QtExtChooseFile::setButton(const QString& caption)
 }
 
 
-void QtExtChooseFile::setCallback(const std::function<QString()>& callback)
+void QtExtChooseFile::setDialogCallback(const std::function<QString()>& callback)
 {
     m_dialogCallback = callback;
 }
 
 
+void QtExtChooseFile::setValue(const QString& value)
+{
+    m_lineEdit->setText(value);
+}
+
+
 QString QtExtChooseFile::text() const
+{
+    value();
+}
+
+
+QString QtExtChooseFile::value() const
 {
     return m_lineEdit->text();
 }
@@ -92,7 +104,7 @@ void QtExtChooseFile::setup(const QString& title, const QString& button, const s
 
     setLabel(title);
     setButton(button);
-    setCallback(dialogCallback);
+    setDialogCallback (dialogCallback);
 
     QCompleter *completer = new QCompleter(this);
     QFileSystemModel* model = new QFileSystemModel(completer);
