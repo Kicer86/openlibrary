@@ -18,7 +18,7 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
 
     public:
         QtExtChooseFile(QWidget* parent = nullptr);
-        QtExtChooseFile(const QString& button_caption, const std::function<QString()>& dialog_callback, QWidget* parent = nullptr);
+        QtExtChooseFile(const QString& browse_button_text, const std::function<QString()>& browse_callback, QWidget* parent = nullptr);
         QtExtChooseFile(const QString& label, const QString& button_caption, const std::function<QString()>& dialog_callback, QWidget* parent = nullptr);
         QtExtChooseFile(const QtExtChooseFile &) = delete;
 
@@ -27,8 +27,8 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
         QtExtChooseFile& operator=(const QtExtChooseFile &) = delete;
 
         void setLabel(const QString &);
-        void setButton(const QString &);
-        void setDialogCallback(const std::function<QString()>&);
+        void setBrowseButtonText(const QString &);
+        void setBrowseCallback(const std::function<QString()>&);
         void setValue(const QString &);
 
         QString text() const;
