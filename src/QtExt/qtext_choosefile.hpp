@@ -8,8 +8,9 @@
 
 #include "QtExt_export.h"
 
-class QPushButton;
+class QLabel;
 class QLineEdit;
+class QPushButton;
 
 class QTEXT_EXPORT QtExtChooseFile: public QWidget
 {
@@ -35,6 +36,7 @@ class QTEXT_EXPORT QtExtChooseFile: public QWidget
         void valueChanged() const;
 
     private:
+        QLabel* m_label;
         QPushButton* m_button;
         QLineEdit*   m_lineEdit;
         std::function<QString()> m_dialogCallback;

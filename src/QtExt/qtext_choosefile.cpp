@@ -33,9 +33,10 @@ QtExtChooseFile::QtExtChooseFile(const QString& title,
                                  const std::function<QString()>& dialogCallback,
                                  QWidget* p):
     QWidget(p),
+    m_label(nullptr),
     m_button(nullptr),
     m_lineEdit(nullptr),
-    m_dialogCallback(dialogCallback)
+    m_dialogCallback()
 {
     setup(title, button, dialogCallback);
 }
@@ -47,18 +48,21 @@ QtExtChooseFile::~QtExtChooseFile()
 }
 
 
-void QtExtChooseFile::setLabel(const QString&)
+void QtExtChooseFile::setLabel(const QString& label)
 {
+    m_label->setText(label);
 }
 
 
-void QtExtChooseFile::setButton(const QString&)
+void QtExtChooseFile::setButton(const QString& caption)
 {
+    m_button->setText(caption);
 }
 
 
-void QtExtChooseFile::setCallback(const std::function<QString ()>&)
+void QtExtChooseFile::setCallback(const std::function<QString()>& callback)
 {
+    m_dialogCallback = callback;
 }
 
 
@@ -79,13 +83,17 @@ void QtExtChooseFile::buttonClicked() const
 void QtExtChooseFile::setup(const QString& title, const QString& button, const std::function<QString ()>& dialogCallback)
 {
     QHBoxLayout* l = new QHBoxLayout(this);
-    QLabel* label = new QLabel(title);
-    m_lineEdit = new QLineEdit;
-    m_button = new QPushButton(button);
+    m_label = new QLabel(this);
+    m_lineEdit = new QLineEdit(this);
+    m_button = new QPushButton(this);
 
-    l->addWidget(label);
+    l->addWidget(m_label);
     l->addWidget(m_lineEdit);
     l->addWidget(m_button);
+
+    setLabel(title);
+    setButton(button);
+    setCallback(dialogCallback);
 
     QCompleter *completer = new QCompleter(this);
     QFileSystemModel* model = new QFileSystemModel(completer);
