@@ -73,7 +73,7 @@ void QtExtChooseFile::setValue(const QString& value)
 
 QString QtExtChooseFile::text() const
 {
-    value();
+    return value();
 }
 
 
