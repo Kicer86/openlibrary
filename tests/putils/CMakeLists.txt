@@ -12,7 +12,14 @@ set(SRC
 
 add_executable(putils_tests ${SRC})
 
-target_link_libraries(putils_tests PRIVATE ${GMOCK_MAIN_LIBRARY} ${GMOCK_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(putils_tests
+                        PRIVATE
+                            ${GMOCK_MAIN_LIBRARY}
+                            ${GMOCK_LIBRARY}
+                            ${GTEST_LIBRARY}
+                            ${CMAKE_THREAD_LIBS_INIT}
+)
+
 enableCodeCoverage(putils_tests)
 
 add_test(putils putils_tests)
