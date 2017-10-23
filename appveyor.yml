@@ -23,9 +23,6 @@ before_build:
     - call appveyor.bat
 
 build:
-  project: build/PhotoBroom.sln
+  project: build/OpenLibrary.sln
   parallel: true
   verbosity: minimal
-
-after_build:
-    - if "%CONFIGURATION%" == "Release"  cmake --build . --target PACKAGE --config %configuration%
