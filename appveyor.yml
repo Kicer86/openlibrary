@@ -1,0 +1,31 @@
+
+version: 1.0.{build}
+
+branches:
+  only:
+    - master
+    - appveyor
+
+configuration:
+    - Release
+    - Debug
+
+platform:
+    - Win32
+    - x64
+
+image: Visual Studio 2013
+
+cache:
+    - c:\projects\googletest   -> appveyor.bat, cmake/third_party/CMakeLists.txt
+
+before_build:
+    - call appveyor.bat
+
+build:
+  project: build/PhotoBroom.sln
+  parallel: true
+  verbosity: minimal
+
+after_build:
+    - if "%CONFIGURATION%" == "Release"  cmake --build . --target PACKAGE --config %configuration%
