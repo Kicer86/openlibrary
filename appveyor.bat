@@ -9,7 +9,7 @@ if "%platform%"=="Win32" (
     set qt_arch=msvc2013_64
 )
 
-set USE_QT_VER=5.9
+set USE_QT_VER=5.5
 set PATH=C:\Qt\%USE_QT_VER%\%qt_arch%\bin;C:\Program Files\CMake\bin;%PATH%
 set CMAKE_PREFIX_PATH=C:/Qt/%USE_QT_VER%/%qt_arch%;c:/projects/install
 set GTEST_PATH=c:\projects\googletest
