@@ -17,7 +17,7 @@ platform:
 image: Visual Studio 2013
 
 cache:
-    - c:\projects\googletest   -> appveyor.bat, cmake/third_party/CMakeLists.txt
+    - c:\projects\googletest   -> appveyor.bat
 
 before_build:
     - call appveyor.bat
