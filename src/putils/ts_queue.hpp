@@ -27,8 +27,7 @@
 #include <condition_variable>
 #include <deque>
 #include <mutex>
-
-#include "utils/optional.hpp"
+#include <optional>
 
 namespace ol
 {
@@ -93,12 +92,6 @@ namespace ol
                 }
             }
 
-            [[deprecated]]
-            void push_front(const T &item)
-            {
-                push(item);
-            }
-
             //! Write data to TS_Queue.
             /*! Behaves as TS_Queue::push(const T &), but uses move semantics
              */
@@ -116,19 +109,13 @@ namespace ol
                 }
             }
 
-            [[deprecated]]
-            void push_back(T&& item)
-            {
-                push(std::move(item));
-            }
-
             //! Get data.
             /*! When there is no data in queue, current thread will wait until data appear.
-            * Returned type is Optional which can be empty in one situation:
+            * Returned type is std::optional which can be empty in one situation:
             * when thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
             */
 
-            Optional<T> pop()
+            std::optional<T> pop()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
                 Optional<T> result;
@@ -145,23 +132,17 @@ namespace ol
                 return std::move(result);
             }
 
-            [[deprecated]]
-            Optional<T> pop_front()
-            {
-                return pop();
-            }
-
             //! Get data.
             /*! When there is no data in queue, current thread will wait until data appear.
             * @arg timeout - defines how long pop_for will wait for new data.
-            * \return Optional which can be empty in two situations:
+            * \return std::optional which can be empty in two situations:
             * - thread was waiting for data and TS_Queue::stop() or TS_Queue's destructor were called.
             * - timeout occured.
             */
-            Optional<T> pop_for(const std::chrono::milliseconds& timeout)
+            std::optional<T> pop_for(const std::chrono::milliseconds& timeout)
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
-                Optional<T> result;
+                std::optional<T> result;
 
                 const bool status = wait_for_data(lock, timeout);
 
