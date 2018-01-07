@@ -54,7 +54,7 @@ namespace ol
         public:
             //! Constructor.
             //! @arg max_size maximum size of queue. When TS_Queue exceeds defined size, any write will cause writting thread to wait. Use 0 for no limits.
-            TS_Queue(size_t max_size):
+            TS_Queue(size_t max_size = 0):
                 m_queue(),
                 m_is_not_full(),
                 m_is_not_empty(),
