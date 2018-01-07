@@ -5,11 +5,10 @@ cmake_minimum_required(VERSION 2.8)
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src)
 
 set(LIB_SOURCES
-    )
+)
 
 set(LIB_HEADERS
     data_ptr.hpp
-    optional.hpp
 )
 
 set(TEST_SRC
