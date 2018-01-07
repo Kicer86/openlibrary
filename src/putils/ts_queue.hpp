@@ -118,7 +118,7 @@ namespace ol
             std::optional<T> pop()
             {
                 std::unique_lock<std::mutex> lock(m_queue_mutex);
-                Optional<T> result;
+                std::optional<T> result;
 
                 wait_for_data(lock);
 
