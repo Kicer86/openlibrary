@@ -5,14 +5,12 @@ function(register_target_install_lib name)
     set(LIBRARY_NAME ${name})
 
     #install files
-    if(WIN32)  # for windows (dll = runtime)
-        set(RUNTIME_TYPE RUNTIME)
-        set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    if(WIN32)
+        set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
     else(WIN32)
-        set(RUNTIME_TYPE LIBRARY)
         set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
     endif(WIN32)
-    
+
     if(TARGET ${LIBRARY_NAME})     #target may not exist if there are no sources (just headers)
 
         install(TARGETS ${LIBRARY_NAME}
@@ -71,8 +69,8 @@ function(register_target_set_version target)
         set_target_properties(${target} PROPERTIES
                             VERSION ${OPENLIBRARY_VERSION}
                             SOVERSION ${OPENLIBRARY_MAJOR_VERSION})
-                            
-    endif(TARGET ${target})                        
+
+    endif(TARGET ${target})
 
 endfunction(register_target_set_version)
 
