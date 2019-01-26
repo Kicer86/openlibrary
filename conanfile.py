@@ -28,6 +28,7 @@ conan_basic_setup()''')
         cmake = CMake(self)
         cmake.configure(source_folder="openlibrary")
         cmake.build()
+        cmake.install()
 
         # Explicit way:
         # self.run('cmake %s/hello %s'
