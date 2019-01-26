@@ -4,18 +4,17 @@ from conans import ConanFile, CMake, tools
 class OpenlibraryConan(ConanFile):
     name = "OpenLibrary"
     version = "2.1"
-    license = "<Put the package license here>"
-    author = "<Put your name here> <And your email here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Openlibrary here>"
-    topics = ("<Put some tag here>", "<here>", "<and here>")
+    license = "LGPLv3"
+    author = "Michał Walenciak Kicer86@gmail.com"
+    url = "https://github.com/Kicer86/openlibrary"
+    description = "Open Library is a set of various toolkits."
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
-    default_options = "shared=False"
+    default_options = "shared=True"
     generators = "cmake"
 
     def source(self):
-        self.run("git clone https://github.com/memsharded/hello.git")
+        self.run("git clone https://github.com/Kicer86/openlibrary.git")
         self.run("cd hello && git checkout static_shared")
         # This small hack might be useful to guarantee proper /MT /MD linkage
         # in MSVC if the packaged project doesn't have variables to set it
