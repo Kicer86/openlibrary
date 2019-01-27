@@ -6,7 +6,7 @@ from conans import ConanFile, CMake, tools
 
 class OpenlibraryConan(ConanFile):
     name = "OpenLibrary"
-    version = "2.3"
+    version = "2.4"
     license = "LGPLv3"
     author = "Michał Walenciak Kicer86@gmail.com"
     url = "https://github.com/Kicer86/openlibrary"
