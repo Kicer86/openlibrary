@@ -53,9 +53,10 @@ ConfigurationPrivate::~ConfigurationPrivate()
 
 QVariant ConfigurationPrivate::getEntry(const QString& entry)
 {
+    const QStringList entry_processed = entry.split("::");
 
     auto config = m_entries.lock();
-    auto it = config->find(entry);
+    auto it = config->find(entry_processed);
 
     const QVariant value = it != config->end()? it->second: QVariant();
 
@@ -65,8 +66,10 @@ QVariant ConfigurationPrivate::getEntry(const QString& entry)
 
 void ConfigurationPrivate::setEntry(const QString& entry, const QVariant& entry_value)
 {
+    const QStringList entry_processed = entry.split("::");
+
     auto config = m_entries.lock();
-    (*config)[entry] = entry_value;
+    (*config)[entry_processed] = entry_value;
 
     const auto w_it = m_watchers.find(entry);
 

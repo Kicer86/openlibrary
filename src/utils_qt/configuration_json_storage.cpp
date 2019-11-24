@@ -39,7 +39,7 @@ namespace
     }
 
 
-    IConfigStorage::Content readNode(const QJsonObject &obj, const QString &entry_namespace = {})
+    IConfigStorage::Content readNode(const QJsonObject &obj, const QStringList &entry_namespace = {})
     {
         IConfigStorage::Content content;
 
@@ -51,7 +51,8 @@ namespace
             assert(value.isArray() == false);
             assert(value.isNull() == false);
 
-            const QString sub_namespace = entry_namespace + (entry_namespace.isEmpty()? name : QString("::%1").arg(name));
+            QStringList sub_namespace = entry_namespace;
+            sub_namespace.append(name);
 
             if (value.isObject())
             {
@@ -88,9 +89,8 @@ void ConfigJsonStorage::save(const IConfigStorage::Content &configuration)
 
     QJsonObject configurationObject;
 
-    for(const auto& [key, value]: configuration)
+    for(const auto& [entries, value]: configuration)
     {
-        const QStringList entries = key.split("::");
         writeTo(configurationObject, entries, value);
     }
 

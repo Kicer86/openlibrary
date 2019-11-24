@@ -20,10 +20,13 @@
 #ifndef CONFIGURATION_HPP
 #define CONFIGURATION_HPP
 
+#include <map>
+
+#include <QStringList>
+
 #include <OpenLibrary/utils_qt/iconfiguration.hpp>
 #include <OpenLibrary/utils_qt/utils_qt_export.h>
 
-#include <map>
 
 
 /**
@@ -31,7 +34,7 @@
  */
 struct IConfigStorage
 {
-    typedef std::map<QString, QVariant> Content;
+    typedef std::map<QStringList, QVariant> Content;
 
     virtual ~IConfigStorage() = default;
 
