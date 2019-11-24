@@ -44,6 +44,13 @@ function(register_target_set_groups)
 endfunction(register_target_set_groups)
 
 
+function(register_target_set_groups2 files)
+
+    source_group(${LIBRARY_NAME}\\sources FILES ${files})
+
+endfunction(register_target_set_groups2)
+
+
 function(register_target_install_headers name)
 
     set(LIBRARY_NAME ${name})
@@ -60,6 +67,21 @@ function(register_target_install_headers name)
     message("registering ${LIBRARY_NAME} library")
 
 endfunction(register_target_install_headers)
+
+
+function(register_target_install_headers2 name)
+
+    getHeadersPath(HEADERS_INSTALL_PATH)
+
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/includes/${name}
+            DESTINATION ${HEADERS_INSTALL_PATH}
+            FILE_PERMISSIONS OWNER_READ GROUP_READ WORLD_READ
+    )
+
+    #some debug
+    message("registering ${LIBRARY_NAME} library")
+
+endfunction(register_target_install_headers2)
 
 
 function(register_target_set_version target)
@@ -91,3 +113,20 @@ function(register_target_export_header target)
     endif()
 
 endfunction(register_target_export_header)
+
+
+function(register_target_export_header2 target)
+
+    if(TARGET ${target})
+        set(header ${CMAKE_BINARY_DIR}/${target}_export.h)
+        generate_export_header(${target} EXPORT_FILE_NAME ${header})
+
+        getHeadersPath(HEADERS_INSTALL_PATH)
+        set(HEADERS_INSTALL_PATH ${HEADERS_INSTALL_PATH}/${target})
+
+        install(FILES ${header}
+                DESTINATION ${HEADERS_INSTALL_PATH}
+                PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
+    endif()
+
+endfunction(register_target_export_header2)

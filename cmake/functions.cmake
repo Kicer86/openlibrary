@@ -23,6 +23,21 @@ function(register_target)
 endfunction()
 
 
+function(register_target2 target_name)
+
+    get_target_property(source_files ${target_name} SOURCES)
+
+    register_target_install_lib(${target_name})
+    register_target_install_headers2(${target_name})
+    register_target_set_groups2(${source_files})
+    register_target_set_version(${target_name})
+    register_target_export_header2(${target_name})
+
+    hideSymbols(${target_name})
+
+endfunction()
+
+
 function(getHeadersBasePath path)
     set(${path} ${CMAKE_INSTALL_PREFIX}/include/ PARENT_SCOPE)
 endfunction(getHeadersBasePath)
