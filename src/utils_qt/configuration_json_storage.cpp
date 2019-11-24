@@ -1,6 +1,8 @@
 
 #include "OpenLibrary/utils_qt/configuration_json_storage.hpp"
 
+#include <cassert>
+
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonDocument>
