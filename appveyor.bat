@@ -2,14 +2,14 @@
 echo ON
 
 if "%platform%"=="Win32" (
-    set generator="Visual Studio 12"
-    set qt_arch=msvc2013
+    set generator="Visual Studio 15"
+    set qt_arch=msvc2015
 ) else (
-    set generator="Visual Studio 12 Win64"
-    set qt_arch=msvc2013_64
+    set generator="Visual Studio 15 Win64"
+    set qt_arch=msvc2017_64
 )
 
-set USE_QT_VER=5.5
+set USE_QT_VER=5.11
 set PATH=C:\Qt\%USE_QT_VER%\%qt_arch%\bin;C:\Program Files\CMake\bin;%PATH%
 set CMAKE_PREFIX_PATH=C:/Qt/%USE_QT_VER%/%qt_arch%;c:/projects/install
 set GTEST_PATH=c:\projects\googletest
