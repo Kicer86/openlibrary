@@ -4,16 +4,15 @@ find_package(Qt5Core REQUIRED)
 add_library(utils_qt SHARED
                 configuration.cpp configuration_p.hpp
 
-                ${PROJECT_SOURCE_DIR}/src/includes/utils_qt/configuration.hpp
-                ${PROJECT_SOURCE_DIR}/src/includes/utils_qt/iconfiguration.hpp
+                ${PROJECT_SOURCE_DIR}/src/includes/OpenLibrary/utils_qt/configuration.hpp
+                ${PROJECT_SOURCE_DIR}/src/includes/OpenLibrary/utils_qt/iconfiguration.hpp
 )
 
 target_include_directories(utils_qt
                             PRIVATE
-                                ${PROJECT_SOURCE_DIR}/src/includes/utils_qt
                                 ${PROJECT_SOURCE_DIR}/src/includes
                                 ${PROJECT_SOURCE_DIR}/src
-                                ${PROJECT_BINARY_DIR}
+                                ${PROJECT_BINARY_DIR}/includes
 
                             SYSTEM PRIVATE
                                 ${Qt5Core_INCLUDE_DIRS}

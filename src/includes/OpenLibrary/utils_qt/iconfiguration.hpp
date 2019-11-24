@@ -25,7 +25,7 @@
 class QString;
 class QVariant;
 
-#include <utils_qt_export.h>
+#include <OpenLibrary/utils_qt/utils_qt_export.h>
 
 
 struct UTILS_QT_EXPORT IConfiguration

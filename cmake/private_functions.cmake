@@ -73,7 +73,7 @@ function(register_target_install_headers2 name)
 
     getHeadersPath(HEADERS_INSTALL_PATH)
 
-    install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/includes/${name}
+    install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/includes/OpenLibrary/${name}
             DESTINATION ${HEADERS_INSTALL_PATH}
             FILE_PERMISSIONS OWNER_READ GROUP_READ WORLD_READ
     )
@@ -118,7 +118,7 @@ endfunction(register_target_export_header)
 function(register_target_export_header2 target)
 
     if(TARGET ${target})
-        set(header ${CMAKE_BINARY_DIR}/${target}_export.h)
+        set(header ${CMAKE_BINARY_DIR}/includes/OpenLibrary/${target}/${target}_export.h)
         generate_export_header(${target} EXPORT_FILE_NAME ${header})
 
         getHeadersPath(HEADERS_INSTALL_PATH)

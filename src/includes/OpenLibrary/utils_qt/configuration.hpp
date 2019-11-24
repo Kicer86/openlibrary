@@ -20,8 +20,8 @@
 #ifndef CONFIGURATION_HPP
 #define CONFIGURATION_HPP
 
-#include <utils_qt/iconfiguration.hpp>
-#include <utils_qt_export.h>
+#include <OpenLibrary/utils_qt/iconfiguration.hpp>
+#include <OpenLibrary/utils_qt/utils_qt_export.h>
 
 #include <map>
 

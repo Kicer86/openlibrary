@@ -17,7 +17,7 @@
  *
  */
 
-#include "configuration.hpp"
+#include "OpenLibrary/utils_qt/configuration.hpp"
 #include "configuration_p.hpp"
 
 #include <fstream>
