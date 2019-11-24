@@ -5,9 +5,10 @@
 
 #include <QString>
 #include <OpenLibrary/utils_qt/configuration.hpp>
+#include <OpenLibrary/utils_qt/utils_qt_export.h>
 
 
-class ConfigJsonStorage: public IConfigStorage
+class UTILS_QT_EXPORT ConfigJsonStorage: public IConfigStorage
 {
 public:
     explicit ConfigJsonStorage(const QString& configFile);
