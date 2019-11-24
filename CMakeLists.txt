@@ -41,6 +41,7 @@ add_library_path(src/utils utils)
 #add_library_path(src/palgorithm palgorithm)
 add_library_path(src/putils putils)
 add_library_path(src/common common)
+add_library_path(src/utils_qt utils_qt)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)
