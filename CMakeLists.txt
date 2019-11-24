@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.1)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 set(OPENLIBRARY_MAJOR_VERSION 2)
 set(OPENLIBRARY_MINOR_VERSION 4)
@@ -41,6 +41,7 @@ add_library_path(src/utils utils)
 #add_library_path(src/palgorithm palgorithm)
 add_library_path(src/putils putils)
 add_library_path(src/common common)
+add_library_path(src/utils_qt utils_qt)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)
