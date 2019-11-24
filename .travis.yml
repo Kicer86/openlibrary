@@ -1,12 +1,11 @@
-sudo: required
-dist: trusty
 
+dist: bionic
 language: cpp
 
 branches:
   only:
     - master
-    
+
 addons:
   apt:
     packages:
@@ -15,7 +14,7 @@ addons:
 notifications:
     on_failure: never
     on_success: never
-    
+
 before_script:
   - mkdir build
   - cd build
