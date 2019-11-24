@@ -3,8 +3,10 @@ find_package(Qt5Core REQUIRED)
 
 add_library(utils_qt SHARED
                 configuration.cpp configuration_p.hpp
+                configuration_json_storage.cpp
 
                 ${PROJECT_SOURCE_DIR}/src/includes/OpenLibrary/utils_qt/configuration.hpp
+                ${PROJECT_SOURCE_DIR}/src/includes/OpenLibrary/utils_qt/configuration_json_storage.hpp
                 ${PROJECT_SOURCE_DIR}/src/includes/OpenLibrary/utils_qt/iconfiguration.hpp
 )
 
