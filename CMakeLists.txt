@@ -67,5 +67,8 @@ if(BUILD_TESTS)
 
     add_custom_target(RunUnitTests ALL
                       COMMAND ctest
-                      DEPENDS putils_tests)
+                      DEPENDS
+                        putils_tests
+                        utils_qt_tests
+    )
 endif()
