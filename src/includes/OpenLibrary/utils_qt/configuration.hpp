@@ -23,6 +23,7 @@
 #include <map>
 
 #include <QStringList>
+#include <QVariant>
 
 #include <OpenLibrary/utils_qt/iconfiguration.hpp>
 #include <OpenLibrary/utils_qt/utils_qt_export.h>
