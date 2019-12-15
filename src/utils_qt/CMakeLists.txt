@@ -21,7 +21,7 @@ target_include_directories(utils_qt
 )
 
 target_link_libraries(utils_qt
-                        PRIVATE
+                        PUBLIC
                             Qt5::Core
 )
 
