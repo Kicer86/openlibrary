@@ -10,6 +10,9 @@ using testing::Return;
 TEST(Configuration, isEmptyAfterConstruction)
 {
     IConfigStorageMock storage;
+    EXPECT_CALL(storage, load).Times(1);
+    EXPECT_CALL(storage, save).Times(0);    // config not modified, no save needed
+
     Configuration config(storage);
 
     EXPECT_TRUE(config.getEntry("test1").isNull());
@@ -21,6 +24,9 @@ TEST(Configuration, isEmptyAfterConstruction)
 TEST(Configuration, usesDefaultsWhenConfigEmpty)
 {
     IConfigStorageMock storage;
+    EXPECT_CALL(storage, load).Times(1);
+    EXPECT_CALL(storage, save).Times(1);
+
     Configuration config(storage);
 
     config.setDefaultValue("test1", "a");
@@ -41,7 +47,7 @@ TEST(Configuration, doesNotUseDefaultsWhenConfigProvided)
 
     IConfigStorageMock storage;
     EXPECT_CALL(storage, load).WillOnce(Return(content));
-
+    EXPECT_CALL(storage, save).Times(1);
 
     Configuration config(storage);
 
