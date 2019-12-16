@@ -59,3 +59,36 @@ TEST(Configuration, doesNotUseDefaultsWhenConfigProvided)
     EXPECT_EQ(config.getEntry("test2"), "bb");          // bb comes from config so wins
     EXPECT_EQ(config.getEntry("test3"), "aaa");
 }
+
+
+TEST(Configuration, variousValueTypes)
+{
+    IConfigStorage::Content expectedContent = {
+        { {"test1"}, 1},
+        { {"test2"}, 1.25f},
+        { {"test3"}, 1.5},
+        { {"test4"}, QString("abc123")},
+        { {"test5"}, "zxc"},
+        { {"test6"}, QByteArray("\001\123\255\020")},
+    };
+
+    IConfigStorageMock storage;
+    EXPECT_CALL(storage, load).Times(1);
+    EXPECT_CALL(storage, save(expectedContent)).Times(1);
+
+    Configuration config(storage);
+
+    config.setDefaultValue("test1", 1);
+    config.setEntry       ("test2", 1.25f);
+    config.setDefaultValue("test3", 1.5);
+    config.setEntry       ("test4", QString("abc123"));
+    config.setDefaultValue("test5", "zxc");
+    config.setEntry       ("test6", QByteArray("\001\123\255\020"));
+
+    EXPECT_EQ(config.getEntry("test1"), 1);
+    EXPECT_EQ(config.getEntry("test2"), 1.25);
+    EXPECT_EQ(config.getEntry("test3"), 1.5);
+    EXPECT_EQ(config.getEntry("test4"), QString("abc123"));
+    EXPECT_EQ(config.getEntry("test5"), "zxc");
+    EXPECT_EQ(config.getEntry("test6"), QByteArray("\001\123\255\020"));
+}
