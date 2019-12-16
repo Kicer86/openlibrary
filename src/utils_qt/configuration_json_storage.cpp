@@ -72,7 +72,6 @@ namespace
 }
 
 
-
 ConfigJsonStorage::ConfigJsonStorage(const QString &configFile):
     m_configFile(configFile)
 {
@@ -103,7 +102,6 @@ void ConfigJsonStorage::save(const IConfigStorage::Content &configuration)
     configFile.write(jsonDoc.toJson());
     configFile.commit();
 }
-
 
 
 IConfigStorage::Content ConfigJsonStorage::load()
