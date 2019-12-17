@@ -7,7 +7,7 @@
 using testing::Return;
 
 
-TEST(Configuration, isEmptyAfterConstruction)
+TEST(ConfigurationTest, isEmptyAfterConstruction)
 {
     IConfigStorageMock storage;
     EXPECT_CALL(storage, load).Times(1);
@@ -21,7 +21,7 @@ TEST(Configuration, isEmptyAfterConstruction)
 }
 
 
-TEST(Configuration, usesDefaultsWhenConfigEmpty)
+TEST(ConfigurationTest, usesDefaultsWhenConfigEmpty)
 {
     IConfigStorageMock storage;
     EXPECT_CALL(storage, load).Times(1);
@@ -39,7 +39,7 @@ TEST(Configuration, usesDefaultsWhenConfigEmpty)
 }
 
 
-TEST(Configuration, doesNotUseDefaultsWhenConfigProvided)
+TEST(ConfigurationTest, doesNotUseDefaultsWhenConfigProvided)
 {
     IConfigStorage::Content content = {
         { {"test2"}, "bb" },
@@ -61,7 +61,7 @@ TEST(Configuration, doesNotUseDefaultsWhenConfigProvided)
 }
 
 
-TEST(Configuration, variousValueTypes)
+TEST(ConfigurationTest, variousValueTypes)
 {
     IConfigStorage::Content expectedContent = {
         { {"test1"}, 1},
