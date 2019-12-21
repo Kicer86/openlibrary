@@ -5,6 +5,7 @@
 #include "iconfiguration_storage_mock.hpp"
 
 using testing::Return;
+using testing::NiceMock;
 
 
 TEST(ConfigurationTest, isEmptyAfterConstruction)
@@ -96,9 +97,7 @@ TEST(ConfigurationTest, variousValueTypes)
 
 TEST(ConfigurationTest, fetchingSubentries)
 {
-    IConfigStorageMock storage;
-    EXPECT_CALL(storage, load).Times(1);
-    EXPECT_CALL(storage, save).Times(1);
+    NiceMock<IConfigStorageMock> storage;
 
     Configuration config(storage);
 
