@@ -43,6 +43,7 @@ class ConfigurationPrivate: public QObject
         ConfigurationPrivate& operator=(const ConfigurationPrivate &) = delete;
 
         QVariant getEntry(const QString &);
+        QStringList getSubEntries(const QString &);
         void setEntry(const QString &, const QVariant &);
 
         void watchFor(const QString &, const IConfiguration::Watcher &);

@@ -9,6 +9,7 @@
 #include <QJsonObject>
 #include <QJsonValue>
 #include <QVariant>
+#include <QSaveFile>
 
 
 namespace
@@ -71,7 +72,6 @@ namespace
 }
 
 
-
 ConfigJsonStorage::ConfigJsonStorage(const QString &configFile):
     m_configFile(configFile)
 {
@@ -96,12 +96,12 @@ void ConfigJsonStorage::save(const IConfigStorage::Content &configuration)
 
     QJsonDocument jsonDoc(configurationObject);
 
-    QFile configFile(m_configFile);
+    QSaveFile configFile(m_configFile);
 
     configFile.open(QIODevice::WriteOnly);
     configFile.write(jsonDoc.toJson());
+    configFile.commit();
 }
-
 
 
 IConfigStorage::Content ConfigJsonStorage::load()

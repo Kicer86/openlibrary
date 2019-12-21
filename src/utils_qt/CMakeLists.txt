@@ -12,18 +12,14 @@ add_library(utils_qt SHARED
 
 target_include_directories(utils_qt
                             PRIVATE
+                                ${PROJECT_SOURCE_DIR}/src               #todo: should be removed when all sublibs are setup as utils_qt
                                 ${PROJECT_SOURCE_DIR}/src/includes
-                                ${PROJECT_SOURCE_DIR}/src
                                 ${PROJECT_BINARY_DIR}/includes
-
-                            SYSTEM PRIVATE
-                                ${Qt5Core_INCLUDE_DIRS}
 )
 
 target_link_libraries(utils_qt
-                        PRIVATE
+                        PUBLIC
                             Qt5::Core
 )
-
 
 register_target2(utils_qt)
