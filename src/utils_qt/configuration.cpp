@@ -62,6 +62,44 @@ QVariant ConfigurationPrivate::getEntry(const QString& entry)
 }
 
 
+QStringList ConfigurationPrivate::getSubEntries(const QString& entry)
+{
+    std::set<QString> subentries;
+
+    const QStringList entry_processed = entry.split("::");
+
+    auto config = m_entries.lock();
+    auto locked_config = *config;
+
+    for(const auto &[config_entry, value]: locked_config)
+    {
+        if (config_entry.size() <= entry_processed.size())
+            continue;
+
+        bool equal = true;
+        auto ce_it = config_entry.cbegin();
+        for(auto en_it = entry_processed.cbegin(); en_it != entry_processed.cend(); ++en_it, ++ce_it)
+        {
+            if (*en_it != *ce_it)
+            {
+                equal = false;
+                break;
+            }
+        }
+
+        if (equal)
+            subentries.insert(*ce_it);
+    }
+
+    /// @todo: since Qt 5.14: QStringList(subentries.cbegin(), subentries.cend());
+
+    QStringList list_of_subentries;
+    std::copy(subentries.cbegin(), subentries.cend(), std::back_inserter(list_of_subentries));
+
+    return list_of_subentries;
+}
+
+
 void ConfigurationPrivate::setEntry(const QString& entry, const QVariant& entry_value)
 {
     const QStringList entry_processed = entry.split("::");
@@ -124,6 +162,12 @@ Configuration::~Configuration()
 QVariant Configuration::getEntry(const QString& entry)
 {
     return d->getEntry(entry);
+}
+
+
+QStringList Configuration::getSubEntries(const QString& entry)
+{
+    return d->getSubEntries(entry);
 }
 
 

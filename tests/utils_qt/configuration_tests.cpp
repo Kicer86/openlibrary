@@ -92,3 +92,29 @@ TEST(ConfigurationTest, variousValueTypes)
     EXPECT_EQ(config.getEntry("test5"), "zxc");
     EXPECT_EQ(config.getEntry("test6"), QByteArray("\001\123\255\020"));
 }
+
+
+TEST(ConfigurationTest, fetchingSubentries)
+{
+    IConfigStorageMock storage;
+    EXPECT_CALL(storage, load).Times(1);
+    EXPECT_CALL(storage, save).Times(1);
+
+    Configuration config(storage);
+
+    config.setEntry("test", "a");
+    config.setEntry("test::1", "a");
+    config.setEntry("test::2", "b");
+    config.setEntry("test::3", "c");
+    config.setEntry("test::1::a", "a");
+    config.setEntry("test::2::b", "b");
+    config.setEntry("test::3::c", "c");
+    config.setEntry("test2::1", "a");
+    config.setEntry("test2::2", "b");
+    config.setEntry("test2::3", "c");
+    config.setEntry("a::test::1", "a");
+    config.setEntry("b::test::2", "b");
+    config.setEntry("c::test::3", "c");
+
+    EXPECT_EQ(config.getSubEntries("test"), QStringList({"1", "2", "3"}) );
+}

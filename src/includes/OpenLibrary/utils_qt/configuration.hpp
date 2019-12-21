@@ -67,6 +67,7 @@ class UTILS_QT_EXPORT Configuration: public IConfiguration
         Configuration& operator=(const Configuration &) = delete;
 
         QVariant getEntry(const QString &) override;
+        QStringList getSubEntries(const QString &) override;
 
         void setEntry(const QString &, const QVariant &) override;
         void setDefaultValue(const QString &, const QVariant &) override;
