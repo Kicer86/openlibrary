@@ -16,12 +16,7 @@ set(OPENLIBRARY_NAMESPACE OpenLibrary::)
 option(BUILD_TESTS "Build tests. Set to ON to build tests")
 
 #prepare paths
-if(WIN32 AND NOT CYGWIN)
-  set(DEF_INSTALL_CMAKE_DIR CMake)
-else()
-  set(DEF_INSTALL_CMAKE_DIR lib/cmake/OpenLibrary)
-endif()
-
+set(DEF_INSTALL_CMAKE_DIR lib/cmake/OpenLibrary)
 set(EXTRA_CMAKE_MODULES_DIR ${DEF_INSTALL_CMAKE_DIR}/modules)
 
 include(GenerateExportHeader)
