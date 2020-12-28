@@ -6,9 +6,9 @@ function(register_target_install_lib name)
 
     #install files
     if(WIN32)
-        set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+        set(LIB_DESTINATION lib)
     else()
-        set(LIB_DESTINATION ${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/OpenLibrary)
+        set(LIB_DESTINATION lib${LIB_SUFFIX}/OpenLibrary)
     endif()
 
     if(TARGET ${LIBRARY_NAME})     #target may not exist if there are no sources (just headers)
@@ -16,18 +16,19 @@ function(register_target_install_lib name)
         install(TARGETS ${LIBRARY_NAME}
                 EXPORT OpenLibrary_${LIBRARY_NAME}Config
                 DESTINATION ${LIB_DESTINATION}
-                RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
+                RUNTIME DESTINATION bin
         )
 
         install(EXPORT OpenLibrary_${LIBRARY_NAME}Config
-                DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private
+                DESTINATION ${DEF_INSTALL_CMAKE_DIR}/private
                 NAMESPACE ${OPENLIBRARY_NAMESPACE}
         )
 
      else()
 
         configure_file(${CMAKE_SOURCE_DIR}/cmake/OpenLibrary_HeadersLibConfig.cmake.in ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake @ONLY)
-        install(FILES ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake DESTINATION ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR}/private)
+        install(FILES ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake
+                DESTINATION ${DEF_INSTALL_CMAKE_DIR}/private)
 
     endif(TARGET ${LIBRARY_NAME})
 

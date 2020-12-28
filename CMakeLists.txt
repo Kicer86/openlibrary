@@ -40,7 +40,7 @@ add_library_path(src/utils_qt utils_qt)
 
 getHeadersPath(HEADERS_INSTALL_PATH)
 getHeadersBasePath(HEADERS_INSTALL_BASE_PATH)
-set(OPENLIBRARY_CMAKE_DIR ${CMAKE_INSTALL_PREFIX}/${DEF_INSTALL_CMAKE_DIR})
+set(OPENLIBRARY_CMAKE_DIR ${DEF_INSTALL_CMAKE_DIR})
 
 configure_file(cmake/OpenLibraryConfig.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfig.cmake" @ONLY)
 configure_file(cmake/OpenLibraryConfigVersion.cmake.in "${PROJECT_BINARY_DIR}/OpenLibraryConfigVersion.cmake" @ONLY)
