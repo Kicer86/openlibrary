@@ -20,7 +20,7 @@ function(register_target_install_lib name)
         )
 
         install(EXPORT OpenLibrary_${LIBRARY_NAME}Config
-                DESTINATION ${DEF_INSTALL_CMAKE_DIR}/private
+                DESTINATION ${DEF_INSTALL_CMAKE_DIR}
                 NAMESPACE ${OPENLIBRARY_NAMESPACE}
         )
 
@@ -28,7 +28,7 @@ function(register_target_install_lib name)
 
         configure_file(${CMAKE_SOURCE_DIR}/cmake/OpenLibrary_HeadersLibConfig.cmake.in ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake @ONLY)
         install(FILES ${CMAKE_BINARY_DIR}/OpenLibrary_${LIBRARY_NAME}Config.cmake
-                DESTINATION ${DEF_INSTALL_CMAKE_DIR}/private)
+                DESTINATION ${DEF_INSTALL_CMAKE_DIR})
 
     endif(TARGET ${LIBRARY_NAME})
 
