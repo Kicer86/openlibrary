@@ -1,3 +1,4 @@
+# to be reenabled when travis (ubuntu) has qt6 packages
 
 dist: bionic
 language: cpp
