@@ -1,14 +1,8 @@
 
-project( QtExt )
+project(QtExt)
 cmake_minimum_required(VERSION 3.16)
 
-find_package(Qt6 COMPONENTS Widgets)
-if(Qt6_FOUND)
-    message("Linking ${PROJECT_NAME} against Qt6")
-else()
-    find_package(Qt5 5.15 COMPONENTS REQUIRED Widgets)
-    message("Linking ${PROJECT_NAME} against Qt5")
-endif()
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 include_directories(${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_SOURCE_DIR}/src)
 
