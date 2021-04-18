@@ -1,5 +1,5 @@
 
-find_package(Qt5Core REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 
 add_library(utils_qt SHARED
                 configuration.cpp configuration_p.hpp
@@ -19,7 +19,7 @@ target_include_directories(utils_qt
 
 target_link_libraries(utils_qt
                         PUBLIC
-                            Qt5::Core
+                            Qt::Core
 )
 
 register_target2(utils_qt)
